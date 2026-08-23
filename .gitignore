@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.venv/
+venv/
+
+# Runtime data (Web UI collections, user data, caches)
+src/data/collections.json
+src/data/read_papers.json
+src/data/users.json
+src/data/paper_cache.json
+src/data/feedback.jsonl
+src/data/llm_config.json
+src/data/s2_corpus_id_cache.json
+src/data/api_config.json
+
+# Eval results (keep templates, discard runs)
+results/*.json
+results/*.log
+!results/2026-*/README.md
+
+# Cache directories
+.cache/
+.codegraph/
+.pytest_cache/
+src/.cache/
+src/.pytest_cache/
+data/*/\.cache/
+
+# Logs
+log/
+*.log
+
+# Models (large binary files)
+models/*/model*.safetensors
+
+# FAISS index files (too large for GitHub)
+*.index.npy
+
+# Node
+node_modules/

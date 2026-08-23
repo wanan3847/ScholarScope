@@ -1,0 +1,1796 @@
+[
+    {
+        "input": {
+            "query_id": "semantic_2",
+            "query": "Could you suggest research that investigates a clustering-based efficient attention mechanism within Transformer models?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [
+                "212718077"
+            ],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Clustering-based Attention Mechanism",
+                    "description": "The paper must discuss or propose an attention mechanism within Transformer models that explicitly incorporates clustering techniques to improve efficiency.",
+                    "weight": 0.55
+                },
+                {
+                    "name": "Efficiency Improvements",
+                    "description": "The paper must address how the clustering-based attention mechanism improves computational efficiency, such as reducing time or memory complexity, compared to standard Transformer attention mechanisms.",
+                    "weight": 0.35
+                },
+                {
+                    "name": "Transformer Models",
+                    "description": "The paper must focus on Transformer models and their architecture, ensuring that the clustering-based attention mechanism is applied within this context.",
+                    "weight": 0.1
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_7",
+            "query": "What is the performance of large language models in text summarization under reference-based and reference-free human evaluations?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [
+                "254685611"
+            ],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Large Language Models (LLMs)",
+                    "description": "The paper must discuss or evaluate large language models (LLMs), specifically in the context of their performance in text summarization tasks.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Text Summarization",
+                    "description": "The paper must focus on text summarization as the primary task being evaluated, with LLMs being applied to this task.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Reference-Based Human Evaluation",
+                    "description": "The paper must include an analysis or discussion of reference-based human evaluation methods for assessing the quality of text summarization outputs from LLMs.",
+                    "weight": 0.2
+                },
+                {
+                    "name": "Reference-Free Human Evaluation",
+                    "description": "The paper must include an analysis or discussion of reference-free human evaluation methods for assessing the quality of text summarization outputs from LLMs.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_8",
+            "query": "What papers use decoupled workers in distributed RL system?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [
+                "259287121"
+            ],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "decoupled workers",
+                    "weight": 0.8,
+                    "description": "the paper must use or introduce a decoupled workers pattern in the context of distributed RL"
+                },
+                {
+                    "name": "distributed RL",
+                    "weight": 0.2,
+                    "description": "the paper must discuss Reinforcement Learning in the context of how to allow or improve running on distributted systems"
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_22",
+            "query": "Which papers propose to mask positions to pre-train multi-modal document transformer\uff1f"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [
+                "258967524"
+            ],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "pre-training of multi-modal document transformer",
+                    "weight": 0.5,
+                    "description": "discussing pre-training of multi-modal document transformer"
+                },
+                {
+                    "name": "mask positions",
+                    "weight": 0.5,
+                    "description": "proposes to mask positions to improve pre-training of multi-modal transformers"
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_33",
+            "query": "Could you suggest a study that explores employing a beta distribution to sample span sizes within unsupervised learning frameworks for text representation?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [
+                "219530980"
+            ],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Beta distribution for span size sampling",
+                    "description": "The paper must explicitly explore or propose the use of a beta distribution to sample span sizes in a computational or algorithmic context.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Unsupervised learning framework",
+                    "description": "The paper must focus on unsupervised learning frameworks, particularly in the context of text representation.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Application to text representation",
+                    "description": "The paper must discuss or demonstrate how the sampled span sizes (using the beta distribution) are applied to text representation tasks or models.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_43",
+            "query": "Could you direct me to research that evaluates few-shot slot tagging model performance by averaging micro-F1 scores across different test episodes?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Few-shot slot tagging",
+                    "description": "The paper must focus on few-shot learning techniques specifically applied to slot tagging tasks, which involve identifying and classifying specific spans of text in a sequence.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Evaluation using micro-F1 scores",
+                    "description": "The paper must evaluate model performance using micro-F1 scores, which aggregate contributions of all classes to compute the metric.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Averaging across test episodes",
+                    "description": "The evaluation process must involve averaging the micro-F1 scores across multiple test episodes, indicating a focus on episodic evaluation in few-shot learning.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_57",
+            "query": "Could you recommend a study that explores how language models are not robust to the surface form editing when testing commonsense knowledge?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Language Models",
+                    "description": "The paper must focus on language models, specifically their behavior, performance, or limitations.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Commonsense Knowledge",
+                    "description": "The paper must address the evaluation or understanding of commonsense knowledge within language models.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Surface Form Editing",
+                    "description": "The paper must explore how changes to the surface form of input (e.g., rephrasing, paraphrasing, or minor edits) affect the performance of language models.",
+                    "weight": 0.4
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_70",
+            "query": "Have any research efforts been made to gather dialogue data via crowdworkers to enhance conversational information retrieval systems?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Crowdworker Data Collection for Dialogue",
+                    "description": "The paper must discuss the use of crowdworkers to collect dialogue data. This includes methodologies, tools, or processes for gathering conversational data specifically through crowdworkers.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Conversational Information Retrieval Systems",
+                    "description": "The paper must address conversational information retrieval systems, focusing on their development, enhancement, or evaluation.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Relation Between Crowdworker Data and System Enhancement",
+                    "description": "The paper must explicitly connect the use of dialogue data collected via crowdworkers to the enhancement or improvement of conversational information retrieval systems.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_77",
+            "query": "Could you recommend research that evaluates the performance decline in various language models, like BLOOM, under 4-bit integer columnar weight-only quantization?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Evaluation of performance decline",
+                    "description": "The paper must evaluate the performance decline of language models when subjected to quantization techniques, specifically focusing on the effects of quantization on model accuracy, efficiency, or other performance metrics.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "4-bit integer columnar weight-only quantization",
+                    "description": "The paper must specifically address 4-bit integer columnar weight-only quantization as the quantization method applied to the language models.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Language models including BLOOM",
+                    "description": "The paper must include evaluations of language models, with a specific focus on BLOOM or similar large language models.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_87",
+            "query": "Could you recommend a study that investigates how contrastive learning enhances sentence-level embeddings in natural language processing, especially for subsequent applications?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Contrastive Learning",
+                    "description": "The paper must explicitly discuss contrastive learning techniques, including their methodology, implementation, or theoretical underpinnings.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Sentence-Level Embeddings",
+                    "description": "The paper must focus on sentence-level embeddings, detailing how they are generated, improved, or evaluated in the context of natural language processing.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Enhancement through Contrastive Learning",
+                    "description": "The paper must investigate how contrastive learning specifically enhances the quality or utility of sentence-level embeddings, establishing a clear relationship between the two.",
+                    "weight": 0.4
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_91",
+            "query": "Can you recommend some literature that focuses on dependency-based models for relation extraction, especially those that utilize dependency parsing to capture non-local syntactic relations?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Dependency-based models",
+                    "description": "The paper must focus on models that are explicitly dependency-based, meaning they utilize dependency structures or dependency parsing as a core component of their methodology.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Relation extraction",
+                    "description": "The paper must address the task of relation extraction, which involves identifying and classifying relationships between entities in text.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Non-local syntactic relations",
+                    "description": "The paper must discuss or demonstrate how dependency parsing is used to capture non-local syntactic relations, such as long-range dependencies or relations that are not adjacent in the text.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_98",
+            "query": "How can complex word identification (CWI) models be personalized to improve their performance for individual users with different language backgrounds and proficiency levels?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Complex Word Identification (CWI) Models",
+                    "description": "The paper must focus on models or methods specifically designed for identifying complex words in text, including their development, evaluation, or application.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Personalization Techniques",
+                    "description": "The paper must discuss methods or strategies for personalizing CWI models, such as adapting to individual user characteristics, preferences, or needs.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "User Language Background and Proficiency",
+                    "description": "The paper must address how CWI models can account for variations in users' language backgrounds (e.g., native vs. non-native speakers) and proficiency levels in the target language.",
+                    "weight": 0.4
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_100",
+            "query": "What are some of the key advantages and challenges of building multilingual evaluation datasets by translating existing English datasets into other target languages? Or more specifically, how do these translated datasets impact the quality and reliability of cross-lingual evaluations, and what potential pitfalls should be considered when using translations as a primary method for creating non-English benchmarks? "
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Translation of English datasets for multilingual evaluation",
+                    "description": "The paper must discuss the process of translating existing English datasets into other target languages for the purpose of building multilingual evaluation datasets.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Impact on cross-lingual evaluation quality and reliability",
+                    "description": "The paper must analyze how translated datasets affect the quality and reliability of cross-lingual evaluations, including any observed benefits or limitations.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Challenges and pitfalls of using translations",
+                    "description": "The paper must identify and discuss potential challenges, pitfalls, or biases introduced when using translations as the primary method for creating non-English benchmarks.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_101",
+            "query": "Interdisciplinary research usually takes extra efforts to conduct. Are there any systems or approaches to facilitate interdisciplinary research and cross-domain discovery in scientific fields?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Systems or approaches for interdisciplinary research",
+                    "description": "The paper must discuss specific systems, tools, frameworks, or methodologies explicitly designed to facilitate interdisciplinary research. These should aim to bridge gaps between different scientific fields or disciplines.",
+                    "weight": 0.5
+                },
+                {
+                    "name": "Facilitation of cross-domain discovery",
+                    "description": "The paper must address how the proposed systems or approaches enable or enhance the discovery of insights, knowledge, or innovations across different scientific domains.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Application to scientific fields",
+                    "description": "The paper must provide examples, case studies, or discussions of how the systems or approaches are applied in real-world scientific fields, demonstrating their practical utility.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_104",
+            "query": "What are the common model architectures for retrieval-augmented language models?\n"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Retrieval-Augmented Language Models",
+                    "description": "The paper must explicitly discuss retrieval-augmented language models, which are models that integrate a retrieval mechanism to fetch external information or context to enhance language model performance.",
+                    "weight": 0.5
+                },
+                {
+                    "name": "Model Architectures",
+                    "description": "The paper must describe or analyze specific model architectures used in retrieval-augmented language models, such as how the retrieval mechanism is integrated with the language model.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Commonality of Architectures",
+                    "description": "The paper must discuss common or widely-used architectures for retrieval-augmented language models, rather than focusing solely on niche or experimental designs.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_108",
+            "query": "Has anyone tried fine tuning with RAG\u2014 or have seen work on this?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Fine-tuning with RAG",
+                    "description": "The paper must discuss or explore fine-tuning methods specifically applied to Retrieval-Augmented Generation (RAG) models. This includes techniques, experiments, or results related to adapting RAG models to specific tasks or datasets through fine-tuning.",
+                    "weight": 0.7
+                },
+                {
+                    "name": "RAG models",
+                    "description": "The paper must focus on Retrieval-Augmented Generation (RAG) models, including their architecture, functionality, or applications. The discussion of RAG must be directly relevant to the context of fine-tuning.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_110",
+            "query": "Pruning is a means of model compression that can improve model efficiency in NLP. What are some recent general, task-agnostic pruning methods for large language methods that have worked well?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Pruning methods",
+                    "description": "The paper must discuss pruning methods as a means of model compression, specifically focusing on techniques that reduce the size or computational requirements of large language models.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Task-agnostic pruning",
+                    "description": "The pruning methods described must be task-agnostic, meaning they are not designed for or limited to specific NLP tasks but can be applied broadly across different tasks.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Large language models",
+                    "description": "The paper must explicitly address pruning methods in the context of large language models, ensuring the methods are applicable to or tested on such models.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_112",
+            "query": "Could you please provide some references to work on multi-document summarization?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Multi-document Summarization",
+                    "description": "The paper must focus on summarization techniques or methods that explicitly deal with multiple documents as input, rather than single-document summarization or other unrelated tasks.",
+                    "weight": 0.7
+                },
+                {
+                    "name": "Summarization Techniques",
+                    "description": "The paper must discuss specific techniques, algorithms, or models used for summarizing multiple documents, such as extractive, abstractive, or hybrid approaches.",
+                    "weight": 0.2
+                },
+                {
+                    "name": "Evaluation of Multi-document Summarization",
+                    "description": "The paper must include an evaluation or analysis of the summarization methods specifically in the context of multi-document summarization, such as metrics, datasets, or case studies.",
+                    "weight": 0.1
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_120",
+            "query": "Compare the performance and advantages of LSTMs versus basic RNNs (vanilla RNNs) on NLP tasks. What evidence shows that LSTMs perform better than basic RNNs, and what are the key reasons for any performance differences?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Comparison of LSTMs and basic RNNs on NLP tasks",
+                    "description": "The paper must explicitly compare the performance of LSTMs and basic RNNs (vanilla RNNs) on natural language processing tasks, providing evidence or experimental results.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Evidence of LSTM superiority",
+                    "description": "The paper must present evidence, such as experimental results, benchmarks, or case studies, that demonstrate LSTMs outperform basic RNNs on NLP tasks.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Reasons for performance differences",
+                    "description": "The paper must discuss the key reasons for the performance differences between LSTMs and basic RNNs, such as handling long-term dependencies, vanishing gradients, or architectural differences.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_123",
+            "query": "What are some pretraining techniques to improve language model reasoning abilities, especially focusing on pretraining with chain of thought?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Pretraining Techniques",
+                    "description": "The paper must discuss specific pretraining techniques or methods aimed at improving language model reasoning abilities. This includes any modifications or innovations in the pretraining process.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Reasoning Abilities",
+                    "description": "The paper must explicitly address how the proposed pretraining techniques enhance or are designed to enhance the reasoning capabilities of language models. This includes logical reasoning, problem-solving, or multi-step reasoning tasks.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Chain of Thought Pretraining",
+                    "description": "The paper must focus on or include pretraining methods that incorporate chain of thought reasoning, where intermediate reasoning steps are explicitly modeled or used during pretraining.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_125",
+            "query": "What are the key references for super-resolution techniques used in measuring diameters in images?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [
+                "271909739",
+                "264452520",
+                "19089789"
+            ],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Super-resolution techniques",
+                    "description": "The paper must discuss or propose super-resolution techniques, specifically methods that enhance the resolution of images beyond their native resolution.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Measurement of diameters",
+                    "description": "The paper must address the measurement of diameters in images, such as objects, structures, or features, and how super-resolution techniques are applied to improve the accuracy of these measurements.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Application of super-resolution to diameter measurement",
+                    "description": "The paper must explicitly connect super-resolution techniques to the task of measuring diameters, demonstrating the relationship between the two and the impact of super-resolution on measurement accuracy.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_137",
+            "query": "Are language models better at discriminating among previously generated alternatives compared to generating initial responses? What evidence exists about their relative performance in generation vs discrimination tasks?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Language Models in Generation Tasks",
+                    "description": "The paper must discuss the performance of language models specifically in the context of generating initial responses or outputs, focusing on their capabilities, limitations, or methodologies for generation tasks.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Language Models in Discrimination Tasks",
+                    "description": "The paper must address the performance of language models in discriminating among previously generated alternatives, including methods, metrics, or evaluations used to assess this capability.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Comparison of Generation and Discrimination",
+                    "description": "The paper must explicitly compare the performance of language models in generation tasks versus discrimination tasks, providing evidence, analysis, or experimental results that highlight their relative strengths or weaknesses in these areas.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_138",
+            "query": "Has any work been done using large language models (LLMs) to generate blog posts from scientific papers? Please summarize the results."
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Use of LLMs",
+                    "description": "The paper must explicitly discuss the use of large language models (LLMs) in its methodology or experiments.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Scientific Paper Input",
+                    "description": "The paper must involve the use of scientific papers as input data for the LLMs.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Blog Post Generation",
+                    "description": "The paper must focus on generating blog posts or similar simplified, human-readable summaries from the scientific papers using LLMs.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_140",
+            "query": "papers studying LLMs' abilities of generating new research ideas in NLP"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [
+                "272463952",
+                "277244603"
+            ],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "LLMs",
+                    "description": "The paper must explicitly discuss large language models (LLMs), their architecture, or their applications.",
+                    "weight": 0.2
+                },
+                {
+                    "name": "NLP",
+                    "description": "The paper must focus on natural language processing (NLP) as the domain of study or application.",
+                    "weight": 0.2
+                },
+                {
+                    "name": "Generating New Research Ideas",
+                    "description": "The paper must specifically address the ability of LLMs to generate new research ideas, hypotheses, or directions in the field of NLP.",
+                    "weight": 0.6
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_145",
+            "query": "earliest paper comparing two dialogue systems with win rates judged by humans"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [
+                "202538657",
+                "216553145"
+            ],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Comparison of two dialogue systems",
+                    "description": "The paper must explicitly compare two dialogue systems, analyzing their performance or characteristics in a direct manner.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Human-judged win rates",
+                    "description": "The paper must include human evaluations of the dialogue systems, specifically reporting win rates or similar metrics judged by humans.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Earliest instance",
+                    "description": "The paper must be the earliest known instance of such a comparison, meaning it predates other papers with similar evaluations.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_148",
+            "query": "research on generative document retrieval models that allow for quick addition of new documents as they become available"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Generative Document Retrieval Models",
+                    "description": "The paper must focus on generative models specifically designed for document retrieval tasks. These models should generate or predict relevant documents or document representations based on a query.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Quick Addition of New Documents",
+                    "description": "The paper must address methods or mechanisms that allow for the efficient and rapid integration of new documents into the retrieval system without requiring extensive retraining or re-indexing.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Relation Between Generative Models and Quick Document Addition",
+                    "description": "The paper must explicitly discuss how the generative retrieval model supports or is adapted to enable the quick addition of new documents, ensuring the two aspects are directly connected.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_152",
+            "query": "State-of-the-art papers focusing on sampling mechanisms at LLM inference time, including mechanisms like majority voting and reward model scoring in the context of sample selection."
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Sampling mechanisms at LLM inference time",
+                    "description": "The paper must focus on sampling mechanisms specifically during the inference phase of large language models (LLMs). This includes methods for generating or selecting outputs from the model's predictions.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Majority voting or ensemble methods",
+                    "description": "The paper must discuss or analyze majority voting or similar ensemble-based methods as part of the sampling or output selection process in LLM inference.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Reward model scoring in sample selection",
+                    "description": "The paper must explore the use of reward models or scoring mechanisms to evaluate and select samples during LLM inference.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_155",
+            "query": "vision language models that use perceivers to encode images"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Vision-Language Models",
+                    "description": "The paper must discuss vision-language models, which are models designed to process and integrate both visual (image) and textual (language) data.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Use of Perceivers",
+                    "description": "The paper must specifically involve the use of Perceiver architectures or their variants as part of the model design.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Perceivers for Image Encoding",
+                    "description": "The paper must explicitly describe how Perceivers are used to encode images, focusing on their role in processing visual data.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_160",
+            "query": "What are the current solutions and approaches to address the transcription bottleneck in linguistic fieldwork and documentation of endangered languages? Include both technological and methodological solutions."
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Transcription bottleneck in linguistic fieldwork",
+                    "description": "The paper must explicitly address the issue of transcription bottlenecks in linguistic fieldwork, particularly in the context of documenting endangered languages. This includes identifying challenges related to manual transcription, time constraints, or resource limitations.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Technological solutions",
+                    "description": "The paper must discuss technological solutions to address transcription bottlenecks, such as the use of automatic speech recognition (ASR), machine learning models, or other computational tools tailored for linguistic fieldwork and endangered languages.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Methodological solutions",
+                    "description": "The paper must explore methodological approaches to mitigate transcription bottlenecks, such as community-based transcription practices, innovative workflows, or strategies for integrating technology with traditional methods.",
+                    "weight": 0.2
+                },
+                {
+                    "name": "Focus on endangered languages",
+                    "description": "The paper must specifically focus on endangered languages, ensuring that the solutions or approaches discussed are applicable to the unique challenges of documenting these languages.",
+                    "weight": 0.1
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_170",
+            "query": "What are the central methods for aligning AI systems with human values?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [
+                "270286917",
+                "269093027",
+                "257365338",
+                "233296398",
+                "272690273",
+                "273638073",
+                "273662284",
+                "273877839"
+            ],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "AI alignment methods",
+                    "description": "The paper must discuss specific methods, techniques, or frameworks for aligning AI systems with human values. This includes approaches such as reward modeling, inverse reinforcement learning, value learning, or other mechanisms explicitly designed to align AI behavior with human preferences or ethical principles.",
+                    "weight": 0.5
+                },
+                {
+                    "name": "Human values integration",
+                    "description": "The paper must address how human values are defined, modeled, or integrated into AI systems. This includes discussions on identifying, formalizing, or operationalizing human values in a way that AI systems can understand and act upon.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Relation between methods and human values",
+                    "description": "The paper must explicitly connect the methods it discusses to the goal of aligning AI systems with human values, ensuring that the methods are not just general AI techniques but are specifically aimed at addressing alignment challenges.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_172",
+            "query": "papers about long term memory in agents"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Long Term Memory",
+                    "description": "The paper must explicitly discuss long-term memory mechanisms, architectures, or models. This includes how agents store, retrieve, and utilize information over extended periods of time.",
+                    "weight": 0.5
+                },
+                {
+                    "name": "Agents",
+                    "description": "The paper must focus on agents, which can include artificial agents such as AI systems, robots, or software agents, and their use or implementation of long-term memory.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Relation Between Long Term Memory and Agents",
+                    "description": "The paper must explore the relationship between long-term memory and agents, specifically how long-term memory is integrated into or impacts the behavior, learning, or decision-making of agents.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_174",
+            "query": "Are there generative retrieval methods that can handle new documents and add them to the trained retrieval model?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Generative Retrieval Methods",
+                    "description": "The paper must discuss generative retrieval methods, which are retrieval techniques that generate responses or results based on learned representations or models.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Handling New Documents",
+                    "description": "The paper must address how the retrieval method can handle new documents, specifically focusing on the ability to incorporate these documents into the retrieval process after the model has been trained.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Integration of New Documents into Trained Models",
+                    "description": "The paper must explicitly describe mechanisms or strategies for integrating new documents into a retrieval model that has already been trained, ensuring the relevance of the retrieval process is maintained or improved.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_186",
+            "query": "recent papers about large language models (LLMs) processing hypothetical conditional statements"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Large Language Models (LLMs)",
+                    "description": "The paper must explicitly discuss or analyze large language models (LLMs), such as GPT, BERT, or similar architectures, focusing on their design, functionality, or applications.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Hypothetical Conditional Statements",
+                    "description": "The paper must address the processing, understanding, or generation of hypothetical conditional statements (e.g., 'If X, then Y') by LLMs, ensuring a clear connection between the two topics.",
+                    "weight": 0.6
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_189",
+            "query": "papers discussing how modern language models set d_model and number of layers in transformer architecture, focusing on the effects of long narrow vs wide shallow models"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Transformer architecture design",
+                    "description": "The paper must discuss the design of transformer architectures, specifically focusing on the parameters d_model (model dimension) and the number of layers.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Comparison of long narrow vs wide shallow models",
+                    "description": "The paper must explicitly compare or analyze the effects of long narrow (more layers, smaller d_model) versus wide shallow (fewer layers, larger d_model) transformer models.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Modern language models",
+                    "description": "The paper must focus on modern language models, ensuring the discussion is relevant to current state-of-the-art transformer-based architectures.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_192",
+            "query": "What are some datasets for task-oriented grasping?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Task-oriented grasping",
+                    "description": "The paper must focus on datasets specifically designed for task-oriented grasping, which involves robotic or computational systems performing grasps tailored to specific tasks or object functionalities.",
+                    "weight": 0.6
+                },
+                {
+                    "name": "Dataset description",
+                    "description": "The paper must provide a detailed description of one or more datasets, including their purpose, structure, and relevance to task-oriented grasping.",
+                    "weight": 0.4
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_193",
+            "query": "Adaptive query expansion with LLMs, focusing on papers published on or after 2023"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Adaptive Query Expansion",
+                    "description": "The paper must discuss methods, techniques, or frameworks for adaptive query expansion, where the expansion process dynamically adjusts based on the context or user input.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Use of Large Language Models (LLMs)",
+                    "description": "The paper must explicitly involve the use of large language models (LLMs) in the process of adaptive query expansion, either as a core component or as a supporting tool.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Relation Between LLMs and Adaptive Query Expansion",
+                    "description": "The paper must establish a clear connection between the use of LLMs and their role in enabling or improving adaptive query expansion techniques.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_196",
+            "query": "papers on individually identifying individuals based on their word choice or other lexical features"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Individual Identification",
+                    "description": "The paper must focus on methods or techniques for identifying individuals, specifically distinguishing one person from another, based on their unique characteristics.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Lexical Features",
+                    "description": "The paper must analyze or utilize lexical features, such as word choice, vocabulary, or other language-based attributes, as a primary means of identification.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Relation Between Identification and Lexical Features",
+                    "description": "The paper must explicitly establish a connection between individual identification and the use of lexical features, demonstrating how these features are used to distinguish individuals.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_203",
+            "query": "Video aesthetics score, using multimodal large models."
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Video Aesthetics Scoring",
+                    "description": "The paper must address the task of evaluating or scoring the aesthetics of videos, focusing on visual appeal, artistic quality, or subjective beauty.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Multimodal Approach",
+                    "description": "The paper must involve a multimodal approach, meaning it integrates multiple types of data (e.g., visual, audio, text) to assess video aesthetics.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Large Models",
+                    "description": "The paper must utilize large models, such as large-scale neural networks or pretrained models, in the process of scoring video aesthetics.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_205",
+            "query": "Can you help me find research papers that explore the use of large vision-language models as agents to automatically play PC games?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Large Vision-Language Models",
+                    "description": "The paper must discuss large vision-language models (VLMs), specifically their architecture, training, or application. These models should integrate both visual and textual modalities.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Agent Behavior",
+                    "description": "The paper must explore the use of VLMs as agents, meaning the models are used to make decisions or take actions autonomously in a given environment.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "PC Game Environment",
+                    "description": "The paper must focus on the application of VLMs in the context of PC games, where the models interact with or play games autonomously.",
+                    "weight": 0.4
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_214",
+            "query": "Search for papers related to large language models that demonstrate how the same prompt with different responses can improve the performance of the SFT model."
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Large Language Models (LLMs)",
+                    "description": "The paper must focus on or involve large language models (LLMs) as a central component of the research or experimentation.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Prompt Engineering",
+                    "description": "The paper must discuss or analyze the use of prompts, specifically focusing on how variations in prompts (e.g., the same prompt with different responses) are utilized or studied.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "SFT Model Performance",
+                    "description": "The paper must explicitly address the impact of prompt variations on the performance of supervised fine-tuning (SFT) models, demonstrating a clear connection between the two.",
+                    "weight": 0.4
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_219",
+            "query": "Show me research on rejection sampling finetuning."
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Rejection Sampling",
+                    "description": "The paper must discuss rejection sampling, a statistical method used to generate samples from a distribution by rejecting certain samples based on a criterion.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Finetuning",
+                    "description": "The paper must address finetuning, which involves adjusting the parameters of a pre-trained model on a specific task or dataset.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Rejection Sampling in Finetuning",
+                    "description": "The paper must explicitly explore or propose the use of rejection sampling as part of the finetuning process, establishing a clear connection between the two concepts.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_220",
+            "query": "What papers discuss the use of transformer architecture in 3d video generation"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Transformer Architecture",
+                    "description": "The paper must explicitly discuss the use of transformer architecture, including its design, implementation, or adaptation, as a core component of the proposed or analyzed method.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "3D Video Generation",
+                    "description": "The paper must focus on 3D video generation, which involves creating sequences of 3D video frames or volumetric data, and not just 2D video or static 3D models.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Relation Between Transformer and 3D Video Generation",
+                    "description": "The paper must establish a clear connection between the transformer architecture and its application to 3D video generation, such as how transformers are used to model temporal, spatial, or volumetric aspects of 3D video data.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_221",
+            "query": "DPO training for large-scale vision-language models."
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "DPO Training",
+                    "description": "The paper must discuss or implement Direct Preference Optimization (DPO) as a training method. This includes theoretical discussions, practical implementations, or evaluations of DPO in any context.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Vision-Language Models",
+                    "description": "The paper must focus on models that integrate both vision and language modalities, such as image-text models or multimodal transformers.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "DPO for Vision-Language Models",
+                    "description": "The paper must explicitly explore the application of DPO training specifically for vision-language models, ensuring the connection between the training method and the model type is central to the work.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_222",
+            "query": "I am looking for research papers on the construction of multimodal foundation models that support both visual and audio inputs. These models should be pre-trained on large-scale datasets, including visual, audio, and audio-visual data. Please exclude survey papers."
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Multimodal Foundation Models",
+                    "description": "The paper must focus on the construction or development of multimodal foundation models that integrate both visual and audio modalities.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Pre-training on Large-Scale Datasets",
+                    "description": "The paper must describe pre-training of the multimodal foundation models on large-scale datasets, which include visual, audio, and audio-visual data.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Exclusion of Survey Papers",
+                    "description": "The paper must not be a survey or review paper. It should present original research or novel contributions.",
+                    "weight": 0.3
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_224",
+            "query": "List all papers that use autoregressive transformer to generate videos."
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Autoregressive Transformer",
+                    "description": "The paper must explicitly discuss the use of autoregressive transformers as a core component of the model or methodology.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Video Generation",
+                    "description": "The paper must focus on generating videos as the primary task or application, not just analyzing or processing videos.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Relation Between Autoregressive Transformer and Video Generation",
+                    "description": "The paper must clearly describe how the autoregressive transformer is applied specifically for the task of video generation, establishing a direct connection between the two.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_226",
+            "query": "Show me research on the long video description. Here, long videos are defined as those with a duration of at least several minutes."
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Long Video Definition",
+                    "description": "The paper must explicitly address or analyze videos that are defined as 'long', with a duration of at least several minutes, as opposed to short clips or snippets.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Video Description",
+                    "description": "The paper must focus on generating, analyzing, or improving descriptions for videos, where 'description' refers to textual or semantic summaries of video content.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Relation Between Long Videos and Description",
+                    "description": "The paper must explicitly discuss or explore the challenges, methods, or results of generating descriptions specifically for long videos, rather than general video description techniques.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_229",
+            "query": "Is there any work that analyzes the scaling law of the multi-module models, such as video-text, image-text models?"
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Scaling laws",
+                    "description": "The paper must analyze or discuss scaling laws, which refer to the mathematical or empirical relationships between model size, data size, and performance.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Multi-module models",
+                    "description": "The paper must focus on multi-module models, which integrate multiple modalities such as video-text or image-text.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Scaling laws in multi-module models",
+                    "description": "The paper must specifically analyze or discuss scaling laws in the context of multi-module models, ensuring the relationship between scaling laws and multi-module models is central to the work.",
+                    "weight": 0.2
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "semantic_233",
+            "query": "Find papers on trigger-free document-level event extraction methods that do not use human-annotated triggers."
+        },
+        "scorer_criteria": {
+            "known_to_be_good": [],
+            "known_to_be_bad": [],
+            "relevance_criteria": [
+                {
+                    "name": "Document-level event extraction",
+                    "description": "The paper must focus on event extraction at the document level, meaning it considers the context of the entire document rather than sentence-level or isolated event extraction.",
+                    "weight": 0.3
+                },
+                {
+                    "name": "Trigger-free methods",
+                    "description": "The paper must explicitly discuss methods that do not rely on predefined or human-annotated triggers for event extraction. The absence of human-annotated triggers must be a core aspect of the proposed method.",
+                    "weight": 0.4
+                },
+                {
+                    "name": "Event extraction methodology",
+                    "description": "The paper must propose or evaluate a specific methodology or framework for event extraction, rather than just discussing theoretical aspects or related tasks.",
+                    "weight": 0.2
+                },
+                {
+                    "name": "No reliance on human-annotated triggers",
+                    "description": "The paper must clearly state that it avoids the use of human-annotated triggers in its approach, ensuring that the method is independent of such annotations.",
+                    "weight": 0.1
+                }
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "specific_7",
+            "query": "BART by Lewis et al."
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "204960716"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "specific_9",
+            "query": "the MS^2 DeYong2021 paper"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "233231380"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "specific_10",
+            "query": "the Multi-news fabri2019multinews paper"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "174799390"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "specific_11",
+            "query": "the paper about the Objaverse dataset"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "254685588"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "specific_15",
+            "query": "the AlphaGeometry paper"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "267032902"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "specific_20",
+            "query": "the cnn paper"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "195908774",
+                "206594692"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "specific_24",
+            "query": "the gpt-2 paper"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "160025533"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "specific_33",
+            "query": "the squad paper"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "11816014"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "specific_39",
+            "query": "the SPIKE paper"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "219303477",
+                "8021519",
+                "8778480",
+                "942454",
+                "13903068"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "specific_44",
+            "query": "SPIKE syntactic search paper"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "219303477"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "metadata_4",
+            "query": "a Nature portfolio papers by David Harel"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "226312159",
+                "14549281",
+                "34517208"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "metadata_14",
+            "query": "NAACL 2010 or 2012 papers co-authored by one of the authors of the \"BERT\" paper and at least one additional author"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "17192521",
+                "1999849",
+                "1173402",
+                "6937668",
+                "11265565",
+                "2468787"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "metadata_15",
+            "query": "Claire Cardie ACL papers published at 2014 or 2017"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "441563",
+                "2172129",
+                "18733074",
+                "142368",
+                "12315936",
+                "10538557"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "metadata_25",
+            "query": "Papers citing the DistilBERT paper after 2022 with more than 50 citations"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "267675587",
+                "273811174",
+                "270440391",
+                "268531351",
+                "267760021",
+                "267627639",
+                "267061245",
+                "266725532",
+                "259244026",
+                "257219780",
+                "256662585",
+                "266551872",
+                "265659184",
+                "265498655",
+                "265157884",
+                "264306297",
+                "263830786",
+                "263831293",
+                "261557007",
+                "261529981",
+                "261049466",
+                "260887495",
+                "260681542",
+                "259937180",
+                "259766518",
+                "259317075",
+                "259275123",
+                "263610088",
+                "259224568",
+                "259203671",
+                "259164722",
+                "259145019",
+                "259129342",
+                "259129329",
+                "258999338",
+                "258999195",
+                "258967462",
+                "258947273",
+                "258833129",
+                "265150147",
+                "258686693",
+                "258686446",
+                "258615571",
+                "258564349",
+                "258564887",
+                "258436810",
+                "258447166",
+                "258352678",
+                "258352540",
+                "258331833",
+                "258179419",
+                "258170300",
+                "258059818",
+                "258049306",
+                "257805087",
+                "257636789",
+                "257504984",
+                "257405434",
+                "257405349",
+                "257365136",
+                "257365320",
+                "257255121",
+                "257631936",
+                "257205716",
+                "256868484",
+                "256827347",
+                "256697131",
+                "256503945",
+                "256389937",
+                "255341638",
+                "246657761",
+                "251462471",
+                "251385004",
+                "250390923",
+                "250390561",
+                "239690039",
+                "255096260",
+                "254877399",
+                "254877310",
+                "254823436",
+                "254535728",
+                "254563929",
+                "254044526",
+                "252761342",
+                "253734315",
+                "253734406",
+                "253523094",
+                "253420623",
+                "253264964",
+                "253236958",
+                "253080612",
+                "252992725",
+                "252846328",
+                "252715691",
+                "252693152",
+                "252693337",
+                "252683160",
+                "252693405",
+                "244119684",
+                "252595691",
+                "252367445",
+                "252211706",
+                "252081651",
+                "252065191",
+                "252185316",
+                "251979721",
+                "251715024",
+                "250919478",
+                "250526382",
+                "250451482",
+                "251403135",
+                "254017945",
+                "250244080",
+                "250243785",
+                "248875992",
+                "250243971",
+                "250109980",
+                "249848175",
+                "249712016",
+                "249642147",
+                "249594813",
+                "249395624",
+                "249363473",
+                "249375519",
+                "249152301",
+                "253397955",
+                "248834570",
+                "252780443",
+                "248562685",
+                "248496913",
+                "248067917",
+                "248427085",
+                "248476220",
+                "248299679",
+                "248240018",
+                "248227997",
+                "252088953",
+                "248174546",
+                "248118878",
+                "248085116",
+                "248005954",
+                "248006164",
+                "247922354",
+                "247778801",
+                "248266822",
+                "247762948",
+                "247762845",
+                "247627806",
+                "247748611",
+                "247618840",
+                "247475977",
+                "247446572",
+                "247447127",
+                "247362537",
+                "247259397",
+                "247218132",
+                "247050244",
+                "246996617",
+                "246867107",
+                "246867045",
+                "246863594",
+                "254069544",
+                "246822885",
+                "246434841",
+                "246419424",
+                "246240082",
+                "249974508",
+                "245986500",
+                "247519243",
+                "245877810",
+                "245822227",
+                "245650847"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "metadata_26",
+            "query": "paper citing the T5 paper and the spider paper"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "272701638",
+                "276775091",
+                "276774742",
+                "276574850",
+                "276574911",
+                "276409203",
+                "276541757",
+                "275570708",
+                "275079271",
+                "274581681"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "metadata_31",
+            "query": "Journal articles by David Harel with at least 10 citations, citing papers by Gera Weiss, but not self-citations of Gera Weiss"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "249889772",
+                "246679917",
+                "208139460",
+                "53425415",
+                "3672059",
+                "13336039",
+                "3987221",
+                "5362134",
+                "16023098",
+                "4010707",
+                "17960881",
+                "1638978",
+                "4031399",
+                "34893",
+                "2829044",
+                "6904233"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "metadata_33",
+            "query": "A SPLASH 2019 and beyond paper that cites any NeurIPS"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "227128926"
+            ]
+        }
+    },
+    {
+        "input": {
+            "query_id": "metadata_42",
+            "query": "NeurIPS papers 2022-2023 that cite the \"RoBERTa\" paper that are cited by at least 30 other paper written by more than 3 authors"
+        },
+        "scorer_criteria": {
+            "corpus_ids": [
+                "263829712",
+                "263152603",
+                "260611350",
+                "259262373",
+                "259263947",
+                "259137816",
+                "259108779",
+                "259096157",
+                "259075732",
+                "258959274",
+                "258947152",
+                "258887717",
+                "258841328",
+                "258832444",
+                "258762543",
+                "258888141",
+                "258479968",
+                "258049306",
+                "257687654",
+                "257232924",
+                "257219775",
+                "257079124",
+                "256846990",
+                "256697185",
+                "256627727",
+                "253306024",
+                "253156381",
+                "253115122",
+                "254853701",
+                "254685493",
+                "254043765",
+                "254017395",
+                "252968266",
+                "252693337",
+                "252568062",
+                "252545187",
+                "252544768",
+                "252089100",
+                "252907757",
+                "251135101",
+                "250643915",
+                "250491011",
+                "250244080",
+                "250243785",
+                "249953673",
+                "249889853",
+                "249848279",
+                "249712016",
+                "249674874",
+                "249642722",
+                "249674655",
+                "249538435",
+                "249538460",
+                "249538647",
+                "249395549",
+                "249462026",
+                "249191271",
+                "249151871",
+                "249152172",
+                "249097507",
+                "249097871",
+                "249062606",
+                "248986465",
+                "248965309",
+                "248965287",
+                "248239771",
+                "248227479",
+                "248266822",
+                "246680398",
+                "252873712"
+            ]
+        }
+    }
+]

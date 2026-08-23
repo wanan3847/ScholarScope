@@ -1,0 +1,2943 @@
+[
+  {
+    "id": "nls_bmi_raw|0|0",
+    "input": {
+      "query": "Does increased time preference leads to higher BMI?",
+      "question_type": "relationship",
+      "data_folder": "nls_bmi_raw",
+      "metadata": {
+        "domain": "sociology",
+        "workflow_tags": "regression, feature engineering, data cleaning",
+        "domain_knowledge": "This is a longitudinal survey data that does not have a perfect response rate. Addressing & accounting for missing information in longitudinal survey data is critical to ensuring the validity and reliability of the analysis outcomes. Spending and saving behavior can be used as proxies for Time preference of an individual. Incarceration status can also be gauged by studying the place of residence. If it is \u2018Jail\u2019, or other facilities of detention, incarceration can be assumed. Test scores and class standings are some of the ways to gauge the academic performance of an individual.",
+        "datasets": [
+          {
+            "name": "nls_raw.csv",
+            "description": "The dataset contains information from National Longitudinal Survey of Youth (NLSY79). It includes information about the Demographics, Family Background, Education, Health, Residential, Financial & Criminal Records of the participants.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "ID# (range 1-12686) 1979",
+                  "description": "Unique Identifier of the respondent",
+                  "depth": 0
+                },
+                {
+                  "name": "Sample ID, 1979 (interview)",
+                  "description": "Sample Identification Code",
+                  "depth": 0
+                },
+                {
+                  "name": "Age of respondent, 1979",
+                  "description": "Age of respondent in 1979",
+                  "depth": 0
+                },
+                {
+                  "name": "Age of respondent at interview date, 1981",
+                  "description": "Age of respondent in 1981",
+                  "depth": 0
+                },
+                {
+                  "name": "Age of respondent at interview date, 1989",
+                  "description": "Age of respondent in 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "Occupation of adult male in household at age 14, 1979",
+                  "description": "Occupation of the adult male present in the household of the respondent at age 14 in 1979. Variable records the occupation of the father figure of the repondent, values include FARMER AND FARM MANAGERS, PROFESSIONAL,TECHNICAL AND KINDRED etc",
+                  "depth": 0
+                },
+                {
+                  "name": "Highest grade completed by respondent's mother, 1979",
+                  "description": "Highest grade or year of regular school that respondent's mother ever completed till 1979",
+                  "depth": 0
+                },
+                {
+                  "name": "Highest grade completed by respondent's father, 1979",
+                  "description": "Highest grade or year of regular school that respondent's father ever completed till 1979",
+                  "depth": 0
+                },
+                {
+                  "name": "Highest grade completed, 1979",
+                  "description": "Highest grade or year of regular school that respondent have completed and got credit for till 1979",
+                  "depth": 0
+                },
+                {
+                  "name": "Racial/ethnic cohort, 1979",
+                  "description": "Respondent's racial/ethnic cohort, contains one of three values 1:BLACK, 2:HISPANIC, 3:NON-BLACK NON-HISPANIC",
+                  "depth": 0
+                },
+                {
+                  "name": "Sex of respondent, 1979",
+                  "description": "Sex of the respondent, 1:MALE or 2:FEMALE",
+                  "depth": 0
+                },
+                {
+                  "name": "Family size, 1979",
+                  "description": "Family size of the respondent in 1979",
+                  "depth": 0
+                },
+                {
+                  "name": "Ever convicted of an illegal act in adult court before 1980",
+                  "description": "Boolean variable that indicates if the respondent was convicted of an illegal act in adult court other than minor traffic violations before 1980",
+                  "depth": 0
+                },
+                {
+                  "name": "Ever been sentenced in any correctional institution before 1980",
+                  "description": "Boolean variable that indicated if the respondent was sentenced to spend time in a corrections institute, like a jail, prison, or a youth institution like a training school or reform school or not before 1980",
+                  "depth": 0
+                },
+                {
+                  "name": "Height of respondent, 1981",
+                  "description": "Height of the respondent in inches in 1981",
+                  "depth": 0
+                },
+                {
+                  "name": "Height of respondent, 1985",
+                  "description": "Height of the respondent in inches in 1985",
+                  "depth": 0
+                },
+                {
+                  "name": "Weight of respondent, 1981",
+                  "description": "Weight of the respondent in kilograms in 1981",
+                  "depth": 0
+                },
+                {
+                  "name": "Weight of respondent, 1989",
+                  "description": "Weight of the respondent in kilograms in 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "Weight of respondent, 1992",
+                  "description": "Weight of the respondent in kilograms in 1992",
+                  "depth": 0
+                },
+                {
+                  "name": "Rank in class last year attended at this school, 1981",
+                  "description": "Respondent's rank in the class that he attended in school last year (in 1980) (variable recorded in 1981)",
+                  "depth": 0
+                },
+                {
+                  "name": "Number of students in class last year attended at this school, 1981",
+                  "description": "Number of students in the respondent's class for the last year attended this school",
+                  "depth": 0
+                },
+                {
+                  "name": "ASVAB - Arithmetic Reasoning Z Score (rounded), 1981",
+                  "description": "This variable represents the standardized scores of respondents on the Arithmetic Reasoning section of the ASVAB test. It provides a way to compare individuals' performance on this specific aspect of the test within a standardized framework.",
+                  "depth": 0
+                },
+                {
+                  "name": "ASVAB - Word Knowledge Z Score (rounded), 1981",
+                  "description": "This variable represents the standardized scores of respondents on the Word Knowledge section of the ASVAB test, allowing for comparison of individuals' performance on this specific aspect of the test within a standardized framework.",
+                  "depth": 0
+                },
+                {
+                  "name": "ASVAB - Paragraph Comprehension Z Score (rounded), 1981",
+                  "description": "This variable represents the standardized scores of respondents on the Paragraph Comprehension section of the ASVAB test, allowing for comparison of individuals' performance on this specific aspect of the test within a standardized framework.",
+                  "depth": 0
+                },
+                {
+                  "name": "ASVAB - Mathematics Knowledge Z Score (rounded), 1981",
+                  "description": "This variable represents the standardized scores of respondents on the Mathematics Knowledge section of the ASVAB test, facilitating comparison of individuals' performance on this specific aspect of the test within a standardized framework.",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1981",
+                  "description": "Type of residence respondent is living in the 1981, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1982",
+                  "description": "Type of residence respondent is living in the 1982, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1983",
+                  "description": "Type of residence respondent is living in the 1983, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1984",
+                  "description": "Type of residence respondent is living in the 1984, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1985",
+                  "description": "Type of residence respondent is living in the 1985, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1986",
+                  "description": "Type of residence respondent is living in the 1986, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1987",
+                  "description": "Type of residence respondent is living in the 1987, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1988",
+                  "description": "Type of residence respondent is living in the 1988, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1989",
+                  "description": "Type of residence respondent is living in the 1989, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1990",
+                  "description": "Type of residence respondent is living in the 1990, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1991",
+                  "description": "Type of residence respondent is living in the 1991, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1992",
+                  "description": "Type of residence respondent is living in the 1992, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1993",
+                  "description": "Type of residence respondent is living in the 1993, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1994",
+                  "description": "Type of residence respondent is living in the 1994, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1996",
+                  "description": "Type of residence respondent is living in the 1996, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Family net wealth, 1985",
+                  "description": "Total Net Wealth for Family. Created by summing all asset values and subtracting all debts for the year 1985",
+                  "depth": 0
+                },
+                {
+                  "name": "Family net wealth, 1990",
+                  "description": "Total Net Wealth for Family. Created by summing all asset values and subtracting all debts for the year 1990",
+                  "depth": 0
+                },
+                {
+                  "name": "Family net wealth, 1996 (key data point)",
+                  "description": "Total Net Wealth for Family. Created by summing all asset values and subtracting all debts for the year 1996",
+                  "depth": 0
+                },
+                {
+                  "name": "Market value of residential property respondent/spouse own, 1985",
+                  "description": "Market value of residential property that respondent/spouse owned in 1985",
+                  "depth": 0
+                },
+                {
+                  "name": "Market value of residential property respondent/spouse own, 1990",
+                  "description": "Market value of residential property that respondent/spouse owned in 1990",
+                  "depth": 0
+                },
+                {
+                  "name": "Market value of residential property respondent/spouse own, 1996",
+                  "description": "Market value of residential property that respondent/spouse owned in 1996",
+                  "depth": 0
+                },
+                {
+                  "name": "Total market value of farm, business, and other property, 1985",
+                  "description": "Total market value of all of the real estate, assets in the business(es), farm operation(s) in 1985",
+                  "depth": 0
+                },
+                {
+                  "name": "Total market value of farm, business, and other property, 1990",
+                  "description": "Total market value of all of the real estate, assets in the business(es), farm operation(s) in 1990",
+                  "depth": 0
+                },
+                {
+                  "name": "Total market value of farm, business, and other property, 1996",
+                  "description": "Total market value of all of the real estate, assets in the business(es), farm operation(s) in 1996",
+                  "depth": 0
+                },
+                {
+                  "name": "Market Value of vehicles respondent/spouse own, 1985",
+                  "description": "Total market value of all vehicles including automobiles that respondent/spouse owned in 1985",
+                  "depth": 0
+                },
+                {
+                  "name": "Market Value of vehicles respondent/spouse own, 1990",
+                  "description": "Total market value of all vehicles including automobiles that respondent/spouse owned in 1990",
+                  "depth": 0
+                },
+                {
+                  "name": "Market Value of vehicles respondent/spouse own, 96",
+                  "description": "Total market value of all vehicles including automobiles that respondent/spouse owned in 1996",
+                  "depth": 0
+                },
+                {
+                  "name": "Total market value of items over $500, 1985",
+                  "description": "Total market value of all the other assets of the respondent that were worth more than $500 in 1985",
+                  "depth": 0
+                },
+                {
+                  "name": "Total market value of items over $500, 1990",
+                  "description": "Total market value of all the other assets of the respondent that were worth more than $500 in 1990",
+                  "depth": 0
+                },
+                {
+                  "name": "Total market value of items over $500, 1996",
+                  "description": "Total market value of all the other assets of the respondent that were worth more than $500 in 1996",
+                  "depth": 0
+                },
+                {
+                  "name": "Total net family income, previous calendar year, 1979",
+                  "description": "Total net family income for the previous calendar year (1978) (recorded in 1979)",
+                  "depth": 0
+                },
+                {
+                  "name": "Total net family income, previous calendar year, 1985",
+                  "description": "Total net family income for the previous calendar year (1984) (recorded in 1985)",
+                  "depth": 0
+                },
+                {
+                  "name": "Total net family income, previous calendar year, 1989",
+                  "description": "Total net family income for the previous calendar year (1989) (recorded in 1989)",
+                  "depth": 0
+                },
+                {
+                  "name": "Was more money put into or taken out of R/spouse savings since last interview, 1989",
+                  "description": "Categorical variable indicating if was more money was put into or taken out of respondent/spouse savings since last interview in 1989.\nIt contains four values 1:PUT MORE MONEY IN, 2:TOOK MORE MONEY OUT, 3:NO CHANGE, 4:NO SAVINGS",
+                  "depth": 0
+                },
+                {
+                  "name": "Net amount respondent/spouse put into savings since last interview, 1989",
+                  "description": "Net amount of money that respondent/spouse put into their savings since last interview in 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "Net amount respondent/spouse took out of savings since last interview, 1989",
+                  "description": "Net amount of money that respondent/spouse took out of savings since last interview in 1989",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Higher time preference associated with higher BMI for 1989 data."
+    }
+  },
+  {
+    "id": "nls_bmi_raw|1|0",
+    "input": {
+      "query": "Is time preference positively associated with obesity in black men?",
+      "question_type": "relationship",
+      "data_folder": "nls_bmi_raw",
+      "metadata": {
+        "domain": "sociology",
+        "workflow_tags": "data selection, regression, feature engineering, data cleaning",
+        "domain_knowledge": "This is a longitudinal survey data that does not have a perfect response rate. Addressing & accounting for missing information in longitudinal survey data is critical to ensuring the validity and reliability of the analysis outcomes. Spending and saving behavior can be used as proxies for Time preference of an individual. Incarceration status can also be gauged by studying the place of residence. If it is \u2018Jail\u2019, or other facilities of detention, incarceration can be assumed. Test scores and class standings are some of the ways to gauge the academic performance of an individual.",
+        "datasets": [
+          {
+            "name": "nls_raw.csv",
+            "description": "The dataset contains information from National Longitudinal Survey of Youth (NLSY79). It includes information about the Demographics, Family Background, Education, Health, Residential, Financial & Criminal Records of the participants.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "ID# (range 1-12686) 1979",
+                  "description": "Unique Identifier of the respondent",
+                  "depth": 0
+                },
+                {
+                  "name": "Sample ID, 1979 (interview)",
+                  "description": "Sample Identification Code",
+                  "depth": 0
+                },
+                {
+                  "name": "Age of respondent, 1979",
+                  "description": "Age of respondent in 1979",
+                  "depth": 0
+                },
+                {
+                  "name": "Age of respondent at interview date, 1981",
+                  "description": "Age of respondent in 1981",
+                  "depth": 0
+                },
+                {
+                  "name": "Age of respondent at interview date, 1989",
+                  "description": "Age of respondent in 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "Occupation of adult male in household at age 14, 1979",
+                  "description": "Occupation of the adult male present in the household of the respondent at age 14 in 1979. Variable records the occupation of the father figure of the repondent, values include FARMER AND FARM MANAGERS, PROFESSIONAL,TECHNICAL AND KINDRED etc",
+                  "depth": 0
+                },
+                {
+                  "name": "Highest grade completed by respondent's mother, 1979",
+                  "description": "Highest grade or year of regular school that respondent's mother ever completed till 1979",
+                  "depth": 0
+                },
+                {
+                  "name": "Highest grade completed by respondent's father, 1979",
+                  "description": "Highest grade or year of regular school that respondent's father ever completed till 1979",
+                  "depth": 0
+                },
+                {
+                  "name": "Highest grade completed, 1979",
+                  "description": "Highest grade or year of regular school that respondent have completed and got credit for till 1979",
+                  "depth": 0
+                },
+                {
+                  "name": "Racial/ethnic cohort, 1979",
+                  "description": "Respondent's racial/ethnic cohort, contains one of three values 1:BLACK, 2:HISPANIC, 3:NON-BLACK NON-HISPANIC",
+                  "depth": 0
+                },
+                {
+                  "name": "Sex of respondent, 1979",
+                  "description": "Sex of the respondent, 1:MALE or 2:FEMALE",
+                  "depth": 0
+                },
+                {
+                  "name": "Family size, 1979",
+                  "description": "Family size of the respondent in 1979",
+                  "depth": 0
+                },
+                {
+                  "name": "Ever convicted of an illegal act in adult court before 1980",
+                  "description": "Boolean variable that indicates if the respondent was convicted of an illegal act in adult court other than minor traffic violations before 1980",
+                  "depth": 0
+                },
+                {
+                  "name": "Ever been sentenced in any correctional institution before 1980",
+                  "description": "Boolean variable that indicated if the respondent was sentenced to spend time in a corrections institute, like a jail, prison, or a youth institution like a training school or reform school or not before 1980",
+                  "depth": 0
+                },
+                {
+                  "name": "Height of respondent, 1981",
+                  "description": "Height of the respondent in inches in 1981",
+                  "depth": 0
+                },
+                {
+                  "name": "Height of respondent, 1985",
+                  "description": "Height of the respondent in inches in 1985",
+                  "depth": 0
+                },
+                {
+                  "name": "Weight of respondent, 1981",
+                  "description": "Weight of the respondent in kilograms in 1981",
+                  "depth": 0
+                },
+                {
+                  "name": "Weight of respondent, 1989",
+                  "description": "Weight of the respondent in kilograms in 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "Weight of respondent, 1992",
+                  "description": "Weight of the respondent in kilograms in 1992",
+                  "depth": 0
+                },
+                {
+                  "name": "Rank in class last year attended at this school, 1981",
+                  "description": "Respondent's rank in the class that he attended in school last year (in 1980) (variable recorded in 1981)",
+                  "depth": 0
+                },
+                {
+                  "name": "Number of students in class last year attended at this school, 1981",
+                  "description": "Number of students in the respondent's class for the last year attended this school",
+                  "depth": 0
+                },
+                {
+                  "name": "ASVAB - Arithmetic Reasoning Z Score (rounded), 1981",
+                  "description": "This variable represents the standardized scores of respondents on the Arithmetic Reasoning section of the ASVAB test. It provides a way to compare individuals' performance on this specific aspect of the test within a standardized framework.",
+                  "depth": 0
+                },
+                {
+                  "name": "ASVAB - Word Knowledge Z Score (rounded), 1981",
+                  "description": "This variable represents the standardized scores of respondents on the Word Knowledge section of the ASVAB test, allowing for comparison of individuals' performance on this specific aspect of the test within a standardized framework.",
+                  "depth": 0
+                },
+                {
+                  "name": "ASVAB - Paragraph Comprehension Z Score (rounded), 1981",
+                  "description": "This variable represents the standardized scores of respondents on the Paragraph Comprehension section of the ASVAB test, allowing for comparison of individuals' performance on this specific aspect of the test within a standardized framework.",
+                  "depth": 0
+                },
+                {
+                  "name": "ASVAB - Mathematics Knowledge Z Score (rounded), 1981",
+                  "description": "This variable represents the standardized scores of respondents on the Mathematics Knowledge section of the ASVAB test, facilitating comparison of individuals' performance on this specific aspect of the test within a standardized framework.",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1981",
+                  "description": "Type of residence respondent is living in the 1981, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1982",
+                  "description": "Type of residence respondent is living in the 1982, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1983",
+                  "description": "Type of residence respondent is living in the 1983, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1984",
+                  "description": "Type of residence respondent is living in the 1984, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1985",
+                  "description": "Type of residence respondent is living in the 1985, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1986",
+                  "description": "Type of residence respondent is living in the 1986, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1987",
+                  "description": "Type of residence respondent is living in the 1987, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1988",
+                  "description": "Type of residence respondent is living in the 1988, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1989",
+                  "description": "Type of residence respondent is living in the 1989, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1990",
+                  "description": "Type of residence respondent is living in the 1990, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1991",
+                  "description": "Type of residence respondent is living in the 1991, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1992",
+                  "description": "Type of residence respondent is living in the 1992, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1993",
+                  "description": "Type of residence respondent is living in the 1993, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1994",
+                  "description": "Type of residence respondent is living in the 1994, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Type of residence respondent is living in, 1996",
+                  "description": "Type of residence respondent is living in the 1996, contains one of these values 1:ABOARD SHIP, BARRACKS,    2:BACHELOR, OFFICER QUARTERS,    3:DORM, FRATERNITY, SORORITY,    4:HOSPITAL,    5:JAIL,    6:OTHER TEMPORARY QUARTERS,    11:OWN DWELLING UNIT,    12:ON-BASE MIL FAM HOUSING,    13:OFF-BASE MIL FAM HOUSING,    14:ORPHANAGE,    15:RELIGIOUS INSTITUTION,    16:OTHER INDIVIDUAL QUARTERS,    17:PARENTAL,    18:HHI CONDUCTED WITH PARENT,    19:R IN PARENTAL HOUSEHOLD",
+                  "depth": 0
+                },
+                {
+                  "name": "Family net wealth, 1985",
+                  "description": "Total Net Wealth for Family. Created by summing all asset values and subtracting all debts for the year 1985",
+                  "depth": 0
+                },
+                {
+                  "name": "Family net wealth, 1990",
+                  "description": "Total Net Wealth for Family. Created by summing all asset values and subtracting all debts for the year 1990",
+                  "depth": 0
+                },
+                {
+                  "name": "Family net wealth, 1996 (key data point)",
+                  "description": "Total Net Wealth for Family. Created by summing all asset values and subtracting all debts for the year 1996",
+                  "depth": 0
+                },
+                {
+                  "name": "Market value of residential property respondent/spouse own, 1985",
+                  "description": "Market value of residential property that respondent/spouse owned in 1985",
+                  "depth": 0
+                },
+                {
+                  "name": "Market value of residential property respondent/spouse own, 1990",
+                  "description": "Market value of residential property that respondent/spouse owned in 1990",
+                  "depth": 0
+                },
+                {
+                  "name": "Market value of residential property respondent/spouse own, 1996",
+                  "description": "Market value of residential property that respondent/spouse owned in 1996",
+                  "depth": 0
+                },
+                {
+                  "name": "Total market value of farm, business, and other property, 1985",
+                  "description": "Total market value of all of the real estate, assets in the business(es), farm operation(s) in 1985",
+                  "depth": 0
+                },
+                {
+                  "name": "Total market value of farm, business, and other property, 1990",
+                  "description": "Total market value of all of the real estate, assets in the business(es), farm operation(s) in 1990",
+                  "depth": 0
+                },
+                {
+                  "name": "Total market value of farm, business, and other property, 1996",
+                  "description": "Total market value of all of the real estate, assets in the business(es), farm operation(s) in 1996",
+                  "depth": 0
+                },
+                {
+                  "name": "Market Value of vehicles respondent/spouse own, 1985",
+                  "description": "Total market value of all vehicles including automobiles that respondent/spouse owned in 1985",
+                  "depth": 0
+                },
+                {
+                  "name": "Market Value of vehicles respondent/spouse own, 1990",
+                  "description": "Total market value of all vehicles including automobiles that respondent/spouse owned in 1990",
+                  "depth": 0
+                },
+                {
+                  "name": "Market Value of vehicles respondent/spouse own, 96",
+                  "description": "Total market value of all vehicles including automobiles that respondent/spouse owned in 1996",
+                  "depth": 0
+                },
+                {
+                  "name": "Total market value of items over $500, 1985",
+                  "description": "Total market value of all the other assets of the respondent that were worth more than $500 in 1985",
+                  "depth": 0
+                },
+                {
+                  "name": "Total market value of items over $500, 1990",
+                  "description": "Total market value of all the other assets of the respondent that were worth more than $500 in 1990",
+                  "depth": 0
+                },
+                {
+                  "name": "Total market value of items over $500, 1996",
+                  "description": "Total market value of all the other assets of the respondent that were worth more than $500 in 1996",
+                  "depth": 0
+                },
+                {
+                  "name": "Total net family income, previous calendar year, 1979",
+                  "description": "Total net family income for the previous calendar year (1978) (recorded in 1979)",
+                  "depth": 0
+                },
+                {
+                  "name": "Total net family income, previous calendar year, 1985",
+                  "description": "Total net family income for the previous calendar year (1984) (recorded in 1985)",
+                  "depth": 0
+                },
+                {
+                  "name": "Total net family income, previous calendar year, 1989",
+                  "description": "Total net family income for the previous calendar year (1989) (recorded in 1989)",
+                  "depth": 0
+                },
+                {
+                  "name": "Was more money put into or taken out of R/spouse savings since last interview, 1989",
+                  "description": "Categorical variable indicating if was more money was put into or taken out of respondent/spouse savings since last interview in 1989.\nIt contains four values 1:PUT MORE MONEY IN, 2:TOOK MORE MONEY OUT, 3:NO CHANGE, 4:NO SAVINGS",
+                  "depth": 0
+                },
+                {
+                  "name": "Net amount respondent/spouse put into savings since last interview, 1989",
+                  "description": "Net amount of money that respondent/spouse put into their savings since last interview in 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "Net amount respondent/spouse took out of savings since last interview, 1989",
+                  "description": "Net amount of money that respondent/spouse took out of savings since last interview in 1989",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Time preference positively associated with obesity in Black men."
+    }
+  },
+  {
+    "id": "immigration_offshoring_effect_on_employment|0|0",
+    "input": {
+      "query": "Which variable per unit reduces 0.1059 unit of the share of offshore employment?",
+      "question_type": "variable",
+      "data_folder": "immigration_offshoring_effect_on_employment",
+      "metadata": {
+        "domain": "economics",
+        "workflow_tags": "regression, data cleaning, data integration",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "offshoring_iv_mar2.dta",
+            "description": "This dataset contains measures aimed at capturing exogenous variation in the ease or costs of offshoring across industries and years. It is constructed using variation in offshoring across countries to the U.S., interacting with each industry's initial distribution of offshoring across those countries. This offshoring measure is intended to be used as an explanatory variable when examining impacts on domestic employment patterns.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "year",
+                  "description": "The year of the observation",
+                  "depth": 0
+                },
+                {
+                  "name": "beaind",
+                  "description": "Beaurau of Economic (BEA) Industry Code",
+                  "depth": 0
+                },
+                {
+                  "name": "iv_offshoring_1",
+                  "description": "The key instrumental variable capturing exogenous variation in the ease/costs of offshoring for that industry-year.",
+                  "depth": 0
+                }
+              ]
+            }
+          },
+          {
+            "name": "immi_popimputed_00_07.dta",
+            "description": "This dataset provides imputed measures of immigrant employment aimed at capturing exogenous variation in immigration costs and push-factors across industries and years",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "year",
+                  "description": "The year of the observation",
+                  "depth": 0
+                },
+                {
+                  "name": "beaind",
+                  "description": "Beaurau of Economic (BEA) Industry Code",
+                  "depth": 0
+                },
+                {
+                  "name": "share_immi_imputed",
+                  "description": "This column represents the imputed share or proportion of immigrant employment within total employment for each industry-year observation. The share of immigrant employment indicates the proportion of total employment within each industry that is comprised of immigrant workers.",
+                  "depth": 0
+                },
+                {
+                  "name": "empl_immi_imputed",
+                  "description": "This column represents the imputed level of immigrant employment for each industry-year observation. This refers to the estimated number of immigrant workers employed within each industry-year.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Per unit increased ease of immigration reduces 0.1059 unit of the share of offshore employment"
+    }
+  },
+  {
+    "id": "immigration_offshoring_effect_on_employment|0|1",
+    "input": {
+      "query": "How does per unit increased ease of immigration impact the share of offshore employment?",
+      "question_type": "relationship",
+      "data_folder": "immigration_offshoring_effect_on_employment",
+      "metadata": {
+        "domain": "economics",
+        "workflow_tags": "regression, data cleaning, data integration",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "offshoring_iv_mar2.dta",
+            "description": "This dataset contains measures aimed at capturing exogenous variation in the ease or costs of offshoring across industries and years. It is constructed using variation in offshoring across countries to the U.S., interacting with each industry's initial distribution of offshoring across those countries. This offshoring measure is intended to be used as an explanatory variable when examining impacts on domestic employment patterns.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "year",
+                  "description": "The year of the observation",
+                  "depth": 0
+                },
+                {
+                  "name": "beaind",
+                  "description": "Beaurau of Economic (BEA) Industry Code",
+                  "depth": 0
+                },
+                {
+                  "name": "iv_offshoring_1",
+                  "description": "The key instrumental variable capturing exogenous variation in the ease/costs of offshoring for that industry-year.",
+                  "depth": 0
+                }
+              ]
+            }
+          },
+          {
+            "name": "immi_popimputed_00_07.dta",
+            "description": "This dataset provides imputed measures of immigrant employment aimed at capturing exogenous variation in immigration costs and push-factors across industries and years",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "year",
+                  "description": "The year of the observation",
+                  "depth": 0
+                },
+                {
+                  "name": "beaind",
+                  "description": "Beaurau of Economic (BEA) Industry Code",
+                  "depth": 0
+                },
+                {
+                  "name": "share_immi_imputed",
+                  "description": "This column represents the imputed share or proportion of immigrant employment within total employment for each industry-year observation. The share of immigrant employment indicates the proportion of total employment within each industry that is comprised of immigrant workers.",
+                  "depth": 0
+                },
+                {
+                  "name": "empl_immi_imputed",
+                  "description": "This column represents the imputed level of immigrant employment for each industry-year observation. This refers to the estimated number of immigrant workers employed within each industry-year.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Per unit increased ease of immigration reduces 0.1059 unit of the share of offshore employment"
+    }
+  },
+  {
+    "id": "immigration_offshoring_effect_on_employment|1|0",
+    "input": {
+      "query": "What is the effect of increased ease of immigration on the local job market for native workers?",
+      "question_type": "relationship",
+      "data_folder": "immigration_offshoring_effect_on_employment",
+      "metadata": {
+        "domain": "economics",
+        "workflow_tags": "regression, data cleaning, data integration",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "offshoring_iv_mar2.dta",
+            "description": "This dataset contains measures aimed at capturing exogenous variation in the ease or costs of offshoring across industries and years. It is constructed using variation in offshoring across countries to the U.S., interacting with each industry's initial distribution of offshoring across those countries. This offshoring measure is intended to be used as an explanatory variable when examining impacts on domestic employment patterns.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "year",
+                  "description": "The year of the observation",
+                  "depth": 0
+                },
+                {
+                  "name": "beaind",
+                  "description": "Beaurau of Economic (BEA) Industry Code",
+                  "depth": 0
+                },
+                {
+                  "name": "iv_offshoring_1",
+                  "description": "The key instrumental variable capturing exogenous variation in the ease/costs of offshoring for that industry-year.",
+                  "depth": 0
+                }
+              ]
+            }
+          },
+          {
+            "name": "immi_popimputed_00_07.dta",
+            "description": "This dataset provides imputed measures of immigrant employment aimed at capturing exogenous variation in immigration costs and push-factors across industries and years",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "year",
+                  "description": "The year of the observation",
+                  "depth": 0
+                },
+                {
+                  "name": "beaind",
+                  "description": "Beaurau of Economic (BEA) Industry Code",
+                  "depth": 0
+                },
+                {
+                  "name": "share_immi_imputed",
+                  "description": "This column represents the imputed share or proportion of immigrant employment within total employment for each industry-year observation. The share of immigrant employment indicates the proportion of total employment within each industry that is comprised of immigrant workers.",
+                  "depth": 0
+                },
+                {
+                  "name": "empl_immi_imputed",
+                  "description": "This column represents the imputed level of immigrant employment for each industry-year observation. This refers to the estimated number of immigrant workers employed within each industry-year.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Increased ease of immigration has no significant effect on the share of native employment"
+    }
+  },
+  {
+    "id": "immigration_offshoring_effect_on_employment|1|1",
+    "input": {
+      "query": "How does increased ease of immigration impact the share of native employment?",
+      "question_type": "relationship",
+      "data_folder": "immigration_offshoring_effect_on_employment",
+      "metadata": {
+        "domain": "economics",
+        "workflow_tags": "regression, data cleaning, data integration",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "offshoring_iv_mar2.dta",
+            "description": "This dataset contains measures aimed at capturing exogenous variation in the ease or costs of offshoring across industries and years. It is constructed using variation in offshoring across countries to the U.S., interacting with each industry's initial distribution of offshoring across those countries. This offshoring measure is intended to be used as an explanatory variable when examining impacts on domestic employment patterns.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "year",
+                  "description": "The year of the observation",
+                  "depth": 0
+                },
+                {
+                  "name": "beaind",
+                  "description": "Beaurau of Economic (BEA) Industry Code",
+                  "depth": 0
+                },
+                {
+                  "name": "iv_offshoring_1",
+                  "description": "The key instrumental variable capturing exogenous variation in the ease/costs of offshoring for that industry-year.",
+                  "depth": 0
+                }
+              ]
+            }
+          },
+          {
+            "name": "immi_popimputed_00_07.dta",
+            "description": "This dataset provides imputed measures of immigrant employment aimed at capturing exogenous variation in immigration costs and push-factors across industries and years",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "year",
+                  "description": "The year of the observation",
+                  "depth": 0
+                },
+                {
+                  "name": "beaind",
+                  "description": "Beaurau of Economic (BEA) Industry Code",
+                  "depth": 0
+                },
+                {
+                  "name": "share_immi_imputed",
+                  "description": "This column represents the imputed share or proportion of immigrant employment within total employment for each industry-year observation. The share of immigrant employment indicates the proportion of total employment within each industry that is comprised of immigrant workers.",
+                  "depth": 0
+                },
+                {
+                  "name": "empl_immi_imputed",
+                  "description": "This column represents the imputed level of immigrant employment for each industry-year observation. This refers to the estimated number of immigrant workers employed within each industry-year.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Increased ease of immigration has no significant effect on the share of native employment"
+    }
+  },
+  {
+    "id": "evolution_freshwater_fish|2|0",
+    "input": {
+      "query": "Which two aspects of evolutionary biology have been found to have no significant association?",
+      "question_type": "variables",
+      "data_folder": "evolution_freshwater_fish",
+      "metadata": {
+        "domain": "biology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "body-size-evolution-in-south-american-freshwater-fishes.csv",
+            "description": "This dataset contains the drivers of speciation rates in South American freshwater fishes, employing an integrative approach that considers multiple biotic and abiotic factors.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "HYBAS_ID",
+                  "description": "Identifier for hydrological basins as defined by the HydroBASINS framework",
+                  "depth": 0
+                },
+                {
+                  "name": "long",
+                  "description": "The longitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "lat",
+                  "description": "The latitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_speciation",
+                  "description": "This variable represents the average speciation rates of species within each sub-basin, as estimated by BAMM",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_extinction",
+                  "description": "This variable represents the mean extinction rates for each tip of the phylogenetic tree, as estimated by the BAMM analysis",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_NetDiv",
+                  "description": "This variable stands for the net diversification rates, which are calculated by subtracting the mean extinction rates from the mean \nspeciation rates for each tip in the phylogenetic tree.",
+                  "depth": 0
+                },
+                {
+                  "name": "DR",
+                  "description": "Diversification Rate, a transformed measure of evolutionary distinctness to understand phylogenetic diversity. The lower the \"ed\" value, the higher the \"DR\" metric, indicating a species with less unique evolutionary history compared to others in the phylogeny.",
+                  "depth": 0
+                },
+                {
+                  "name": "BEL_evol",
+                  "description": "Rates of Body Elongation evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "MBL_evol",
+                  "description": "Rates of Maximum Body Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "OGP_evol",
+                  "description": "Rates of Oral Gape Position Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RES_evol",
+                  "description": "Rates of Relative Eye Size Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RML_evol",
+                  "description": "Rate of Relative Maxillary Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "bio1",
+                  "description": "This variable represents the annual mean temperature.",
+                  "depth": 0
+                },
+                {
+                  "name": "bio12",
+                  "description": "This variable represents the annual mean precipitation.",
+                  "depth": 0
+                },
+                {
+                  "name": "runoff",
+                  "description": "This variable is used to represent the quantity of water from precipitation that flows over the land's surface and does not get absorbed into the ground. It is being extracted from a geographic database (HydroAtlas).",
+                  "depth": 0
+                },
+                {
+                  "name": "aet",
+                  "description": "Actual evapotranspiration, which is the sum of evaporation and plant transpiration from the Earth's land and ocean surface to the atmosphere.",
+                  "depth": 0
+                },
+                {
+                  "name": "Elevation",
+                  "description": "Mean elevation data indicating the height above sea level.",
+                  "depth": 0
+                },
+                {
+                  "name": "sgr",
+                  "description": "Stream gradient is a measure of the steepness or incline of a stream or river. It can affect water flow and sediment transport, which in turn can influence the habitat conditions for freshwater species. Higher stream gradients usually correspond to faster-moving \nwater and can create different ecological conditions compared to lower gradients.",
+                  "depth": 0
+                },
+                {
+                  "name": "soil_div",
+                  "description": "It measures the diversity of soil types or conditions within each sub-basin studied. Soil diversity is computed using a dataset that includes eight variables related to substrate types and soil conditions.",
+                  "depth": 0
+                },
+                {
+                  "name": "area",
+                  "description": "The geographic area of a sub-basin, possibly in square meters, used as one of the predictors in the analysis.",
+                  "depth": 0
+                },
+                {
+                  "name": "diversity",
+                  "description": "Species diversity, which in ecological studies typically refers to the number of species and their relative abundances in a given area.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "The rate of body elongation evolution has no significant association with speciation rates."
+    }
+  },
+  {
+    "id": "evolution_freshwater_fish|2|1",
+    "input": {
+      "query": "What is the nature of the relationship between the rate of body elongation evolution and speciation rates?",
+      "question_type": "relationship",
+      "data_folder": "evolution_freshwater_fish",
+      "metadata": {
+        "domain": "biology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "body-size-evolution-in-south-american-freshwater-fishes.csv",
+            "description": "This dataset contains the drivers of speciation rates in South American freshwater fishes, employing an integrative approach that considers multiple biotic and abiotic factors.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "HYBAS_ID",
+                  "description": "Identifier for hydrological basins as defined by the HydroBASINS framework",
+                  "depth": 0
+                },
+                {
+                  "name": "long",
+                  "description": "The longitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "lat",
+                  "description": "The latitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_speciation",
+                  "description": "This variable represents the average speciation rates of species within each sub-basin, as estimated by BAMM",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_extinction",
+                  "description": "This variable represents the mean extinction rates for each tip of the phylogenetic tree, as estimated by the BAMM analysis",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_NetDiv",
+                  "description": "This variable stands for the net diversification rates, which are calculated by subtracting the mean extinction rates from the mean \nspeciation rates for each tip in the phylogenetic tree.",
+                  "depth": 0
+                },
+                {
+                  "name": "DR",
+                  "description": "Diversification Rate, a transformed measure of evolutionary distinctness to understand phylogenetic diversity. The lower the \"ed\" value, the higher the \"DR\" metric, indicating a species with less unique evolutionary history compared to others in the phylogeny.",
+                  "depth": 0
+                },
+                {
+                  "name": "BEL_evol",
+                  "description": "Rates of Body Elongation evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "MBL_evol",
+                  "description": "Rates of Maximum Body Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "OGP_evol",
+                  "description": "Rates of Oral Gape Position Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RES_evol",
+                  "description": "Rates of Relative Eye Size Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RML_evol",
+                  "description": "Rate of Relative Maxillary Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "bio1",
+                  "description": "This variable represents the annual mean temperature.",
+                  "depth": 0
+                },
+                {
+                  "name": "bio12",
+                  "description": "This variable represents the annual mean precipitation.",
+                  "depth": 0
+                },
+                {
+                  "name": "runoff",
+                  "description": "This variable is used to represent the quantity of water from precipitation that flows over the land's surface and does not get absorbed into the ground. It is being extracted from a geographic database (HydroAtlas).",
+                  "depth": 0
+                },
+                {
+                  "name": "aet",
+                  "description": "Actual evapotranspiration, which is the sum of evaporation and plant transpiration from the Earth's land and ocean surface to the atmosphere.",
+                  "depth": 0
+                },
+                {
+                  "name": "Elevation",
+                  "description": "Mean elevation data indicating the height above sea level.",
+                  "depth": 0
+                },
+                {
+                  "name": "sgr",
+                  "description": "Stream gradient is a measure of the steepness or incline of a stream or river. It can affect water flow and sediment transport, which in turn can influence the habitat conditions for freshwater species. Higher stream gradients usually correspond to faster-moving \nwater and can create different ecological conditions compared to lower gradients.",
+                  "depth": 0
+                },
+                {
+                  "name": "soil_div",
+                  "description": "It measures the diversity of soil types or conditions within each sub-basin studied. Soil diversity is computed using a dataset that includes eight variables related to substrate types and soil conditions.",
+                  "depth": 0
+                },
+                {
+                  "name": "area",
+                  "description": "The geographic area of a sub-basin, possibly in square meters, used as one of the predictors in the analysis.",
+                  "depth": 0
+                },
+                {
+                  "name": "diversity",
+                  "description": "Species diversity, which in ecological studies typically refers to the number of species and their relative abundances in a given area.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "The rate of body elongation evolution has no significant association with speciation rates."
+    }
+  },
+  {
+    "id": "evolution_freshwater_fish|3|0",
+    "input": {
+      "query": "What entities show a weak but significant, positive relationship with a coefficient of 0.00003018?",
+      "question_type": "variables",
+      "data_folder": "evolution_freshwater_fish",
+      "metadata": {
+        "domain": "biology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "body-size-evolution-in-south-american-freshwater-fishes.csv",
+            "description": "This dataset contains the drivers of speciation rates in South American freshwater fishes, employing an integrative approach that considers multiple biotic and abiotic factors.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "HYBAS_ID",
+                  "description": "Identifier for hydrological basins as defined by the HydroBASINS framework",
+                  "depth": 0
+                },
+                {
+                  "name": "long",
+                  "description": "The longitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "lat",
+                  "description": "The latitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_speciation",
+                  "description": "This variable represents the average speciation rates of species within each sub-basin, as estimated by BAMM",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_extinction",
+                  "description": "This variable represents the mean extinction rates for each tip of the phylogenetic tree, as estimated by the BAMM analysis",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_NetDiv",
+                  "description": "This variable stands for the net diversification rates, which are calculated by subtracting the mean extinction rates from the mean \nspeciation rates for each tip in the phylogenetic tree.",
+                  "depth": 0
+                },
+                {
+                  "name": "DR",
+                  "description": "Diversification Rate, a transformed measure of evolutionary distinctness to understand phylogenetic diversity. The lower the \"ed\" value, the higher the \"DR\" metric, indicating a species with less unique evolutionary history compared to others in the phylogeny.",
+                  "depth": 0
+                },
+                {
+                  "name": "BEL_evol",
+                  "description": "Rates of Body Elongation evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "MBL_evol",
+                  "description": "Rates of Maximum Body Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "OGP_evol",
+                  "description": "Rates of Oral Gape Position Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RES_evol",
+                  "description": "Rates of Relative Eye Size Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RML_evol",
+                  "description": "Rate of Relative Maxillary Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "bio1",
+                  "description": "This variable represents the annual mean temperature.",
+                  "depth": 0
+                },
+                {
+                  "name": "bio12",
+                  "description": "This variable represents the annual mean precipitation.",
+                  "depth": 0
+                },
+                {
+                  "name": "runoff",
+                  "description": "This variable is used to represent the quantity of water from precipitation that flows over the land's surface and does not get absorbed into the ground. It is being extracted from a geographic database (HydroAtlas).",
+                  "depth": 0
+                },
+                {
+                  "name": "aet",
+                  "description": "Actual evapotranspiration, which is the sum of evaporation and plant transpiration from the Earth's land and ocean surface to the atmosphere.",
+                  "depth": 0
+                },
+                {
+                  "name": "Elevation",
+                  "description": "Mean elevation data indicating the height above sea level.",
+                  "depth": 0
+                },
+                {
+                  "name": "sgr",
+                  "description": "Stream gradient is a measure of the steepness or incline of a stream or river. It can affect water flow and sediment transport, which in turn can influence the habitat conditions for freshwater species. Higher stream gradients usually correspond to faster-moving \nwater and can create different ecological conditions compared to lower gradients.",
+                  "depth": 0
+                },
+                {
+                  "name": "soil_div",
+                  "description": "It measures the diversity of soil types or conditions within each sub-basin studied. Soil diversity is computed using a dataset that includes eight variables related to substrate types and soil conditions.",
+                  "depth": 0
+                },
+                {
+                  "name": "area",
+                  "description": "The geographic area of a sub-basin, possibly in square meters, used as one of the predictors in the analysis.",
+                  "depth": 0
+                },
+                {
+                  "name": "diversity",
+                  "description": "Species diversity, which in ecological studies typically refers to the number of species and their relative abundances in a given area.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "There is a weak but significant, positive relationship between speciation rates and species diversity. The weak relationship is determined by a very small coefficient 0.00003018."
+    }
+  },
+  {
+    "id": "evolution_freshwater_fish|3|1",
+    "input": {
+      "query": "What type of relationship exists between speciation rates and species diversity?",
+      "question_type": "relationship",
+      "data_folder": "evolution_freshwater_fish",
+      "metadata": {
+        "domain": "biology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "body-size-evolution-in-south-american-freshwater-fishes.csv",
+            "description": "This dataset contains the drivers of speciation rates in South American freshwater fishes, employing an integrative approach that considers multiple biotic and abiotic factors.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "HYBAS_ID",
+                  "description": "Identifier for hydrological basins as defined by the HydroBASINS framework",
+                  "depth": 0
+                },
+                {
+                  "name": "long",
+                  "description": "The longitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "lat",
+                  "description": "The latitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_speciation",
+                  "description": "This variable represents the average speciation rates of species within each sub-basin, as estimated by BAMM",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_extinction",
+                  "description": "This variable represents the mean extinction rates for each tip of the phylogenetic tree, as estimated by the BAMM analysis",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_NetDiv",
+                  "description": "This variable stands for the net diversification rates, which are calculated by subtracting the mean extinction rates from the mean \nspeciation rates for each tip in the phylogenetic tree.",
+                  "depth": 0
+                },
+                {
+                  "name": "DR",
+                  "description": "Diversification Rate, a transformed measure of evolutionary distinctness to understand phylogenetic diversity. The lower the \"ed\" value, the higher the \"DR\" metric, indicating a species with less unique evolutionary history compared to others in the phylogeny.",
+                  "depth": 0
+                },
+                {
+                  "name": "BEL_evol",
+                  "description": "Rates of Body Elongation evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "MBL_evol",
+                  "description": "Rates of Maximum Body Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "OGP_evol",
+                  "description": "Rates of Oral Gape Position Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RES_evol",
+                  "description": "Rates of Relative Eye Size Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RML_evol",
+                  "description": "Rate of Relative Maxillary Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "bio1",
+                  "description": "This variable represents the annual mean temperature.",
+                  "depth": 0
+                },
+                {
+                  "name": "bio12",
+                  "description": "This variable represents the annual mean precipitation.",
+                  "depth": 0
+                },
+                {
+                  "name": "runoff",
+                  "description": "This variable is used to represent the quantity of water from precipitation that flows over the land's surface and does not get absorbed into the ground. It is being extracted from a geographic database (HydroAtlas).",
+                  "depth": 0
+                },
+                {
+                  "name": "aet",
+                  "description": "Actual evapotranspiration, which is the sum of evaporation and plant transpiration from the Earth's land and ocean surface to the atmosphere.",
+                  "depth": 0
+                },
+                {
+                  "name": "Elevation",
+                  "description": "Mean elevation data indicating the height above sea level.",
+                  "depth": 0
+                },
+                {
+                  "name": "sgr",
+                  "description": "Stream gradient is a measure of the steepness or incline of a stream or river. It can affect water flow and sediment transport, which in turn can influence the habitat conditions for freshwater species. Higher stream gradients usually correspond to faster-moving \nwater and can create different ecological conditions compared to lower gradients.",
+                  "depth": 0
+                },
+                {
+                  "name": "soil_div",
+                  "description": "It measures the diversity of soil types or conditions within each sub-basin studied. Soil diversity is computed using a dataset that includes eight variables related to substrate types and soil conditions.",
+                  "depth": 0
+                },
+                {
+                  "name": "area",
+                  "description": "The geographic area of a sub-basin, possibly in square meters, used as one of the predictors in the analysis.",
+                  "depth": 0
+                },
+                {
+                  "name": "diversity",
+                  "description": "Species diversity, which in ecological studies typically refers to the number of species and their relative abundances in a given area.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "There is a weak but significant, positive relationship between speciation rates and species diversity. The weak relationship is determined by a very small coefficient 0.00003018."
+    }
+  },
+  {
+    "id": "evolution_freshwater_fish|0|0",
+    "input": {
+      "query": "Is the maximum body length evolution the most impactful factor in explaining the speciation rates?",
+      "question_type": "variable",
+      "data_folder": "evolution_freshwater_fish",
+      "metadata": {
+        "domain": "biology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "body-size-evolution-in-south-american-freshwater-fishes.csv",
+            "description": "This dataset contains the drivers of speciation rates in South American freshwater fishes, employing an integrative approach that considers multiple biotic and abiotic factors.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "HYBAS_ID",
+                  "description": "Identifier for hydrological basins as defined by the HydroBASINS framework",
+                  "depth": 0
+                },
+                {
+                  "name": "long",
+                  "description": "The longitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "lat",
+                  "description": "The latitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_speciation",
+                  "description": "This variable represents the average speciation rates of species within each sub-basin, as estimated by BAMM",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_extinction",
+                  "description": "This variable represents the mean extinction rates for each tip of the phylogenetic tree, as estimated by the BAMM analysis",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_NetDiv",
+                  "description": "This variable stands for the net diversification rates, which are calculated by subtracting the mean extinction rates from the mean \nspeciation rates for each tip in the phylogenetic tree.",
+                  "depth": 0
+                },
+                {
+                  "name": "DR",
+                  "description": "Diversification Rate, a transformed measure of evolutionary distinctness to understand phylogenetic diversity. The lower the \"ed\" value, the higher the \"DR\" metric, indicating a species with less unique evolutionary history compared to others in the phylogeny.",
+                  "depth": 0
+                },
+                {
+                  "name": "BEL_evol",
+                  "description": "Rates of Body Elongation evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "MBL_evol",
+                  "description": "Rates of Maximum Body Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "OGP_evol",
+                  "description": "Rates of Oral Gape Position Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RES_evol",
+                  "description": "Rates of Relative Eye Size Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RML_evol",
+                  "description": "Rate of Relative Maxillary Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "bio1",
+                  "description": "This variable represents the annual mean temperature.",
+                  "depth": 0
+                },
+                {
+                  "name": "bio12",
+                  "description": "This variable represents the annual mean precipitation.",
+                  "depth": 0
+                },
+                {
+                  "name": "runoff",
+                  "description": "This variable is used to represent the quantity of water from precipitation that flows over the land's surface and does not get absorbed into the ground. It is being extracted from a geographic database (HydroAtlas).",
+                  "depth": 0
+                },
+                {
+                  "name": "aet",
+                  "description": "Actual evapotranspiration, which is the sum of evaporation and plant transpiration from the Earth's land and ocean surface to the atmosphere.",
+                  "depth": 0
+                },
+                {
+                  "name": "Elevation",
+                  "description": "Mean elevation data indicating the height above sea level.",
+                  "depth": 0
+                },
+                {
+                  "name": "sgr",
+                  "description": "Stream gradient is a measure of the steepness or incline of a stream or river. It can affect water flow and sediment transport, which in turn can influence the habitat conditions for freshwater species. Higher stream gradients usually correspond to faster-moving \nwater and can create different ecological conditions compared to lower gradients.",
+                  "depth": 0
+                },
+                {
+                  "name": "soil_div",
+                  "description": "It measures the diversity of soil types or conditions within each sub-basin studied. Soil diversity is computed using a dataset that includes eight variables related to substrate types and soil conditions.",
+                  "depth": 0
+                },
+                {
+                  "name": "area",
+                  "description": "The geographic area of a sub-basin, possibly in square meters, used as one of the predictors in the analysis.",
+                  "depth": 0
+                },
+                {
+                  "name": "diversity",
+                  "description": "Species diversity, which in ecological studies typically refers to the number of species and their relative abundances in a given area.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "The rate of maximum body length evolution emerged as the most influential factor explaining spatial variation in speciation rates. The relationship is positive with linear coefficient 0.82."
+    }
+  },
+  {
+    "id": "evolution_freshwater_fish|0|1",
+    "input": {
+      "query": "What explained the spatial variation in speciation rates, where the rate of maximum body length evolution was identified as the most influential factor with a positive relationship coefficient of 0.82?",
+      "question_type": "variable",
+      "data_folder": "evolution_freshwater_fish",
+      "metadata": {
+        "domain": "biology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "body-size-evolution-in-south-american-freshwater-fishes.csv",
+            "description": "This dataset contains the drivers of speciation rates in South American freshwater fishes, employing an integrative approach that considers multiple biotic and abiotic factors.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "HYBAS_ID",
+                  "description": "Identifier for hydrological basins as defined by the HydroBASINS framework",
+                  "depth": 0
+                },
+                {
+                  "name": "long",
+                  "description": "The longitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "lat",
+                  "description": "The latitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_speciation",
+                  "description": "This variable represents the average speciation rates of species within each sub-basin, as estimated by BAMM",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_extinction",
+                  "description": "This variable represents the mean extinction rates for each tip of the phylogenetic tree, as estimated by the BAMM analysis",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_NetDiv",
+                  "description": "This variable stands for the net diversification rates, which are calculated by subtracting the mean extinction rates from the mean \nspeciation rates for each tip in the phylogenetic tree.",
+                  "depth": 0
+                },
+                {
+                  "name": "DR",
+                  "description": "Diversification Rate, a transformed measure of evolutionary distinctness to understand phylogenetic diversity. The lower the \"ed\" value, the higher the \"DR\" metric, indicating a species with less unique evolutionary history compared to others in the phylogeny.",
+                  "depth": 0
+                },
+                {
+                  "name": "BEL_evol",
+                  "description": "Rates of Body Elongation evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "MBL_evol",
+                  "description": "Rates of Maximum Body Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "OGP_evol",
+                  "description": "Rates of Oral Gape Position Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RES_evol",
+                  "description": "Rates of Relative Eye Size Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RML_evol",
+                  "description": "Rate of Relative Maxillary Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "bio1",
+                  "description": "This variable represents the annual mean temperature.",
+                  "depth": 0
+                },
+                {
+                  "name": "bio12",
+                  "description": "This variable represents the annual mean precipitation.",
+                  "depth": 0
+                },
+                {
+                  "name": "runoff",
+                  "description": "This variable is used to represent the quantity of water from precipitation that flows over the land's surface and does not get absorbed into the ground. It is being extracted from a geographic database (HydroAtlas).",
+                  "depth": 0
+                },
+                {
+                  "name": "aet",
+                  "description": "Actual evapotranspiration, which is the sum of evaporation and plant transpiration from the Earth's land and ocean surface to the atmosphere.",
+                  "depth": 0
+                },
+                {
+                  "name": "Elevation",
+                  "description": "Mean elevation data indicating the height above sea level.",
+                  "depth": 0
+                },
+                {
+                  "name": "sgr",
+                  "description": "Stream gradient is a measure of the steepness or incline of a stream or river. It can affect water flow and sediment transport, which in turn can influence the habitat conditions for freshwater species. Higher stream gradients usually correspond to faster-moving \nwater and can create different ecological conditions compared to lower gradients.",
+                  "depth": 0
+                },
+                {
+                  "name": "soil_div",
+                  "description": "It measures the diversity of soil types or conditions within each sub-basin studied. Soil diversity is computed using a dataset that includes eight variables related to substrate types and soil conditions.",
+                  "depth": 0
+                },
+                {
+                  "name": "area",
+                  "description": "The geographic area of a sub-basin, possibly in square meters, used as one of the predictors in the analysis.",
+                  "depth": 0
+                },
+                {
+                  "name": "diversity",
+                  "description": "Species diversity, which in ecological studies typically refers to the number of species and their relative abundances in a given area.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "The rate of maximum body length evolution emerged as the most influential factor explaining spatial variation in speciation rates. The relationship is positive with linear coefficient 0.82."
+    }
+  },
+  {
+    "id": "evolution_freshwater_fish|0|2",
+    "input": {
+      "query": "What is the linear coefficient that describes the positive relationship between the rate of maximum body length evolution and spatial variation in speciation rates, where the former emerges as the most influential factor?",
+      "question_type": "relationhsip",
+      "data_folder": "evolution_freshwater_fish",
+      "metadata": {
+        "domain": "biology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "body-size-evolution-in-south-american-freshwater-fishes.csv",
+            "description": "This dataset contains the drivers of speciation rates in South American freshwater fishes, employing an integrative approach that considers multiple biotic and abiotic factors.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "HYBAS_ID",
+                  "description": "Identifier for hydrological basins as defined by the HydroBASINS framework",
+                  "depth": 0
+                },
+                {
+                  "name": "long",
+                  "description": "The longitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "lat",
+                  "description": "The latitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_speciation",
+                  "description": "This variable represents the average speciation rates of species within each sub-basin, as estimated by BAMM",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_extinction",
+                  "description": "This variable represents the mean extinction rates for each tip of the phylogenetic tree, as estimated by the BAMM analysis",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_NetDiv",
+                  "description": "This variable stands for the net diversification rates, which are calculated by subtracting the mean extinction rates from the mean \nspeciation rates for each tip in the phylogenetic tree.",
+                  "depth": 0
+                },
+                {
+                  "name": "DR",
+                  "description": "Diversification Rate, a transformed measure of evolutionary distinctness to understand phylogenetic diversity. The lower the \"ed\" value, the higher the \"DR\" metric, indicating a species with less unique evolutionary history compared to others in the phylogeny.",
+                  "depth": 0
+                },
+                {
+                  "name": "BEL_evol",
+                  "description": "Rates of Body Elongation evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "MBL_evol",
+                  "description": "Rates of Maximum Body Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "OGP_evol",
+                  "description": "Rates of Oral Gape Position Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RES_evol",
+                  "description": "Rates of Relative Eye Size Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RML_evol",
+                  "description": "Rate of Relative Maxillary Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "bio1",
+                  "description": "This variable represents the annual mean temperature.",
+                  "depth": 0
+                },
+                {
+                  "name": "bio12",
+                  "description": "This variable represents the annual mean precipitation.",
+                  "depth": 0
+                },
+                {
+                  "name": "runoff",
+                  "description": "This variable is used to represent the quantity of water from precipitation that flows over the land's surface and does not get absorbed into the ground. It is being extracted from a geographic database (HydroAtlas).",
+                  "depth": 0
+                },
+                {
+                  "name": "aet",
+                  "description": "Actual evapotranspiration, which is the sum of evaporation and plant transpiration from the Earth's land and ocean surface to the atmosphere.",
+                  "depth": 0
+                },
+                {
+                  "name": "Elevation",
+                  "description": "Mean elevation data indicating the height above sea level.",
+                  "depth": 0
+                },
+                {
+                  "name": "sgr",
+                  "description": "Stream gradient is a measure of the steepness or incline of a stream or river. It can affect water flow and sediment transport, which in turn can influence the habitat conditions for freshwater species. Higher stream gradients usually correspond to faster-moving \nwater and can create different ecological conditions compared to lower gradients.",
+                  "depth": 0
+                },
+                {
+                  "name": "soil_div",
+                  "description": "It measures the diversity of soil types or conditions within each sub-basin studied. Soil diversity is computed using a dataset that includes eight variables related to substrate types and soil conditions.",
+                  "depth": 0
+                },
+                {
+                  "name": "area",
+                  "description": "The geographic area of a sub-basin, possibly in square meters, used as one of the predictors in the analysis.",
+                  "depth": 0
+                },
+                {
+                  "name": "diversity",
+                  "description": "Species diversity, which in ecological studies typically refers to the number of species and their relative abundances in a given area.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "The rate of maximum body length evolution emerged as the most influential factor explaining spatial variation in speciation rates. The relationship is positive with linear coefficient 0.82."
+    }
+  },
+  {
+    "id": "evolution_freshwater_fish|1|0",
+    "input": {
+      "query": "Which evolutionary traits exhibit a negative relationship with speciation rates, with respective coefficients of -4.6 and -4.9?",
+      "question_type": "variables",
+      "data_folder": "evolution_freshwater_fish",
+      "metadata": {
+        "domain": "biology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "body-size-evolution-in-south-american-freshwater-fishes.csv",
+            "description": "This dataset contains the drivers of speciation rates in South American freshwater fishes, employing an integrative approach that considers multiple biotic and abiotic factors.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "HYBAS_ID",
+                  "description": "Identifier for hydrological basins as defined by the HydroBASINS framework",
+                  "depth": 0
+                },
+                {
+                  "name": "long",
+                  "description": "The longitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "lat",
+                  "description": "The latitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_speciation",
+                  "description": "This variable represents the average speciation rates of species within each sub-basin, as estimated by BAMM",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_extinction",
+                  "description": "This variable represents the mean extinction rates for each tip of the phylogenetic tree, as estimated by the BAMM analysis",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_NetDiv",
+                  "description": "This variable stands for the net diversification rates, which are calculated by subtracting the mean extinction rates from the mean \nspeciation rates for each tip in the phylogenetic tree.",
+                  "depth": 0
+                },
+                {
+                  "name": "DR",
+                  "description": "Diversification Rate, a transformed measure of evolutionary distinctness to understand phylogenetic diversity. The lower the \"ed\" value, the higher the \"DR\" metric, indicating a species with less unique evolutionary history compared to others in the phylogeny.",
+                  "depth": 0
+                },
+                {
+                  "name": "BEL_evol",
+                  "description": "Rates of Body Elongation evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "MBL_evol",
+                  "description": "Rates of Maximum Body Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "OGP_evol",
+                  "description": "Rates of Oral Gape Position Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RES_evol",
+                  "description": "Rates of Relative Eye Size Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RML_evol",
+                  "description": "Rate of Relative Maxillary Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "bio1",
+                  "description": "This variable represents the annual mean temperature.",
+                  "depth": 0
+                },
+                {
+                  "name": "bio12",
+                  "description": "This variable represents the annual mean precipitation.",
+                  "depth": 0
+                },
+                {
+                  "name": "runoff",
+                  "description": "This variable is used to represent the quantity of water from precipitation that flows over the land's surface and does not get absorbed into the ground. It is being extracted from a geographic database (HydroAtlas).",
+                  "depth": 0
+                },
+                {
+                  "name": "aet",
+                  "description": "Actual evapotranspiration, which is the sum of evaporation and plant transpiration from the Earth's land and ocean surface to the atmosphere.",
+                  "depth": 0
+                },
+                {
+                  "name": "Elevation",
+                  "description": "Mean elevation data indicating the height above sea level.",
+                  "depth": 0
+                },
+                {
+                  "name": "sgr",
+                  "description": "Stream gradient is a measure of the steepness or incline of a stream or river. It can affect water flow and sediment transport, which in turn can influence the habitat conditions for freshwater species. Higher stream gradients usually correspond to faster-moving \nwater and can create different ecological conditions compared to lower gradients.",
+                  "depth": 0
+                },
+                {
+                  "name": "soil_div",
+                  "description": "It measures the diversity of soil types or conditions within each sub-basin studied. Soil diversity is computed using a dataset that includes eight variables related to substrate types and soil conditions.",
+                  "depth": 0
+                },
+                {
+                  "name": "area",
+                  "description": "The geographic area of a sub-basin, possibly in square meters, used as one of the predictors in the analysis.",
+                  "depth": 0
+                },
+                {
+                  "name": "diversity",
+                  "description": "Species diversity, which in ecological studies typically refers to the number of species and their relative abundances in a given area.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Evolutionary rates of oral gape position and relative maxillary length both exhibit a negative relationship with speciation rates. Their respective coefficient of relation is -4.6 and -4.9."
+    }
+  },
+  {
+    "id": "evolution_freshwater_fish|1|1",
+    "input": {
+      "query": "Which factors exhibit a negative relationship with speciation rates?",
+      "question_type": "variables",
+      "data_folder": "evolution_freshwater_fish",
+      "metadata": {
+        "domain": "biology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "body-size-evolution-in-south-american-freshwater-fishes.csv",
+            "description": "This dataset contains the drivers of speciation rates in South American freshwater fishes, employing an integrative approach that considers multiple biotic and abiotic factors.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "HYBAS_ID",
+                  "description": "Identifier for hydrological basins as defined by the HydroBASINS framework",
+                  "depth": 0
+                },
+                {
+                  "name": "long",
+                  "description": "The longitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "lat",
+                  "description": "The latitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_speciation",
+                  "description": "This variable represents the average speciation rates of species within each sub-basin, as estimated by BAMM",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_extinction",
+                  "description": "This variable represents the mean extinction rates for each tip of the phylogenetic tree, as estimated by the BAMM analysis",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_NetDiv",
+                  "description": "This variable stands for the net diversification rates, which are calculated by subtracting the mean extinction rates from the mean \nspeciation rates for each tip in the phylogenetic tree.",
+                  "depth": 0
+                },
+                {
+                  "name": "DR",
+                  "description": "Diversification Rate, a transformed measure of evolutionary distinctness to understand phylogenetic diversity. The lower the \"ed\" value, the higher the \"DR\" metric, indicating a species with less unique evolutionary history compared to others in the phylogeny.",
+                  "depth": 0
+                },
+                {
+                  "name": "BEL_evol",
+                  "description": "Rates of Body Elongation evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "MBL_evol",
+                  "description": "Rates of Maximum Body Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "OGP_evol",
+                  "description": "Rates of Oral Gape Position Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RES_evol",
+                  "description": "Rates of Relative Eye Size Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RML_evol",
+                  "description": "Rate of Relative Maxillary Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "bio1",
+                  "description": "This variable represents the annual mean temperature.",
+                  "depth": 0
+                },
+                {
+                  "name": "bio12",
+                  "description": "This variable represents the annual mean precipitation.",
+                  "depth": 0
+                },
+                {
+                  "name": "runoff",
+                  "description": "This variable is used to represent the quantity of water from precipitation that flows over the land's surface and does not get absorbed into the ground. It is being extracted from a geographic database (HydroAtlas).",
+                  "depth": 0
+                },
+                {
+                  "name": "aet",
+                  "description": "Actual evapotranspiration, which is the sum of evaporation and plant transpiration from the Earth's land and ocean surface to the atmosphere.",
+                  "depth": 0
+                },
+                {
+                  "name": "Elevation",
+                  "description": "Mean elevation data indicating the height above sea level.",
+                  "depth": 0
+                },
+                {
+                  "name": "sgr",
+                  "description": "Stream gradient is a measure of the steepness or incline of a stream or river. It can affect water flow and sediment transport, which in turn can influence the habitat conditions for freshwater species. Higher stream gradients usually correspond to faster-moving \nwater and can create different ecological conditions compared to lower gradients.",
+                  "depth": 0
+                },
+                {
+                  "name": "soil_div",
+                  "description": "It measures the diversity of soil types or conditions within each sub-basin studied. Soil diversity is computed using a dataset that includes eight variables related to substrate types and soil conditions.",
+                  "depth": 0
+                },
+                {
+                  "name": "area",
+                  "description": "The geographic area of a sub-basin, possibly in square meters, used as one of the predictors in the analysis.",
+                  "depth": 0
+                },
+                {
+                  "name": "diversity",
+                  "description": "Species diversity, which in ecological studies typically refers to the number of species and their relative abundances in a given area.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Evolutionary rates of oral gape position and relative maxillary length both exhibit a negative relationship with speciation rates. Their respective coefficient of relation is -4.6 and -4.9."
+    }
+  },
+  {
+    "id": "evolution_freshwater_fish|1|2",
+    "input": {
+      "query": "What relationship did the evolutionary rates of oral gape position and relative maxillary length have with speciation rates, and what were their coefficients?",
+      "question_type": "relationship",
+      "data_folder": "evolution_freshwater_fish",
+      "metadata": {
+        "domain": "biology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "",
+        "datasets": [
+          {
+            "name": "body-size-evolution-in-south-american-freshwater-fishes.csv",
+            "description": "This dataset contains the drivers of speciation rates in South American freshwater fishes, employing an integrative approach that considers multiple biotic and abiotic factors.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "HYBAS_ID",
+                  "description": "Identifier for hydrological basins as defined by the HydroBASINS framework",
+                  "depth": 0
+                },
+                {
+                  "name": "long",
+                  "description": "The longitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "lat",
+                  "description": "The latitude for specific geographic locations used to map the presence/absence of species.",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_speciation",
+                  "description": "This variable represents the average speciation rates of species within each sub-basin, as estimated by BAMM",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_extinction",
+                  "description": "This variable represents the mean extinction rates for each tip of the phylogenetic tree, as estimated by the BAMM analysis",
+                  "depth": 0
+                },
+                {
+                  "name": "BAMM_NetDiv",
+                  "description": "This variable stands for the net diversification rates, which are calculated by subtracting the mean extinction rates from the mean \nspeciation rates for each tip in the phylogenetic tree.",
+                  "depth": 0
+                },
+                {
+                  "name": "DR",
+                  "description": "Diversification Rate, a transformed measure of evolutionary distinctness to understand phylogenetic diversity. The lower the \"ed\" value, the higher the \"DR\" metric, indicating a species with less unique evolutionary history compared to others in the phylogeny.",
+                  "depth": 0
+                },
+                {
+                  "name": "BEL_evol",
+                  "description": "Rates of Body Elongation evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "MBL_evol",
+                  "description": "Rates of Maximum Body Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "OGP_evol",
+                  "description": "Rates of Oral Gape Position Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RES_evol",
+                  "description": "Rates of Relative Eye Size Evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "RML_evol",
+                  "description": "Rate of Relative Maxillary Length evolution",
+                  "depth": 0
+                },
+                {
+                  "name": "bio1",
+                  "description": "This variable represents the annual mean temperature.",
+                  "depth": 0
+                },
+                {
+                  "name": "bio12",
+                  "description": "This variable represents the annual mean precipitation.",
+                  "depth": 0
+                },
+                {
+                  "name": "runoff",
+                  "description": "This variable is used to represent the quantity of water from precipitation that flows over the land's surface and does not get absorbed into the ground. It is being extracted from a geographic database (HydroAtlas).",
+                  "depth": 0
+                },
+                {
+                  "name": "aet",
+                  "description": "Actual evapotranspiration, which is the sum of evaporation and plant transpiration from the Earth's land and ocean surface to the atmosphere.",
+                  "depth": 0
+                },
+                {
+                  "name": "Elevation",
+                  "description": "Mean elevation data indicating the height above sea level.",
+                  "depth": 0
+                },
+                {
+                  "name": "sgr",
+                  "description": "Stream gradient is a measure of the steepness or incline of a stream or river. It can affect water flow and sediment transport, which in turn can influence the habitat conditions for freshwater species. Higher stream gradients usually correspond to faster-moving \nwater and can create different ecological conditions compared to lower gradients.",
+                  "depth": 0
+                },
+                {
+                  "name": "soil_div",
+                  "description": "It measures the diversity of soil types or conditions within each sub-basin studied. Soil diversity is computed using a dataset that includes eight variables related to substrate types and soil conditions.",
+                  "depth": 0
+                },
+                {
+                  "name": "area",
+                  "description": "The geographic area of a sub-basin, possibly in square meters, used as one of the predictors in the analysis.",
+                  "depth": 0
+                },
+                {
+                  "name": "diversity",
+                  "description": "Species diversity, which in ecological studies typically refers to the number of species and their relative abundances in a given area.",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Evolutionary rates of oral gape position and relative maxillary length both exhibited a negative relationship with speciation rates. Their respective coefficient of relation is -4.6 and -4.9."
+    }
+  },
+  {
+    "id": "nls_bmi|4|0",
+    "input": {
+      "query": "How does an increase in income impact the likelihood of maintaining the same level of savings?",
+      "question_type": "relationship",
+      "data_folder": "nls_bmi",
+      "metadata": {
+        "domain": "sociology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "Spending and saving behavior can be used as proxies for Time preference of an individual.",
+        "datasets": [
+          {
+            "name": "nls_bmi_processed.csv",
+            "description": "This dataset is from the National Longitudinal Survey of Youth (NLSY79) includes variables such as gender, age, income, savings behavior, BMI, and racial background.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "GENDER",
+                  "description": "Gender of the Respondent (MALE or FEMALE)",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE",
+                  "description": "The age of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE_2",
+                  "description": "Square of the age of the Respondent",
+                  "depth": 0
+                },
+                {
+                  "name": "INCOME",
+                  "description": "The income of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "DISSAVED",
+                  "description": "A boolean variable that equals 1 if the respondent took more money out of than put into savings and equals 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "SAMESAVE",
+                  "description": "A boolean variable that equals 1 if the respondent's savings level did not change or the respondent had no savings, and is 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "BMI",
+                  "description": "Body mass index of the respondent calculated using the standard formula using the height and weight of the respondent using the height of 1985 and weight of 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "BLACK",
+                  "description": "A boolean variable that indicated if the respondent belongs to the black race or not",
+                  "depth": 0
+                },
+                {
+                  "name": "HISPANIC",
+                  "description": "A boolean variable that indicated if the respondent belongs to the hispanic race or not",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "As income increases, the likelihood of maintaining the same level of savings decreases, supported by a coefficient of -0.0038 (p<0.001) for income."
+    }
+  },
+  {
+    "id": "nls_bmi|5|0",
+    "input": {
+      "query": "How does higher time preference relate to BMI across different genders?",
+      "question_type": "context",
+      "data_folder": "nls_bmi",
+      "metadata": {
+        "domain": "sociology",
+        "workflow_tags": "regression, data selection",
+        "domain_knowledge": "Spending and saving behavior can be used as proxies for Time preference of an individual.",
+        "datasets": [
+          {
+            "name": "nls_bmi_processed.csv",
+            "description": "This dataset is from the National Longitudinal Survey of Youth (NLSY79) includes variables such as gender, age, income, savings behavior, BMI, and racial background.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "GENDER",
+                  "description": "Gender of the Respondent (MALE or FEMALE)",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE",
+                  "description": "The age of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE_2",
+                  "description": "Square of the age of the Respondent",
+                  "depth": 0
+                },
+                {
+                  "name": "INCOME",
+                  "description": "The income of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "DISSAVED",
+                  "description": "A boolean variable that equals 1 if the respondent took more money out of than put into savings and equals 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "SAMESAVE",
+                  "description": "A boolean variable that equals 1 if the respondent's savings level did not change or the respondent had no savings, and is 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "BMI",
+                  "description": "Body mass index of the respondent calculated using the standard formula using the height and weight of the respondent using the height of 1985 and weight of 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "BLACK",
+                  "description": "A boolean variable that indicated if the respondent belongs to the black race or not",
+                  "depth": 0
+                },
+                {
+                  "name": "HISPANIC",
+                  "description": "A boolean variable that indicated if the respondent belongs to the hispanic race or not",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Higher time preference associated with higher BMI is more pronounced for men with coefficient for withdrawing more than saving being 0.5256, and coefficient for same amount of saving being 0.4715"
+    }
+  },
+  {
+    "id": "nls_bmi|5|1",
+    "input": {
+      "query": "In what way is higher time preference linked to higher BMI among men?",
+      "question_type": "relationship",
+      "data_folder": "nls_bmi",
+      "metadata": {
+        "domain": "sociology",
+        "workflow_tags": "regression, data selection",
+        "domain_knowledge": "Spending and saving behavior can be used as proxies for Time preference of an individual.",
+        "datasets": [
+          {
+            "name": "nls_bmi_processed.csv",
+            "description": "This dataset is from the National Longitudinal Survey of Youth (NLSY79) includes variables such as gender, age, income, savings behavior, BMI, and racial background.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "GENDER",
+                  "description": "Gender of the Respondent (MALE or FEMALE)",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE",
+                  "description": "The age of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE_2",
+                  "description": "Square of the age of the Respondent",
+                  "depth": 0
+                },
+                {
+                  "name": "INCOME",
+                  "description": "The income of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "DISSAVED",
+                  "description": "A boolean variable that equals 1 if the respondent took more money out of than put into savings and equals 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "SAMESAVE",
+                  "description": "A boolean variable that equals 1 if the respondent's savings level did not change or the respondent had no savings, and is 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "BMI",
+                  "description": "Body mass index of the respondent calculated using the standard formula using the height and weight of the respondent using the height of 1985 and weight of 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "BLACK",
+                  "description": "A boolean variable that indicated if the respondent belongs to the black race or not",
+                  "depth": 0
+                },
+                {
+                  "name": "HISPANIC",
+                  "description": "A boolean variable that indicated if the respondent belongs to the hispanic race or not",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Higher time preference associated with higher BMI is more pronounced for men with coefficient for withdrawing more than saving being 0.5256, and coefficient for same amount of saving being 0.4715"
+    }
+  },
+  {
+    "id": "nls_bmi|2|0",
+    "input": {
+      "query": "How is time preference associated with Body Mass Index in Black women, given the coefficients for savings behavior?",
+      "question_type": "relationship",
+      "data_folder": "nls_bmi",
+      "metadata": {
+        "domain": "sociology",
+        "workflow_tags": "regression, data selection",
+        "domain_knowledge": "Spending and saving behavior can be used as proxies for Time preference of an individual.",
+        "datasets": [
+          {
+            "name": "nls_bmi_processed.csv",
+            "description": "This dataset is from the National Longitudinal Survey of Youth (NLSY79) includes variables such as gender, age, income, savings behavior, BMI, and racial background.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "GENDER",
+                  "description": "Gender of the Respondent (MALE or FEMALE)",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE",
+                  "description": "The age of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE_2",
+                  "description": "Square of the age of the Respondent",
+                  "depth": 0
+                },
+                {
+                  "name": "INCOME",
+                  "description": "The income of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "DISSAVED",
+                  "description": "A boolean variable that equals 1 if the respondent took more money out of than put into savings and equals 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "SAMESAVE",
+                  "description": "A boolean variable that equals 1 if the respondent's savings level did not change or the respondent had no savings, and is 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "BMI",
+                  "description": "Body mass index of the respondent calculated using the standard formula using the height and weight of the respondent using the height of 1985 and weight of 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "BLACK",
+                  "description": "A boolean variable that indicated if the respondent belongs to the black race or not",
+                  "depth": 0
+                },
+                {
+                  "name": "HISPANIC",
+                  "description": "A boolean variable that indicated if the respondent belongs to the hispanic race or not",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Time preference is positively associated with Body Mass Index in Black women with coefficients for no change in savings level being 1.1840 (p-value: 0.003) and coefficient for having withdrawn more money from savings than they had put in being 0.5446 (p-value: 0.225)"
+    }
+  },
+  {
+    "id": "nls_bmi|3|0",
+    "input": {
+      "query": "How does age influence the likelihood of withdrawing more money from savings than putting in?",
+      "question_type": "relationship",
+      "data_folder": "nls_bmi",
+      "metadata": {
+        "domain": "sociology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "Spending and saving behavior can be used as proxies for Time preference of an individual.",
+        "datasets": [
+          {
+            "name": "nls_bmi_processed.csv",
+            "description": "This dataset is from the National Longitudinal Survey of Youth (NLSY79) includes variables such as gender, age, income, savings behavior, BMI, and racial background.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "GENDER",
+                  "description": "Gender of the Respondent (MALE or FEMALE)",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE",
+                  "description": "The age of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE_2",
+                  "description": "Square of the age of the Respondent",
+                  "depth": 0
+                },
+                {
+                  "name": "INCOME",
+                  "description": "The income of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "DISSAVED",
+                  "description": "A boolean variable that equals 1 if the respondent took more money out of than put into savings and equals 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "SAMESAVE",
+                  "description": "A boolean variable that equals 1 if the respondent's savings level did not change or the respondent had no savings, and is 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "BMI",
+                  "description": "Body mass index of the respondent calculated using the standard formula using the height and weight of the respondent using the height of 1985 and weight of 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "BLACK",
+                  "description": "A boolean variable that indicated if the respondent belongs to the black race or not",
+                  "depth": 0
+                },
+                {
+                  "name": "HISPANIC",
+                  "description": "A boolean variable that indicated if the respondent belongs to the hispanic race or not",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Younger individuals are more likely to withdraw more money from savings than they had put in and with a negative coefficient between age and withdrawing more than putting into savings (-0.0422)."
+    }
+  },
+  {
+    "id": "nls_bmi|3|1",
+    "input": {
+      "query": "What behaviors regarding withdrawal of savings have been observed in relation to age?",
+      "question_type": "context",
+      "data_folder": "nls_bmi",
+      "metadata": {
+        "domain": "sociology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "Spending and saving behavior can be used as proxies for Time preference of an individual.",
+        "datasets": [
+          {
+            "name": "nls_bmi_processed.csv",
+            "description": "This dataset is from the National Longitudinal Survey of Youth (NLSY79) includes variables such as gender, age, income, savings behavior, BMI, and racial background.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "GENDER",
+                  "description": "Gender of the Respondent (MALE or FEMALE)",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE",
+                  "description": "The age of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE_2",
+                  "description": "Square of the age of the Respondent",
+                  "depth": 0
+                },
+                {
+                  "name": "INCOME",
+                  "description": "The income of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "DISSAVED",
+                  "description": "A boolean variable that equals 1 if the respondent took more money out of than put into savings and equals 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "SAMESAVE",
+                  "description": "A boolean variable that equals 1 if the respondent's savings level did not change or the respondent had no savings, and is 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "BMI",
+                  "description": "Body mass index of the respondent calculated using the standard formula using the height and weight of the respondent using the height of 1985 and weight of 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "BLACK",
+                  "description": "A boolean variable that indicated if the respondent belongs to the black race or not",
+                  "depth": 0
+                },
+                {
+                  "name": "HISPANIC",
+                  "description": "A boolean variable that indicated if the respondent belongs to the hispanic race or not",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Younger individuals are more likely to withdraw more money from savings than they had put in and with a negative coefficient between age and withdrawing more than putting into savings (-0.0422)."
+    }
+  },
+  {
+    "id": "nls_bmi|0|0",
+    "input": {
+      "query": "What are the factors related to time preference associated with higher BMI in the 1989 data?",
+      "question_type": "variables",
+      "data_folder": "nls_bmi",
+      "metadata": {
+        "domain": "sociology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "Spending and saving behavior can be used as proxies for Time preference of an individual.",
+        "datasets": [
+          {
+            "name": "nls_bmi_processed.csv",
+            "description": "This dataset is from the National Longitudinal Survey of Youth (NLSY79) includes variables such as gender, age, income, savings behavior, BMI, and racial background.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "GENDER",
+                  "description": "Gender of the Respondent (MALE or FEMALE)",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE",
+                  "description": "The age of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE_2",
+                  "description": "Square of the age of the Respondent",
+                  "depth": 0
+                },
+                {
+                  "name": "INCOME",
+                  "description": "The income of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "DISSAVED",
+                  "description": "A boolean variable that equals 1 if the respondent took more money out of than put into savings and equals 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "SAMESAVE",
+                  "description": "A boolean variable that equals 1 if the respondent's savings level did not change or the respondent had no savings, and is 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "BMI",
+                  "description": "Body mass index of the respondent calculated using the standard formula using the height and weight of the respondent using the height of 1985 and weight of 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "BLACK",
+                  "description": "A boolean variable that indicated if the respondent belongs to the black race or not",
+                  "depth": 0
+                },
+                {
+                  "name": "HISPANIC",
+                  "description": "A boolean variable that indicated if the respondent belongs to the hispanic race or not",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Higher time preference associated with higher BMI for 1989 data. BMI is postively related with if person spent more than their saving with a coefficient 0.3596. BMI is also positively correlated with if the savings of a person remained unchaged with a coefficient 0.4858."
+    }
+  },
+  {
+    "id": "nls_bmi|0|1",
+    "input": {
+      "query": "How is higher time preference related to BMI in the 1989 data?",
+      "question_type": "relationship",
+      "data_folder": "nls_bmi",
+      "metadata": {
+        "domain": "sociology",
+        "workflow_tags": "regression",
+        "domain_knowledge": "Spending and saving behavior can be used as proxies for Time preference of an individual.",
+        "datasets": [
+          {
+            "name": "nls_bmi_processed.csv",
+            "description": "This dataset is from the National Longitudinal Survey of Youth (NLSY79) includes variables such as gender, age, income, savings behavior, BMI, and racial background.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "GENDER",
+                  "description": "Gender of the Respondent (MALE or FEMALE)",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE",
+                  "description": "The age of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE_2",
+                  "description": "Square of the age of the Respondent",
+                  "depth": 0
+                },
+                {
+                  "name": "INCOME",
+                  "description": "The income of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "DISSAVED",
+                  "description": "A boolean variable that equals 1 if the respondent took more money out of than put into savings and equals 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "SAMESAVE",
+                  "description": "A boolean variable that equals 1 if the respondent's savings level did not change or the respondent had no savings, and is 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "BMI",
+                  "description": "Body mass index of the respondent calculated using the standard formula using the height and weight of the respondent using the height of 1985 and weight of 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "BLACK",
+                  "description": "A boolean variable that indicated if the respondent belongs to the black race or not",
+                  "depth": 0
+                },
+                {
+                  "name": "HISPANIC",
+                  "description": "A boolean variable that indicated if the respondent belongs to the hispanic race or not",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Higher time preference associated with higher BMI for 1989 data. BMI is postively related with if person spent more than their saving with a coefficient 0.3596. BMI is also positively correlated with if the savings of a person remained unchaged with a coefficient 0.4858."
+    }
+  },
+  {
+    "id": "nls_bmi|1|0",
+    "input": {
+      "query": "How does time preference impact BMI in Hispanic men?",
+      "question_type": "context",
+      "data_folder": "nls_bmi",
+      "metadata": {
+        "domain": "sociology",
+        "workflow_tags": "regression, data selection",
+        "domain_knowledge": "Spending and saving behavior can be used as proxies for Time preference of an individual.",
+        "datasets": [
+          {
+            "name": "nls_bmi_processed.csv",
+            "description": "This dataset is from the National Longitudinal Survey of Youth (NLSY79) includes variables such as gender, age, income, savings behavior, BMI, and racial background.",
+            "max_depth": 0,
+            "columns": {
+              "raw": [
+                {
+                  "name": "GENDER",
+                  "description": "Gender of the Respondent (MALE or FEMALE)",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE",
+                  "description": "The age of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "AGE_2",
+                  "description": "Square of the age of the Respondent",
+                  "depth": 0
+                },
+                {
+                  "name": "INCOME",
+                  "description": "The income of the respondent in the year 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "DISSAVED",
+                  "description": "A boolean variable that equals 1 if the respondent took more money out of than put into savings and equals 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "SAMESAVE",
+                  "description": "A boolean variable that equals 1 if the respondent's savings level did not change or the respondent had no savings, and is 0 otherwise",
+                  "depth": 0
+                },
+                {
+                  "name": "BMI",
+                  "description": "Body mass index of the respondent calculated using the standard formula using the height and weight of the respondent using the height of 1985 and weight of 1989",
+                  "depth": 0
+                },
+                {
+                  "name": "BLACK",
+                  "description": "A boolean variable that indicated if the respondent belongs to the black race or not",
+                  "depth": 0
+                },
+                {
+                  "name": "HISPANIC",
+                  "description": "A boolean variable that indicated if the respondent belongs to the hispanic race or not",
+                  "depth": 0
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "gold_output": {
+      "workflow": "",
+      "hypothesis": "Time preference is positively associated with BMI in Hispanic men with coefficients for no change in savings level being 1.5799 (p-value: 0.000) and coefficient for having withdrawn more money from savings than they had put in being 0.9826 (p-value: 0.038)"
+    }
+  }
+]

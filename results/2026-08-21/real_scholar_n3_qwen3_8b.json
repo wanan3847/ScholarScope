@@ -1,0 +1,337 @@
+{
+  "real_scholar": {
+    "summary": {
+      "benchmark": "RealScholarQuery",
+      "total": 3,
+      "succeeded": 3,
+      "failed": 0,
+      "total_api_calls": 124,
+      "total_tokens": 105866,
+      "total_elapsed": 640.17
+    },
+    "macro_metrics": {
+      "precision@5": 0.2,
+      "recall@5": 0.0476,
+      "f1@5": 0.0769,
+      "precision@10": 0.1,
+      "recall@10": 0.0476,
+      "f1@10": 0.0645,
+      "precision@20": 0.05,
+      "recall@20": 0.0476,
+      "f1@20": 0.0488
+    },
+    "efficiency": {
+      "avg_api_calls": 41.33,
+      "avg_tokens": 35288.67,
+      "avg_latency_seconds": 213.39,
+      "p50_latency_seconds": 203.64,
+      "p99_latency_seconds": 244.36
+    },
+    "detailed": [
+      {
+        "qid": "RealScholarQuery_0",
+        "query": "Give me papers which show that using a smaller dataset in large language model pre-training can result in better models than using bigger datasets.",
+        "gold_ids": [
+          "2309.04564",
+          "2402.09668",
+          "2107.06499",
+          "2307.08701",
+          "2305.02301",
+          "2402.04333",
+          "2210.10951",
+          "2305.12816",
+          "2409.17312"
+        ],
+        "pred_ids": [
+          "10.18653/v1/2023.findings-acl.507",
+          "1908.08962",
+          "2411.11927",
+          "2104.05704",
+          "10.18653/v1/2021.mrl-1.11",
+          "10.1109/cvpr52688.2022.01750",
+          "10.18653/v1/2020.findings-emnlp.445",
+          "2004.09297",
+          "10.1038/s41746-021-00455-y",
+          "10.18653/v1/2022.acl-long.244"
+        ],
+        "metrics": {
+          "precision@5": 0.0,
+          "recall@5": 0.0,
+          "f1@5": 0.0,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "precision@20": 0.0,
+          "recall@20": 0.0,
+          "f1@20": 0.0
+        },
+        "stats": {
+          "api_calls": 48,
+          "tokens": 40331,
+          "elapsed_seconds": 192.17,
+          "engine": "spar2",
+          "candidates": 2958,
+          "judged": 150,
+          "judge_parse_failures": 42,
+          "keywords": [
+            "smaller",
+            "dataset",
+            "large",
+            "language",
+            "model",
+            "pre-training",
+            "better",
+            "models",
+            "bigger",
+            "datasets.",
+            "smaller dataset large language",
+            "data-efficient training"
+          ],
+          "queries": [
+            "data-efficient training in large language models",
+            "small dataset pre-training for model performance",
+            "impact of dataset size on model generalization",
+            "resource optimization in language model training",
+            "training efficiency with limited data",
+            "model generalization from small datasets",
+            "smaller dataset large language model pre-training better models bigger datasets.",
+            "smaller dataset",
+            "large language",
+            "model pre-training",
+            "Efficient Training with Limited Data for LLMs",
+            "Knowledge Distillation in Language Model Optimization",
+            "Impact of Corpus Size on LLM Performance",
+            "Compute-Efficient LLM Training Strategies"
+          ],
+          "llm_mode": "real",
+          "retrieval_calls": 9,
+          "backends_used": [
+            "crossref",
+            "local_corpus",
+            "openalex"
+          ],
+          "innovations_used": [
+            "spar2_bfs_iterative",
+            "spar2_doc_query",
+            "spar2_refchain_bi",
+            "spar2_bge_prescreen",
+            "spar2_multi_channel",
+            "spar2_deadline_filter"
+          ]
+        }
+      },
+      {
+        "qid": "RealScholarQuery_1",
+        "query": "Give me papers that share some insights about how large language models gain in-context learning capability in the process of pre-training.\n",
+        "gold_ids": [
+          "2306.15063",
+          "2310.10616",
+          "2205.05055",
+          "2310.17086",
+          "2212.10559",
+          "2310.10638",
+          "2305.09137",
+          "2406.04216",
+          "2212.07677",
+          "2209.11895",
+          "2310.08540",
+          "2312.03002",
+          "2305.12766",
+          "2402.15607",
+          "2405.11751",
+          "2305.17040",
+          "2402.01258",
+          "2111.02080",
+          "2305.19420",
+          "2409.09281",
+          "2306.04637",
+          "2306.15091",
+          "2210.05675",
+          "2005.14165",
+          "2406.14022",
+          "2311.08360",
+          "2303.07895",
+          "2303.07971",
+          "2402.12530"
+        ],
+        "pred_ids": [
+          "2301.00234",
+          "2406.00793",
+          "2406.11233",
+          "10.1016/j.metrad.2023.100017",
+          "2304.01852",
+          "2404.17807",
+          "2406.16007",
+          "2410.04468",
+          "2404.03028",
+          "10.22541/au.172737898.87812203/v1"
+        ],
+        "metrics": {
+          "precision@5": 0.0,
+          "recall@5": 0.0,
+          "f1@5": 0.0,
+          "precision@10": 0.0,
+          "recall@10": 0.0,
+          "f1@10": 0.0,
+          "precision@20": 0.0,
+          "recall@20": 0.0,
+          "f1@20": 0.0
+        },
+        "stats": {
+          "api_calls": 36,
+          "tokens": 25182,
+          "elapsed_seconds": 203.64,
+          "engine": "spar2",
+          "candidates": 3085,
+          "judged": 150,
+          "judge_parse_failures": 18,
+          "keywords": [
+            "large",
+            "language",
+            "models",
+            "gain",
+            "in-context",
+            "learning",
+            "capability",
+            "process",
+            "pre-training.",
+            "large language models gain",
+            "in-context learning",
+            "pre-training"
+          ],
+          "queries": [
+            "mechanisms of in-context learning in pre-trained language models",
+            "context understanding during pre-training of large language models",
+            "parameter updates for contextual knowledge retention in LLMs",
+            "attention mechanisms in pre-training for in-context learning",
+            "training data influence on contextual representation in LLMs",
+            "model adaptation strategies during pre-training for in-context learning",
+            "large language models gain in-context learning capability process pre-training.",
+            "large language",
+            "models gain",
+            "in-context learning",
+            "Mechanisms of In-context Learning in LLMs",
+            "Pre-training Techniques for In-context Learning",
+            "Evaluation Frameworks for In-context Learning",
+            "Survey of In-context Learning in NLP Models"
+          ],
+          "llm_mode": "real",
+          "retrieval_calls": 9,
+          "backends_used": [
+            "crossref",
+            "local_corpus",
+            "openalex"
+          ],
+          "innovations_used": [
+            "spar2_bfs_iterative",
+            "spar2_doc_query",
+            "spar2_refchain_bi",
+            "spar2_bge_prescreen",
+            "spar2_multi_channel",
+            "spar2_deadline_filter"
+          ]
+        }
+      },
+      {
+        "qid": "RealScholarQuery_2",
+        "query": "List all papers that use autoregressive transformer to generate videos.",
+        "gold_ids": [
+          "2312.14125",
+          "2206.04003",
+          "2406.10981",
+          "2402.15391",
+          "2107.09240",
+          "2006.10704",
+          "2209.07143",
+          "2405.15223",
+          "1912.12180",
+          "2104.14806",
+          "2212.06026",
+          "2210.02396",
+          "2203.09457",
+          "2203.15836",
+          "2205.15868",
+          "2207.09814",
+          "2104.10157",
+          "2402.14797",
+          "2406.09455",
+          "1906.02634",
+          "2409.18869"
+        ],
+        "pred_ids": [
+          "10.1109/icip46576.2022.9897982",
+          "2209.07143",
+          "2406.10981",
+          "2407.07356",
+          "2104.10157",
+          "2412.07772",
+          "2409.04003",
+          "MSC: Multi-Scale Spatio-Temporal Causal Attention for Autoregressive Video Diffusion",
+          "2303.11251",
+          "10.1109/icpr56361.2022.9956707"
+        ],
+        "metrics": {
+          "precision@5": 0.6,
+          "recall@5": 0.1429,
+          "f1@5": 0.2308,
+          "precision@10": 0.3,
+          "recall@10": 0.1429,
+          "f1@10": 0.1935,
+          "precision@20": 0.15,
+          "recall@20": 0.1429,
+          "f1@20": 0.1463
+        },
+        "stats": {
+          "api_calls": 40,
+          "tokens": 40353,
+          "elapsed_seconds": 244.36,
+          "engine": "spar2",
+          "candidates": 1813,
+          "judged": 150,
+          "judge_parse_failures": 28,
+          "keywords": [
+            "autoregressive",
+            "transformer",
+            "generate",
+            "videos.",
+            "autoregressive transformer generate videos.",
+            "autoregressive transformer",
+            "video generation",
+            "sequence modeling",
+            "temporal coherence",
+            "video synthesis",
+            "transformer architecture",
+            "generative modeling"
+          ],
+          "queries": [
+            "autoregressive transformer video generation techniques",
+            "sequence modeling in video synthesis using transformers",
+            "temporal coherence in autoregressive video prediction",
+            "transformer architecture for generative video modeling",
+            "spatiotemporal representation in autoregressive video synthesis",
+            "video prediction with autoregressive transformer models",
+            "autoregressive transformer generate videos.",
+            "autoregressive transformer",
+            "generate videos."
+          ],
+          "llm_mode": "real",
+          "retrieval_calls": 5,
+          "backends_used": [
+            "crossref",
+            "local_corpus",
+            "openalex"
+          ],
+          "innovations_used": [
+            "spar2_bfs_iterative",
+            "spar2_doc_query",
+            "spar2_refchain_bi",
+            "spar2_bge_prescreen",
+            "spar2_multi_channel",
+            "spar2_deadline_filter"
+          ]
+        }
+      }
+    ],
+    "reference": "PaSa-7B Recall@20 = 0.733"
+  }
+}

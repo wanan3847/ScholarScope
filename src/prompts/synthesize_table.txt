@@ -1,0 +1,7 @@
+你是论文对比表生成助手。请基于下列论文，输出 markdown 表格，列包括：
+Title | Year | Venue | Method | Key Result
+
+# 论文
+{papers}
+
+# 表格

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SakuraScholar · 科研场景下复杂学术查询的智能论文搜索与推荐</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌸%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:opsz,wght@6..56,400;6..56,500;6..56,600;6..56,700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F1E8;
+  --paper-soft:#EFE9DB;
+  --paper-warm:#EDE6D3;
+  --ink:#0E0E0C;
+  --ink-soft:#3A3A36;
+  --ink-mute:#5C5C54;
+  --signal:#00D26A;
+  --signal-soft:#7FE3A8;
+  --signal-deep:#00A854;
+  --amber:#D4A574;
+  --rose:#C77B7B;
+  --sakura:#FFB7C5;
+  --sakura-deep:#E88BA0;
+  --line:#D8D2C2;
+  --line-soft:#E5DFD0;
+  --shadow:0 1px 2px rgba(14,14,12,.04),0 4px 16px rgba(14,14,12,.06);
+  --shadow-hover:0 2px 4px rgba(14,14,12,.06),0 8px 28px rgba(14,14,12,.10);
+  --radius:14px;
+  --font-serif:'Crimson Pro',Georgia,serif;
+  --font-sans:'Atkinson Hyperlegible',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+/* 键盘可达性 + 减少动态效果（与 /app 统一） */
+a:focus-visible,input:focus-visible,button:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--sakura-deep);outline-offset:2px;border-radius:6px;
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--paper);color:var(--ink);font-family:var(--font-sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{
+  min-height:100vh;
+  background-image:
+    radial-gradient(circle at 18% 26%,rgba(212,165,116,.10) 0%,transparent 42%),
+    radial-gradient(circle at 82% 72%,rgba(255,183,197,.06) 0%,transparent 42%),
+    radial-gradient(circle at 55% 10%,rgba(0,210,106,.035) 0%,transparent 45%);
+}
+body::before{
+  content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;opacity:.35;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .05 0 0 0 0 .05 0 0 0 0 .04 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.wrap{max-width:1440px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+
+/* ===== 顶栏（与 /app 一致） ===== */
+header.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(245,241,232,.88);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand-sakura{
+  width:36px;height:36px;display:grid;place-items:center;
+  font-size:22px;line-height:1;filter:drop-shadow(0 1px 2px rgba(232,139,160,.3));
+}
+.brand-name{font-family:var(--font-serif);font-weight:500;font-size:20px;letter-spacing:-.01em}
+.brand-sub{font-size:10px;color:var(--ink-mute);font-family:var(--font-mono);letter-spacing:.08em;text-transform:uppercase;margin-top:-2px}
+.top-actions{display:flex;align-items:center;gap:8px}
+.icon-btn{
+  width:36px;height:36px;border:1px solid var(--line);background:var(--paper);border-radius:10px;
+  display:grid;place-items:center;cursor:pointer;transition:all .2s;color:var(--ink-soft);position:relative;
+  text-decoration:none;
+}
+.icon-btn:hover{border-color:var(--sakura-deep);color:var(--ink);background:var(--paper-soft)}
+.icon-btn svg{width:18px;height:18px}
+.icon-btn .badge-count{
+  position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 4px;
+  background:var(--sakura-deep);color:#fff;border-radius:8px;font-size:10px;font-weight:600;
+  display:none;place-items:center;font-family:var(--font-mono)
+}
+.login-btn{
+  padding:8px 16px;background:var(--ink);color:var(--paper);border:none;border-radius:10px;
+  font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-sans);transition:all .2s;
+  display:flex;align-items:center;gap:6px;text-decoration:none;
+}
+.login-btn:hover{background:var(--signal-deep);color:var(--paper)}
+.login-btn.logged-in{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+
+/* Hero */
+.hero{padding:72px 0 56px;text-align:center;position:relative}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--signal-deep);
+  background:rgba(0,210,106,.08);padding:6px 14px;border-radius:99px;margin-bottom:24px;
+}
+.hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--signal);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.hero h1{
+  font-family:var(--font-serif);font-weight:400;font-size:52px;line-height:1.15;letter-spacing:-.02em;
+  color:var(--ink);max-width:780px;margin:0 auto 20px;
+}
+.hero h1 em{font-style:normal;color:var(--sakura-deep);font-weight:500}
+.hero p.lead{font-size:18px;color:var(--ink-mute);max-width:660px;margin:0 auto 36px;line-height:1.55}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-primary{
+  background:var(--ink);color:var(--paper);border:none;padding:12px 24px;border-radius:12px;
+  font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  transition:all .2s;font-family:var(--font-sans);
+}
+.btn-primary:hover{background:var(--sakura-deep);transform:translateY(-1px)}
+.btn-secondary{
+  background:var(--paper);color:var(--ink);border:1.5px solid var(--line);padding:11px 22px;border-radius:12px;
+  font-size:14px;font-weight:500;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  transition:all .2s;font-family:var(--font-sans);
+}
+.btn-secondary:hover{border-color:var(--sakura-deep);transform:translateY(-1px)}
+
+/* 指标条 */
+.metrics-bar{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius);
+  box-shadow:var(--shadow);margin:52px 0 0;overflow:hidden;
+}
+.metric-cell{padding:24px 20px;text-align:center;border-right:1px solid var(--line-soft)}
+.metric-cell:last-child{border-right:none}
+.metric-value{font-family:var(--font-serif);font-size:36px;font-weight:500;color:var(--ink);line-height:1;letter-spacing:-.02em}
+.metric-value .unit{font-size:18px;color:var(--ink-mute);font-weight:400}
+.metric-label{font-size:12px;color:var(--ink-mute);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;margin-top:8px}
+
+/* 区块通用 */
+section.block{padding:72px 0}
+.block-header{margin-bottom:44px}
+.block-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:12px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:12px;
+}
+.block-eyebrow .num{
+  background:var(--ink);color:var(--paper);padding:3px 8px;border-radius:4px;font-weight:600;
+}
+.block-title{font-family:var(--font-serif);font-weight:400;font-size:40px;line-height:1.15;letter-spacing:-.02em;color:var(--ink);max-width:720px}
+.block-title em{font-style:normal;color:var(--sakura-deep);font-weight:500}
+.block-sub{font-size:16px;color:var(--ink-mute);max-width:620px;margin-top:12px;line-height:1.55}
+
+/* 架构图 */
+.arch-flow{display:flex;flex-direction:column;gap:12px}
+.arch-layer{
+  display:grid;grid-template-columns:110px 1fr auto;gap:18px;align-items:center;
+  background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:16px 20px;box-shadow:var(--shadow);transition:all .25s;position:relative;
+}
+.arch-layer:hover{box-shadow:var(--shadow-hover);transform:translateX(4px);border-color:var(--line)}
+.arch-layer-tag{
+  font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--paper);
+  background:var(--ink);padding:6px 10px;border-radius:6px;text-align:center;letter-spacing:.05em;
+}
+.arch-layer-tag.l2{background:#1A4D2C}
+.arch-layer-tag.l3{background:#00A854}
+.arch-layer-tag.l4{background:#00D26A}
+.arch-layer-tag.l5{background:#7FE3A8;color:#0E0E0C}
+.arch-layer-tag.l6{background:#D4A574;color:#0E0E0C}
+.arch-layer-tag.l7{background:#E88BA0;color:#FFF}
+.arch-layer-name{font-family:var(--font-serif);font-size:17px;font-weight:500;color:var(--ink)}
+.arch-layer-desc{font-size:12.5px;color:var(--ink-mute);margin-top:2px}
+.arch-layer-modules{font-family:var(--font-mono);font-size:11px;color:var(--signal-deep);background:rgba(0,210,106,.08);padding:4px 10px;border-radius:6px;white-space:nowrap}
+.arch-arrow{text-align:center;color:var(--line);font-size:16px;margin:-7px 0}
+
+/* 创新点网格 */
+.innovation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:900px){.innovation-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.innovation-grid{grid-template-columns:1fr}}
+.innovation-card{
+  background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:20px;box-shadow:var(--shadow);transition:all .25s;position:relative;overflow:hidden;
+}
+.innovation-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-3px);border-color:var(--signal)}
+.innovation-card::before{
+  content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--signal);transform:scaleY(0);transform-origin:top;transition:transform .3s;
+}
+.innovation-card:hover::before{transform:scaleY(1)}
+.innovation-num{
+  font-family:var(--font-mono);font-size:11px;color:var(--signal-deep);background:rgba(0,210,106,.1);
+  padding:3px 8px;border-radius:5px;display:inline-block;margin-bottom:10px;font-weight:600;letter-spacing:.05em;
+}
+.innovation-name{font-family:var(--font-serif);font-size:17px;font-weight:500;color:var(--ink);margin-bottom:8px;line-height:1.3}
+.innovation-desc{font-size:13px;color:var(--ink-soft);line-height:1.5}
+.innovation-tag{
+  display:inline-block;font-family:var(--font-mono);font-size:10px;color:var(--ink-mute);
+  background:var(--paper-soft);padding:2px 6px;border-radius:4px;margin-top:10px;letter-spacing:.03em;
+}
+
+/* 评测 */
+.eval-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:24px}
+@media(max-width:768px){.eval-grid{grid-template-columns:1fr}}
+.eval-card{
+  background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:26px;box-shadow:var(--shadow);
+}
+.eval-card h3{font-family:var(--font-serif);font-weight:500;font-size:20px;margin-bottom:14px}
+.eval-table{width:100%;border-collapse:collapse;font-size:13.5px}
+.eval-table th,.eval-table td{padding:9px 0;text-align:left;border-bottom:1px solid var(--line-soft)}
+.eval-table th{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;color:var(--ink-mute);letter-spacing:.05em;font-weight:500}
+.eval-table td.weight{font-family:var(--font-serif);font-size:19px;font-weight:500;color:var(--signal-deep)}
+.eval-table td:last-child{color:var(--ink-soft)}
+.eval-note{font-size:12px;color:var(--ink-mute);line-height:1.7;margin-top:10px}
+
+/* 技术栈 */
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:768px){.tech-grid{grid-template-columns:repeat(2,1fr)}}
+.tech-item{
+  background:var(--paper);border:1px solid var(--line-soft);border-radius:10px;padding:15px;
+  display:flex;flex-direction:column;gap:6px;transition:all .2s;
+}
+.tech-item:hover{border-color:var(--signal);transform:translateY(-2px)}
+.tech-name{font-family:var(--font-serif);font-weight:500;font-size:15px;color:var(--ink)}
+.tech-role{font-size:12px;color:var(--ink-mute);font-family:var(--font-mono)}
+
+/* CTA */
+.cta-section{padding:72px 0;text-align:center}
+.cta-box{
+  background:var(--ink);color:var(--paper);border-radius:20px;padding:56px 40px;
+  position:relative;overflow:hidden;
+}
+.cta-box h2{font-family:var(--font-serif);font-weight:400;font-size:38px;line-height:1.2;margin-bottom:14px;position:relative}
+.cta-box h2 em{font-style:normal;color:var(--signal);font-weight:500}
+.cta-box p{font-size:16px;color:rgba(245,241,232,.7);max-width:480px;margin:0 auto 28px;position:relative}
+
+/* footer */
+footer{padding:36px 0;border-top:1px solid var(--line);text-align:center;color:var(--ink-mute);font-size:13px}
+footer .footer-brand{font-family:var(--font-serif);color:var(--ink-soft);margin-bottom:4px}
+
+/* 滚动条 */
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--ink-mute)}
+</style>
+</head>
+<body>
+
+<!-- 顶栏（与 /app 一致：品牌 + 图标操作区 + 登录） -->
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a href="/" class="brand">
+      <span class="brand-sakura">🌸</span>
+      <div>
+        <div class="brand-name">樱花学术</div>
+        <div class="brand-sub">SakuraScholar · 智能论文搜索</div>
+      </div>
+    </a>
+    <div class="top-actions">
+      <a class="icon-btn" href="/app#favorites" title="我的收藏夹">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <span class="badge-count" id="fav-count">0</span>
+      </a>
+      <a class="icon-btn" href="/app#history" title="搜索历史">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </a>
+      <a class="icon-btn" href="/app#model" title="配置大模型">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+      </a>
+      <a class="icon-btn" href="/app#docs" title="使用文档">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </a>
+      <a class="icon-btn" href="/app#settings" title="设置">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </a>
+      <a class="login-btn" id="login-btn" href="/app" title="登录">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        <span id="login-text">登录</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow"><span class="dot"></span>🌸 樱花学术 · 学术文献检索与推荐</div>
+    <h1>复杂的学术问题，<em>精准</em>的论文集合</h1>
+    <p class="lead">面向科研场景的复杂学术查询：多通道并行检索、迭代式引文探索、大模型逐篇判分，返回结构化的论文集合。</p>
+    <div class="hero-actions">
+      <a href="/app" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        立即体验搜索
+      </a>
+      <a href="#architecture" class="btn-secondary">查看架构</a>
+    </div>
+
+    <div class="metrics-bar">
+      <div class="metric-cell">
+        <div class="metric-value">5<span class="unit">通道</span></div>
+        <div class="metric-label">并行检索</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-value">3<span class="unit">轮</span></div>
+        <div class="metric-label">迭代检索 BFS</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-value">6<span class="unit">项</span></div>
+        <div class="metric-label">常驻机制</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-value">0.1055</div>
+        <div class="metric-label">F1@10（实测）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 架构 -->
+<section class="block" id="architecture">
+  <div class="wrap">
+    <div class="block-header">
+      <div class="block-eyebrow"><span class="num">/01</span>架构设计</div>
+      <h2 class="block-title">SPAR2 引擎：从查询到结果的完整检索流程</h2>
+      <p class="block-sub">查询规划 → 多通道并行召回 → 语义预筛 → 大模型判分 → 引文扩展 → 精排输出，每一层可独立验证、可观测。</p>
+    </div>
+
+    <div class="arch-flow">
+      <div class="arch-layer">
+        <div class="arch-layer-tag l1">L1</div>
+        <div>
+          <div class="arch-layer-name">查询规划 Query Planner</div>
+          <div class="arch-layer-desc">LLM 提取关键词 + 语义短语，标题词补充；API 模式走双规划合并</div>
+        </div>
+        <div class="arch-layer-modules">关键词 · 语义短语</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer">
+        <div class="arch-layer-tag l2">L2</div>
+        <div>
+          <div class="arch-layer-name">并行 5 通道检索</div>
+          <div class="arch-layer-desc">arXiv / OpenAlex / CrossRef / Semantic Scholar / 本地 PaSa 语义语料，单通道 40s 硬超时，失败自动降级</div>
+        </div>
+        <div class="arch-layer-modules">多通道并发 · 熔断降级</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer">
+        <div class="arch-layer-tag l3">L3</div>
+        <div>
+          <div class="arch-layer-name">BGE 语义预筛</div>
+          <div class="arch-layer-desc">0.70 语义 + 0.20 词面 + 0.10 被引归一加权；阈值 0.40，高语义分论文保底进判分池</div>
+        </div>
+        <div class="arch-layer-modules">语义预筛 · 语义保底</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer">
+        <div class="arch-layer-tag l4">L4</div>
+        <div>
+          <div class="arch-layer-name">LLM 批量判分</div>
+          <div class="arch-layer-desc">主题匹配 / 方法相关性 / 意图覆盖三维度评判；deadline 逐批截断 + 并行判分 + 判分补足</div>
+        </div>
+        <div class="arch-layer-modules">三维判分 · 补判</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer">
+        <div class="arch-layer-tag l5">L5</div>
+        <div>
+          <div class="arch-layer-name">RefChain 双向引文扩展</div>
+          <div class="arch-layer-desc">引用 + 被引同时扩展（API 模式 2 跳 / 本地 1 跳），种子 ≤ 6、每种子 25 篇</div>
+        </div>
+        <div class="arch-layer-modules">双向引文 · 2 跳</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer">
+        <div class="arch-layer-tag l6">L6</div>
+        <div>
+          <div class="arch-layer-name">精排与结构化输出</div>
+          <div class="arch-layer-desc">top-30 相对精排（API 模式）；JSON + Markdown 表格 + 文献星图三件套</div>
+        </div>
+        <div class="arch-layer-modules">相对精排 · 三件套</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer">
+        <div class="arch-layer-tag l7">L7</div>
+        <div>
+          <div class="arch-layer-name">Web 应用层</div>
+          <div class="arch-layer-desc">收藏夹 / 默认文件夹 / 导入导出 / 已阅 / 账号体系 / API Key 设置 / 大模型配置</div>
+        </div>
+        <div class="arch-layer-modules">收藏 · 账号 · 设置</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 创新点 -->
+<section class="block" id="innovations" style="background:var(--paper-soft)">
+  <div class="wrap">
+    <div class="block-header">
+      <div class="block-eyebrow"><span class="num">/02</span>创新点</div>
+      <h2 class="block-title">检索常驻机制 + 完整 Web 工作流</h2>
+      <p class="block-sub">以成熟 SPAR 架构为基线改造的 SPAR2 引擎，六项常驻机制全程生效，并在 Web 端形成可用的研究工具。</p>
+    </div>
+
+    <div class="innovation-grid">
+      <div class="innovation-card"><div class="innovation-num">引擎 01</div><div class="innovation-name">多通道并行检索</div><div class="innovation-desc">arXiv / OpenAlex / CrossRef / Semantic Scholar / 本地语义五路并发，单通道 40s 硬超时，失败自动熔断降级。</div><div class="innovation-tag">召回</div></div>
+      <div class="innovation-card"><div class="innovation-num">引擎 02</div><div class="innovation-name">迭代检索（BFS）</div><div class="innovation-desc">最多 3 轮广度优先扩展，后续轮次聚焦 arXiv + OpenAlex + 本地，预算随轮次放宽。</div><div class="innovation-tag">召回</div></div>
+      <div class="innovation-card"><div class="innovation-num">引擎 03</div><div class="innovation-name">文档驱动查询生成</div><div class="innovation-desc">用已找到论文的标题提取判别词补充查询，零额外 LLM 成本。</div><div class="innovation-tag">查询</div></div>
+      <div class="innovation-card"><div class="innovation-num">引擎 04</div><div class="innovation-name">RefChain 双向引文</div><div class="innovation-desc">引用与被引同时扩展，API 模式找 2 跳，把综述型查询引向种子论文的上下游。</div><div class="innovation-tag">引文</div></div>
+      <div class="innovation-card"><div class="innovation-num">引擎 05</div><div class="innovation-name">BGE 语义预筛 + 保底</div><div class="innovation-desc">语义/词面/被引加权预筛，高语义分论文保证进入判分池，避免漏掉语义型 gold。</div><div class="innovation-tag">筛选</div></div>
+      <div class="innovation-card"><div class="innovation-num">引擎 06</div><div class="innovation-name">评测截止日期过滤</div><div class="innovation-desc">按 PaSa source_meta 时间约束过滤，避免评测日期之后的论文污染排序。</div><div class="innovation-tag">约束</div></div>
+      <div class="innovation-card"><div class="innovation-num">判分</div><div class="innovation-name">LLM 三维度判分</div><div class="innovation-desc">主题匹配 / 方法相关性 / 意图覆盖三维评判 + 相对精排（API 模式 top-30）。</div><div class="innovation-tag">排序</div></div>
+      <div class="innovation-card"><div class="innovation-num">输出</div><div class="innovation-name">三件套 + 文献星图</div><div class="innovation-desc">JSON + Markdown 对比表 + 自包含 SVG 关系图；星图按标题/摘要相似度与共享作者连线。</div><div class="innovation-tag">结构化</div></div>
+      <div class="innovation-card"><div class="innovation-num">反馈</div><div class="innovation-name">反馈闭环</div><div class="innovation-desc">点击 / 收藏 / 已阅 / 引用 / 跳过事件埋点，支持奖励统计。</div><div class="innovation-tag">闭环</div></div>
+      <div class="innovation-card"><div class="innovation-num">工作流</div><div class="innovation-name">收藏与文件夹</div><div class="innovation-desc">默认收藏文件夹、跨文件夹移动、按账号隔离；按文件夹导出，文件名跟随文件夹名。</div><div class="innovation-tag">效率</div></div>
+      <div class="innovation-card"><div class="innovation-num">工作流</div><div class="innovation-name">批量导入 / 导出</div><div class="innovation-desc">BibTeX / RIS / CSV / JSON 导入，兼容 Zotero / EndNote / Mendeley。</div><div class="innovation-tag">互操作</div></div>
+      <div class="innovation-card"><div class="innovation-num">运维</div><div class="innovation-name">API 与模型管理</div><div class="innovation-desc">设置页直接配置 OpenAlex / S2 key；DeepSeek / Ollama / OpenAI 兼容模型预设一键添加。</div><div class="innovation-tag">可配置</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 评测 -->
+<section class="block" id="evaluation">
+  <div class="wrap">
+    <div class="block-header">
+      <div class="block-eyebrow"><span class="num">/03</span>评测</div>
+      <h2 class="block-title">官方测试集上的真实成绩</h2>
+      <p class="block-sub">基于 PaSa 与 AstaBench 官方公开测试集，F1 按 arXiv / DOI / S2 corpusId 归一化后精确匹配。</p>
+    </div>
+    <div class="eval-grid">
+      <div class="eval-card">
+        <h3>当前最优（2026-08-22 实测）</h3>
+        <table class="eval-table">
+          <tr><th>模型</th><th>测试集</th><th>样本</th><th>F1@10</th><th>说明</th></tr>
+          <tr><td>DeepSeek</td><td>RealScholarQuery</td><td>20</td><td class="weight">0.1055</td><td>三件套（相对精排 + RefChain 2 跳 + 双规划）</td></tr>
+          <tr><td>qwen3:8b 本地</td><td>RealScholarQuery</td><td>50 全量</td><td class="weight">0.0893</td><td>免费本地推理，全量稳定</td></tr>
+        </table>
+        <div class="eval-note">参考：PaSa-7B RealScholarQuery Recall@20 = 0.733；旧自研基线 F1@10 = 0.0171。</div>
+      </div>
+      <div class="eval-card">
+        <h3>评测体系</h3>
+        <table class="eval-table">
+          <tr><th>测试集</th><th>规模</th><th>来源</th></tr>
+          <tr><td>AutoScholarQuery</td><td>1000</td><td>PaSa 官方</td></tr>
+          <tr><td>RealScholarQuery</td><td>50</td><td>PaSa 官方</td></tr>
+          <tr><td>paper_finder_bench</td><td>267</td><td>AstaBench 官方</td></tr>
+          <tr><td>LitQA2</td><td>199</td><td>AstaBench 官方</td></tr>
+          <tr><td>SPARBench</td><td>100</td><td>自建抽样</td></tr>
+        </table>
+        <div class="eval-note">评分口径：arXiv（去版本）/ DOI（小写）/ S2 corpusId 三 ID 任一命中即中；另有 P@K / Recall@K / 效率（调用数、Token、P50-P99）指标。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 技术栈 -->
+<section class="block" style="background:var(--paper-soft)">
+  <div class="wrap">
+    <div class="block-header">
+      <div class="block-eyebrow"><span class="num">/04</span>技术栈</div>
+      <h2 class="block-title">低成本接入与运行</h2>
+      <p class="block-sub">本地模型与云端 API 统一接入；公开学术接口无需 key，额度耗尽自动降级；全部数据本地 JSON 持久化。</p>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-item"><div class="tech-name">Python + FastAPI</div><div class="tech-role">Web 后端</div></div>
+      <div class="tech-item"><div class="tech-name">SPAR2Engine</div><div class="tech-role">检索编排</div></div>
+      <div class="tech-item"><div class="tech-name">FastEmbed BGE-small</div><div class="tech-role">语义预筛</div></div>
+      <div class="tech-item"><div class="tech-name">arXiv / OpenAlex / CrossRef / S2</div><div class="tech-role">检索 API</div></div>
+      <div class="tech-item"><div class="tech-name">DeepSeek / Ollama qwen3</div><div class="tech-role">LLM 判分</div></div>
+      <div class="tech-item"><div class="tech-name">vis-network</div><div class="tech-role">文献星图</div></div>
+      <div class="tech-item"><div class="tech-name">pytest</div><div class="tech-role">32 用例全绿</div></div>
+      <div class="tech-item"><div class="tech-name">JSON 持久化</div><div class="tech-role">收藏 / 账号 / 配置</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>开始你的文献检索</h2>
+      <p>输入研究问题，获取结构化的论文集合。</p>
+      <a href="/app" class="btn-primary" style="background:var(--signal);color:var(--ink)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        开始搜索
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- footer -->
+<footer>
+  <div class="wrap">
+    <div class="footer-brand">樱花学术 🌸</div>
+    <div>科研场景下复杂学术查询的智能论文搜索与推荐</div>
+  </div>
+</footer>
+
+<script>
+// 与 /app 保持一致的默认界面大小
+document.documentElement.style.zoom = '1.15';
+document.documentElement.style.webkitTextSizeAdjust = 'none';
+
+// 同步登录态与收藏角标（与 /app 共用 localStorage）
+let currentUser = localStorage.getItem('sakura_user') || '';
+let authToken = localStorage.getItem('sakura_token') || '';
+const loginBtn = document.getElementById('login-btn');
+const loginText = document.getElementById('login-text');
+function syncLoginUI(){
+  if(loginBtn && loginText){
+    if(currentUser){
+      loginBtn.classList.add('logged-in');
+      loginText.textContent = currentUser;
+      loginBtn.title = '当前用户：'+currentUser;
+    } else {
+      loginBtn.classList.remove('logged-in');
+      loginText.textContent = '登录';
+      loginBtn.title = '登录';
+    }
+  }
+}
+syncLoginUI();
+if(authToken){
+  fetch('/api/auth/me?token='+encodeURIComponent(authToken))
+    .then(r=>r.json())
+    .then(d=>{
+      if(!d || !d.logged_in){
+        currentUser=''; authToken='';
+        localStorage.removeItem('sakura_user');
+        localStorage.removeItem('sakura_token');
+        syncLoginUI();
+      }
+    })
+    .catch(()=>{});
+}
+const uid = currentUser || 'web-anonymous';
+fetch(`/api/favorites?user_id=${encodeURIComponent(uid)}`).then(r=>r.json()).then(d=>{
+  const el = document.getElementById('fav-count');
+  const total = (d && d.total) || 0;
+  if(el && total>0){ el.textContent = total; el.style.display = 'grid'; }
+}).catch(()=>{});
+</script>
+</body>
+</html>

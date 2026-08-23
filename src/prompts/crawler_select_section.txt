@@ -1,0 +1,12 @@
+你是论文筛选助手。请从下面这篇论文的 section 中，选出与用户查询最相关的 2~3 个 section。
+
+# 用户查询
+{query}
+
+# 论文标题
+{title}
+
+# 论文 sections
+{sections}
+
+# 输出（每行一个 section 名）

@@ -1,0 +1,41 @@
+# SakuraScholar - 核心依赖
+# MVP 阶段只依赖最少的库，方便本地直接运行
+
+# 异步与 HTTP
+aiohttp>=3.9.0
+httpx>=0.25.0
+requests>=2.31.0          # openai_compat.py 的同步回退
+
+# 数据建模
+pydantic>=2.0.0
+
+# 数值计算与向量检索
+numpy>=1.24.0
+# faiss-cpu>=1.7.4        # 可选：启用真实向量检索时安装
+
+# 工具
+tiktoken>=0.5.0           # token 统计（Mock 也可使用）
+tenacity>=8.2.0           # 重试机制
+python-dotenv>=1.0.0      # .env 加载
+
+# CLI 与日志
+rich>=13.7.0              # 终端美化输出（可选，提升 demo 体验）
+
+# Web 服务
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+jinja2>=3.1.0             # HTML 模板渲染
+
+# 评测与测试
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+
+# =============== 可选：真实 LLM ===============
+# OpenAI 兼容 API（同时适配 DeepSeek / DashScope / GLM）
+openai>=1.30.0            # 启用 openai / deepseek / qwen_api / glm 时需要
+
+# 本地 Qwen 模型（不需 API key，但需要 GPU）
+# transformers>=4.36.0
+# torch>=2.0.0
+# accelerate>=0.25.0
