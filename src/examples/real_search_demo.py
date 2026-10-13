@@ -1,5 +1,5 @@
 """
-SakuraScholar 真实搜索 Demo
+ScholarScope 真实搜索 Demo
 
 使用真实 Semantic Scholar + OpenAlex API 跑端到端 pipeline，
 无需任何 API key（S2 无 key 限速 3s/次，OpenAlex 无 key 也可用）。
@@ -104,7 +104,7 @@ def run_real_search(query: str, use_mock_llm: bool = True) -> dict:
 def render_report(query: str, result: dict, mock_result: dict | None) -> str:
     """生成 Markdown 报告。"""
     lines = []
-    lines.append(f"# SakuraScholar 真实搜索报告\n")
+    lines.append(f"# ScholarScope 真实搜索报告\n")
     lines.append(f"**Query**: {query}\n")
     lines.append(f"**检索后端**: Semantic Scholar + OpenAlex（真实 API）\n")
     lines.append(f"**时间**: {result['stats'].get('wall_clock_seconds', 0)}s\n")
@@ -173,7 +173,7 @@ def render_report(query: str, result: dict, mock_result: dict | None) -> str:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="SakuraScholar 真实搜索 Demo")
+    parser = argparse.ArgumentParser(description="ScholarScope 真实搜索 Demo")
     parser.add_argument(
         "--query", type=str, default="",
         help="指定查询（默认跑 3 条示例查询）",
@@ -199,7 +199,7 @@ def main():
     use_mock_llm = not args.use_real_llm
 
     print(f"\n{'='*60}")
-    print(f"SakuraScholar 真实搜索 Demo")
+    print(f"ScholarScope 真实搜索 Demo")
     print(f"={'='*58}")
     print(f"查询数: {len(queries)}")
     print(f"LLM 模式: {'MockLLM' if use_mock_llm else '真实 LLM'}")
@@ -228,18 +228,8 @@ def main():
             result = {"query": query_text, "papers": [], "stats": {},
                       "intent": {}, "error": str(e)}
 
-        # Mock 对比
+        # SPAR2 引擎无 Mock 检索分支：真实多通道检索已是默认行为，不再重复跑一遍
         mock_result = None
-        if args.compare_mock and use_mock_llm:
-            try:
-                print(f"  >>> 跑 MockLLM 对比...")
-                mock_orch = Orchestrator(use_mock_retrieval=True)
-                mock_result = mock_orch.run(query_text)
-                print(f"  -> Mock: {len(mock_result['papers'])} papers, "
-                      f"api_calls={mock_result['stats']['api_calls']}, "
-                      f"tokens={mock_result['stats']['tokens']}")
-            except Exception as e:
-                print(f"  ✗ Mock 失败: {e}")
 
         # 写入三件套
         safe_name = "".join(c if c.isalnum() else "_" for c in query_text[:40]).strip("_")

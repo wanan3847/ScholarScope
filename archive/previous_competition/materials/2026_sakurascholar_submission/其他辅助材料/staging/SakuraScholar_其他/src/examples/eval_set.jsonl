@@ -1,0 +1,5 @@
+{"query": "retrieval augmented generation", "gold_ids": ["mock-abcd1234"]}
+{"query": "graph neural network", "gold_ids": []}
+{"query": "federated learning", "gold_ids": []}
+{"query": "self-supervised learning", "gold_ids": []}
+{"query": "transformer architecture", "gold_ids": []}

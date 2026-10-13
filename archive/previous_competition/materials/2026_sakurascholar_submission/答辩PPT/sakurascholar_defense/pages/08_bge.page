@@ -1,0 +1,157 @@
+background:
+  type: solid
+  color: "$paper"
+elements:
+  - elementId: sec-label
+    elementType: text
+    bounds: [56, 26, 300, 22]
+    content:
+      fontSize: 11
+      fontFamily: "MiSans"
+      color: "$accent"
+      letterSpacing: 3
+      align: [left, middle]
+      text: 03 · 关键技术
+  - elementId: title
+    elementType: text
+    bounds: [56, 52, 848, 46]
+    content:
+      style: "$title"
+      align: [left, middle]
+      text: 关键技术 ③：BGE 语义预筛 + 保底机制
+  - elementId: rule
+    elementType: line
+    bounds: [56, 104, 848, 2]
+    viewBox: [424, 1]
+    points: "0,0 424,0"
+    border: {style: solid, width: 1, color: "$line"}
+  - elementId: formula-box
+    elementType: shape
+    bounds: [56, 140, 848, 96]
+    shapeName: rect
+    fill: {type: solid, color: "#F3EADF"}
+    border: {style: solid, width: 1, color: "$line"}
+  - elementId: formula
+    elementType: text
+    bounds: [56, 148, 848, 80]
+    content:
+      fontSize: 26
+      fontFamily: "MiSans"
+      color: "$text"
+      align: [center, middle]
+      text: |
+        <p>预排分 = 0.70 × BGE 语义 + 0.20 × 词面 + 0.10 × 被引归一</p>
+        <p style="font-size:14px; color:#6B6361;">本地 FastEmbed BGE-small 向量（零成本、无外部 API）</p>
+  - elementId: rule1
+    elementType: line
+    bounds: [56, 268, 848, 2]
+    viewBox: [424, 1]
+    points: "0,0 424,0"
+    border: {style: solid, width: 1, color: "$line"}
+  - elementId: g1-num
+    elementType: text
+    bounds: [56, 296, 64, 44]
+    content:
+      fontSize: 26
+      fontFamily: "思源宋体"
+      color: "$accent"
+      bold: true
+      align: [left, middle]
+      text: 01
+  - elementId: g1-t
+    elementType: text
+    bounds: [136, 296, 400, 44]
+    content:
+      fontSize: 17
+      fontFamily: "MiSans"
+      color: "$text"
+      bold: true
+      align: [left, middle]
+      text: 语义保底规则
+  - elementId: g1-d
+    elementType: text
+    bounds: [520, 296, 384, 44]
+    content:
+      style: "$small"
+      align: [right, middle]
+      text: BGE 余弦 ≥ 0.40 的论文保证进入判分池（上限 60 篇）
+  - elementId: g1-line
+    elementType: line
+    bounds: [56, 346, 848, 1]
+    viewBox: [424, 1]
+    points: "0,0 424,0"
+    border: {style: solid, width: 1, color: "$line"}
+  - elementId: g2-num
+    elementType: text
+    bounds: [56, 360, 64, 44]
+    content:
+      fontSize: 26
+      fontFamily: "思源宋体"
+      color: "$accent"
+      bold: true
+      align: [left, middle]
+      text: 02
+  - elementId: g2-t
+    elementType: text
+    bounds: [136, 360, 400, 44]
+    content:
+      fontSize: 17
+      fontFamily: "MiSans"
+      color: "$text"
+      bold: true
+      align: [left, middle]
+      text: 解决的问题
+  - elementId: g2-d
+    elementType: text
+    bounds: [520, 360, 384, 44]
+    content:
+      style: "$small"
+      align: [right, middle]
+      text: “词面零重叠但语义相关”的论文不再被截断漏掉
+  - elementId: g2-line
+    elementType: line
+    bounds: [56, 410, 848, 1]
+    viewBox: [424, 1]
+    points: "0,0 424,0"
+    border: {style: solid, width: 1, color: "$line"}
+  - elementId: g3-num
+    elementType: text
+    bounds: [56, 424, 64, 44]
+    content:
+      fontSize: 26
+      fontFamily: "思源宋体"
+      color: "$accent"
+      bold: true
+      align: [left, middle]
+      text: 03
+  - elementId: g3-t
+    elementType: text
+    bounds: [136, 424, 400, 44]
+    content:
+      fontSize: 17
+      fontFamily: "MiSans"
+      color: "$text"
+      bold: true
+      align: [left, middle]
+      text: 典型收益
+  - elementId: g3-d
+    elementType: text
+    bounds: [520, 424, 384, 44]
+    content:
+      style: "$small"
+      align: [right, middle]
+      text: “diffusion models + RL” → Planning with Diffusion 可被召回
+  - elementId: footer
+    elementType: text
+    bounds: [56, 508, 300, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      text: SakuraScholar · 樱花学术
+  - elementId: pageno
+    elementType: text
+    bounds: [880, 508, 40, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: 08 / 17

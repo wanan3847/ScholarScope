@@ -1,0 +1,205 @@
+background:
+  type: solid
+  color: "$paper"
+elements:
+  - elementId: sec-label
+    elementType: text
+    bounds: [56, 26, 300, 22]
+    content:
+      fontSize: 11
+      fontFamily: "MiSans"
+      color: "$accent"
+      letterSpacing: 3
+      align: [left, middle]
+      text: 03 · 关键技术
+  - elementId: title
+    elementType: text
+    bounds: [56, 52, 848, 46]
+    content:
+      style: "$title"
+      align: [left, middle]
+      text: 关键技术 ②：五通道并行检索
+  - elementId: rule
+    elementType: line
+    bounds: [56, 104, 848, 2]
+    viewBox: [424, 1]
+    points: "0,0 424,0"
+    border: {style: solid, width: 1, color: "$line"}
+  - elementId: c1-name
+    elementType: text
+    bounds: [56, 134, 200, 44]
+    content:
+      fontSize: 16
+      fontFamily: "MiSans"
+      color: "$text"
+      bold: true
+      align: [left, middle]
+      text: arXiv API
+  - elementId: c1-role
+    elementType: text
+    bounds: [280, 134, 400, 44]
+    content:
+      style: "$small"
+      align: [left, middle]
+      text: 计算机 / 交叉学科预印本，布尔检索
+  - elementId: c1-fail
+    elementType: text
+    bounds: [700, 134, 204, 44]
+    content:
+      fontSize: 12
+      fontFamily: "MiSans"
+      color: "$secondary"
+      align: [right, middle]
+      text: 10s 超时 + 重试 + 熔断
+  - elementId: c1-line
+    elementType: line
+    bounds: [56, 184, 848, 1]
+    viewBox: [424, 1]
+    points: "0,0 424,0"
+    border: {style: solid, width: 1, color: "$line"}
+  - elementId: c2-name
+    elementType: text
+    bounds: [56, 196, 200, 44]
+    content:
+      fontSize: 16
+      fontFamily: "MiSans"
+      color: "$text"
+      bold: true
+      align: [left, middle]
+      text: OpenAlex
+  - elementId: c2-role
+    elementType: text
+    bounds: [280, 196, 400, 44]
+    content:
+      style: "$small"
+      align: [left, middle]
+      text: title_and_abstract + title + 全文检索
+  - elementId: c2-fail
+    elementType: text
+    bounds: [700, 196, 204, 44]
+    content:
+      fontSize: 12
+      fontFamily: "MiSans"
+      color: "$secondary"
+      align: [right, middle]
+      text: mailto 免计费，额度耗尽降级
+  - elementId: c2-line
+    elementType: line
+    bounds: [56, 246, 848, 1]
+    viewBox: [424, 1]
+    points: "0,0 424,0"
+    border: {style: solid, width: 1, color: "$line"}
+  - elementId: c3-name
+    elementType: text
+    bounds: [56, 258, 200, 44]
+    content:
+      fontSize: 16
+      fontFamily: "MiSans"
+      color: "$text"
+      bold: true
+      align: [left, middle]
+      text: CrossRef
+  - elementId: c3-role
+    elementType: text
+    bounds: [280, 258, 400, 44]
+    content:
+      style: "$small"
+      align: [left, middle]
+      text: DOI 元数据通道，服务 LitQA2 / paper_finder
+  - elementId: c3-fail
+    elementType: text
+    bounds: [700, 258, 204, 44]
+    content:
+      fontSize: 12
+      fontFamily: "MiSans"
+      color: "$secondary"
+      align: [right, middle]
+      text: _safe_call 静默降级
+  - elementId: c3-line
+    elementType: line
+    bounds: [56, 308, 848, 1]
+    viewBox: [424, 1]
+    points: "0,0 424,0"
+    border: {style: solid, width: 1, color: "$line"}
+  - elementId: c4-name
+    elementType: text
+    bounds: [56, 320, 200, 44]
+    content:
+      fontSize: 16
+      fontFamily: "MiSans"
+      color: "$text"
+      bold: true
+      align: [left, middle]
+      text: Semantic Scholar
+  - elementId: c4-role
+    elementType: text
+    bounds: [280, 320, 400, 44]
+    content:
+      style: "$small"
+      align: [left, middle]
+      text: 语义召回 + S2 corpusId 映射
+  - elementId: c4-fail
+    elementType: text
+    bounds: [700, 320, 204, 44]
+    content:
+      fontSize: 12
+      fontFamily: "MiSans"
+      color: "$secondary"
+      align: [right, middle]
+      text: 429 限流退避 + 熔断 5 分钟
+  - elementId: c4-line
+    elementType: line
+    bounds: [56, 370, 848, 1]
+    viewBox: [424, 1]
+    points: "0,0 424,0"
+    border: {style: solid, width: 1, color: "$line"}
+  - elementId: c5-name
+    elementType: text
+    bounds: [56, 382, 200, 44]
+    content:
+      fontSize: 16
+      fontFamily: "MiSans"
+      color: "$text"
+      bold: true
+      align: [left, middle]
+      text: 本地语义语料
+  - elementId: c5-role
+    elementType: text
+    bounds: [280, 382, 400, 44]
+    content:
+      style: "$small"
+      align: [left, middle]
+      text: PaSa 官方 20 万篇标题库（倒排 + BGE 向量）
+  - elementId: c5-fail
+    elementType: text
+    bounds: [700, 382, 204, 44]
+    content:
+      fontSize: 12
+      fontFamily: "MiSans"
+      color: "$secondary"
+      align: [right, middle]
+      text: 断网 / 额度耗尽的兜底
+  - elementId: note
+    elementType: text
+    bounds: [56, 452, 848, 30]
+    content:
+      fontSize: 14
+      fontFamily: "MiSans"
+      color: "$text"
+      bold: true
+      align: [left, middle]
+      text: 五通道并行执行（ThreadPoolExecutor），单通道 40s 硬超时，总耗时由最慢通道决定
+  - elementId: footer
+    elementType: text
+    bounds: [56, 508, 300, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      text: SakuraScholar · 樱花学术
+  - elementId: pageno
+    elementType: text
+    bounds: [880, 508, 40, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: 07 / 17

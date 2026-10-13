@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import os
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FutureTimeout
 from typing import Dict, List
 
 import requests
@@ -23,10 +24,24 @@ def _openalex_headers() -> Dict:
 
 
 def expand_citations(seed_docs: List[dict], max_seeds: int = 8,
-                     refs_per_seed: int = 30, end_date: str = "") -> List[dict]:
-    """对种子论文做 1 跳引用/被引扩展，返回新候选（含标题/DOI/arXiv）。"""
+                     refs_per_seed: int = 30, end_date: str = "",
+                     deadline: float | None = None) -> List[dict]:
+    """对种子论文做 1 跳引用/被引扩展，返回新候选（含标题/DOI/arXiv）。
+
+    deadline：time.monotonic() 刻度的绝对截止时间；每次网络请求前检查，
+    超时立即返回已收集的候选，避免 RefChain 把整条流水线拖过 deadline。
+    """
     if not seed_docs:
         return []
+
+    def _expired() -> bool:
+        return deadline is not None and time.monotonic() >= deadline
+
+    def _left(default: float = 1.0) -> float:
+        if deadline is None:
+            return default
+        return max(0.1, deadline - time.monotonic())
+
     out: List[dict] = []
     end = int(end_date[:4]) if end_date else 9999
 
@@ -48,6 +63,8 @@ def expand_citations(seed_docs: List[dict], max_seeds: int = 8,
     oa_ids = [d.get("openalex_id") for d in seed_docs if d.get("openalex_id")]
     ref_oa_ids: List[str] = []
     for oid in oa_ids[:max_seeds]:
+        if _expired():
+            break
         try:
             resp = requests.get(
                 f"https://api.openalex.org/works/{requests.utils.quote(oid)}",
@@ -87,15 +104,26 @@ def expand_citations(seed_docs: List[dict], max_seeds: int = 8,
             pass
         return None
 
-    with ThreadPoolExecutor(max_workers=8) as pool:
+    pool = ThreadPoolExecutor(max_workers=8)
+    try:
         futures = [pool.submit(_fetch_ref, rid) for rid in ref_oa_ids]
-        for fut in as_completed(futures):
-            work = fut.result()
-            if work is not None:
-                _absorb_work(work)
+        try:
+            for fut in as_completed(futures, timeout=_left(20.0)):
+                work = fut.result()
+                if work is not None:
+                    _absorb_work(work)
+        except FutureTimeout:
+            pass  # 超时：只取已完成的引用候选
+        finally:
+            for fut in futures:
+                fut.cancel()
+    finally:
+        pool.shutdown(wait=False)  # 不等慢引用请求，让 RefChain 受 deadline 约束
 
     # 2) CrossRef 参考文献 + 被引（DOI 种子，主要服务 litqa2/paper_finder 的 DOI gold）
     for seed in seed_docs[:max_seeds]:
+        if _expired():
+            break
         doi = (seed.get("doi") or "").lower()
         if not doi:
             continue

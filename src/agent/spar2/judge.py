@@ -99,7 +99,11 @@ def judge_docs(query: str, docs: List[dict], llm_chat: Callable,
             lines.append(f"[{i}] Title: {title}\nAbstract: {abstract}".strip())
         query_short = query.strip()[:400]
         prompt = _PROMPT.format(q=query.strip(), q_short=query_short, papers="\n\n".join(lines))
-        resp = llm_chat(prompt, max_tokens=1200)
+        from agent.spar2.llm_guard import bounded_call
+        resp = bounded_call(llm_chat, prompt, max_tokens=1200)
+        if resp is None:
+            # LLM 超时：直接词法兜底，不重试（避免慢调用拖爆 deadline）
+            return [lexical_score(query, d) for d in batch]
         parsed = _parse_scores(resp, len(batch))
         if parsed is not None:
             return parsed
@@ -114,18 +118,30 @@ def judge_docs(query: str, docs: List[dict], llm_chat: Callable,
         # 解析失败：重试一次
         global PARSE_FAILURES
         PARSE_FAILURES += 1
-        resp2 = llm_chat(prompt, max_tokens=1200)
+        resp2 = bounded_call(llm_chat, prompt, max_tokens=1200)
+        if resp2 is None:
+            return [lexical_score(query, d) for d in batch]
         parsed2 = _parse_scores(resp2, len(batch))
         if parsed2 is not None:
             return parsed2
         PARSE_FAILURES += 1
         return [lexical_score(query, d) for d in batch]
 
-    with ThreadPoolExecutor(max_workers=max_workers) as pool:
-        futures = {pool.submit(_judge_batch, s): s for s in batches}
-        ordered = {s: None for s in batches}
-        for fut in as_completed(futures):
-            ordered[futures[fut]] = fut.result()
-    for s in batches:
-        scores.extend(ordered[s])
+    # 按波提交：每波最多 max_workers 个批次并行；一波结束后检查 deadline，
+    # 超时则剩余批次直接转词法分（避免晚提交的批次把整条流水线拖爆）
+    wave = max_workers
+    for w0 in range(0, len(batches), wave):
+        if deadline is not None and time.monotonic() >= deadline:
+            for s in batches[w0:]:
+                scores.extend(lexical_score(query, d)
+                              for d in docs[s:s + batch_size])
+            break
+        wave_batches = batches[w0:w0 + wave]
+        with ThreadPoolExecutor(max_workers=len(wave_batches)) as pool:
+            ordered = {s: None for s in wave_batches}
+            futures = {pool.submit(_judge_batch, s): s for s in wave_batches}
+            for fut in as_completed(futures):
+                ordered[futures[fut]] = fut.result()
+        for s in wave_batches:
+            scores.extend(ordered[s])
     return scores

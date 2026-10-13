@@ -1,5 +1,5 @@
 """
-SakuraScholar 端到端 Demo
+ScholarScope 端到端 Demo
 
 演示 5 个真实学术查询的完整 pipeline 运行。
 不依赖任何外部 API key，开箱即跑。
@@ -28,7 +28,7 @@ SAMPLE_OUTPUT_PATH = Path(__file__).parent / "sample_output.json"
 def main():
     """跑 demo：逐条 query 跑 pipeline，打印统计信息。"""
     queries = json.loads(SAMPLE_QUERIES_PATH.read_text(encoding="utf-8"))
-    print(f"\n========== SakuraScholar Demo ==========")
+    print(f"\n========== ScholarScope Demo ==========")
     print(f"查询数: {len(queries)}")
     print(f"=========================================\n")
 
@@ -40,7 +40,7 @@ def main():
         print(f"\n[{idx}/{len(queries)}] type={query_type}")
         print(f"  Q: {query_text}")
         t0 = time.time()
-        out = orch.run(query_text)
+        out = orch.sync_run(query_text)
         elapsed = time.time() - t0
         print(f"  -> top {len(out['papers'])} papers "
               f"(api_calls={out['stats']['api_calls']}, "

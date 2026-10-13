@@ -9,7 +9,7 @@
     - 消融对比支持
 
 支持的数据格式（自动归一化为 {query, gold_ids, qid}）：
-    - SakuraScholar 原生: {query, gold_ids: [...], qid?}
+    - ScholarScope 原生: {query, gold_ids: [...], qid?}
     - PaSa AutoScholarQuery / RealScholarQuery:
         {question, answer: [...], answer_arxiv_id: [...], qid}
     - AstaBench paper_finder_bench:
@@ -176,7 +176,7 @@ class EvaluationRunner:
 
         支持的数据格式见模块 docstring。
         """
-        # 1) SakuraScholar 原生：{query, gold_ids, qid?}
+        # 1) ScholarScope 原生：{query, gold_ids, qid?}
         if "query" in raw and "gold_ids" in raw:
             return {
                 "query": raw["query"],
@@ -240,7 +240,7 @@ class EvaluationRunner:
         }
 
     # ------------------------------------------------------------------ #
-    # 结构化检测（§6.2 结构化 10%）
+    # 结构化输出检测
     # ------------------------------------------------------------------ #
     @staticmethod
     def _check_structural(result: Dict) -> Dict[str, bool]:

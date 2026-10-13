@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>樱花学术 · 智能论文搜索</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌸%3C/text%3E%3C/svg%3E">
+<title>研索 ScholarScope · 面向复杂学术查询的智能论文检索与推荐</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🔎%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:opsz,wght@6..56,400;6..56,500;6..56,600;6..56,700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -63,7 +63,7 @@ header.topbar{
 }
 .topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
-.brand-sakura{
+.brand-mark{
   width:36px;height:36px;display:grid;place-items:center;
   font-size:22px;line-height:1;filter:drop-shadow(0 1px 2px rgba(232,139,160,.3));
 }
@@ -485,10 +485,10 @@ header.topbar{
 <header class="topbar">
   <div class="wrap topbar-inner">
     <a href="/" class="brand">
-      <span class="brand-sakura">🌸</span>
+      <span class="brand-mark">研</span>
       <div>
-        <div class="brand-name">樱花学术</div>
-        <div class="brand-sub">SakuraScholar · 智能论文搜索</div>
+        <div class="brand-name">研索</div>
+        <div class="brand-sub">ScholarScope · 智能论文检索与推荐</div>
       </div>
     </a>
     <div class="top-actions">
@@ -519,7 +519,7 @@ header.topbar{
 <!-- ===== Hero ===== -->
 <section class="hero">
   <div class="wrap">
-    <div class="hero-eyebrow"><span class="dot"></span>🌸 樱花学术 · 学术文献检索与推荐</div>
+    <div class="hero-eyebrow"><span class="dot"></span>研索 ScholarScope · 面向复杂学术查询</div>
     <h1>复杂的学术问题，<em>精准</em>的论文集合</h1>
     <p class="lead">面向复杂研究问题，聚合多源学术数据，从检索、筛选到归纳整理，返回结构化的论文集合。</p>
 
@@ -605,7 +605,7 @@ header.topbar{
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-header">
-    <h2 id="drawer-title">🌸 我的收藏夹</h2>
+    <h2 id="drawer-title">我的收藏夹</h2>
     <button class="drawer-close" onclick="closeDrawer()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
@@ -641,7 +641,7 @@ header.topbar{
   <div class="modal modal-sm">
     <div class="modal-header">
       <div>
-        <h2>🌸 樱花学术</h2>
+        <h2>研索 ScholarScope</h2>
         <div class="modal-sub">本地账号 · 数据隔离</div>
       </div>
       <button class="drawer-close" onclick="closeLoginModal()">
@@ -812,7 +812,7 @@ function renderDrawer(type){
   tabs.innerHTML = '';
 
   if(type==='favorites'){
-    title.innerHTML = '🌸 我的收藏夹' + (currentUser ? ` <span style="font-size:12px;color:var(--ink-mute);font-family:var(--font-mono)">· ${escapeHtml(currentUser)}</span>` : '');
+    title.innerHTML = '我的收藏夹' + (currentUser ? ` <span style="font-size:12px;color:var(--ink-mute);font-family:var(--font-mono)">· ${escapeHtml(currentUser)}</span>` : '');
     tabs.innerHTML = `
       <button class="drawer-tab active" onclick="renderDrawerTab('favorites-list',event)">全部收藏</button>
       <button class="drawer-tab" onclick="renderDrawerTab('favorites-folders',event)">📁 管理文件夹</button>
@@ -993,7 +993,7 @@ async function loadFavoritesList(){
       body.innerHTML = `
         ${_renderFolderBar(folders, counts, fid)}
         <div style="color:var(--ink-mute);font-size:13px;padding:40px 20px;text-align:center">
-          🌸 ${fid==='unfiled'?'没有未分类的收藏':fid?'该文件夹为空':'暂无收藏'}
+          ${fid==='unfiled'?'没有未分类的收藏':fid?'该文件夹为空':'暂无收藏'}
           <br><span style="font-size:11px">点击论文卡片的“收藏”按钮加入</span>
         </div>`;
       return;
@@ -1724,7 +1724,7 @@ async function registerLLM(){
   const base_url = document.getElementById('llm-url').value.trim();
   const api_key = document.getElementById('llm-key').value.trim();
   if(!name||!model||!base_url){showToast('请填写名称、模型ID和base_url','warn');return}
-  const r = await fetch('/api/llm/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,model,base_url,api_key,priority:10})});
+  const r = await fetch('/api/llm/register?token='+encodeURIComponent(authToken),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,model,base_url,api_key,priority:10})});
   if(r.ok){showToast('模型已注册','ok');loadLLMModels()}
   else{showToast('注册失败','error')}
 }
@@ -1738,7 +1738,7 @@ async function testLLM(name){
 }
 
 async function removeLLM(name){
-  await fetch('/api/llm/unregister/'+name,{method:'POST'});
+  await fetch('/api/llm/unregister/'+name+'?token='+encodeURIComponent(authToken),{method:'POST'});
   showToast('已删除 '+name,'ok');
   loadLLMModels();
 }
@@ -1859,7 +1859,7 @@ async function registerPreset(key, name){
   try{
     const body = {provider:key, api_key:apiKey};
     if(model) body.model = model;
-    const r = await fetch('/api/llm/register_preset',{
+    const r = await fetch('/api/llm/register_preset?token='+encodeURIComponent(authToken),{
       method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)
     });
     const d = await r.json();
@@ -1936,7 +1936,7 @@ async function registerLLMModal(){
   const api_key = document.getElementById('llm-key').value.trim();
   if(!name||!model||!base_url){showToast('请填写名称、模型ID和base_url','warn');return}
   try{
-    const r = await fetch('/api/llm/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,model,base_url,api_key,priority:10})});
+    const r = await fetch('/api/llm/register?token='+encodeURIComponent(authToken),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,model,base_url,api_key,priority:10})});
     if(r.ok){
       showToast('模型已注册','ok');
       document.getElementById('llm-name').value='';
@@ -2143,7 +2143,7 @@ function renderPaperCard(p,i){
     </div>
     <div class="paper-abstract" onclick="this.classList.toggle('expanded')">${escapeHtml(abs)}</div>
     <div class="abstract-quick" id="quick-${i}">
-      <div class="abstract-quick-label">🌸 摘要速览</div>
+      <div class="abstract-quick-label">摘要速览</div>
       ${quickRead}
     </div>
     <div class="paper-scores">
@@ -2160,7 +2160,7 @@ function renderPaperCard(p,i){
       <button class="fb-btn ${isRead?'active':''}" onclick="toggleRead(${i},this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>已阅</button>
       <button class="fb-btn ${isFav?'fav-active':''}" onclick="toggleFav(${i},this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>收藏</button>
       <button class="fb-btn" onclick="exportBibtex(${i},this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>引用</button>
-      <button class="fb-btn" onclick="toggleQuickRead(${i},this)">🌸 速读</button>
+      <button class="fb-btn" onclick="toggleQuickRead(${i},this)">速读</button>
       ${similar.length?`<button class="fb-btn" onclick="toggleSimilar(${i},this)">🌱 相似</button>`:''}
       <button class="fb-btn" onclick="sendFeedback('skip','${pid}',this)">跳过</button>
     </div>

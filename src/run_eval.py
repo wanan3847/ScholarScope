@@ -140,7 +140,7 @@ def main():
     args = parser.parse_args()
 
     print(f"\n{'='*70}")
-    print(f"🌸 SakuraScholar 快速评测 (前 {args.n} 条 / benchmark)")
+    print(f"ScholarScope 快速评测 (前 {args.n} 条 / benchmark)")
     print(f"   检索模式: {'真实 API' if args.real else 'Mock（arxiv_id 不会匹配 gold，分数为 0）'}")
     print(f"   LLM 模式: {args.llm or 'MockLLM'}")
     print(f"{'='*70}\n")

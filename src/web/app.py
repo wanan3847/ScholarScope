@@ -1,11 +1,11 @@
 """
-SakuraScholar Web 服务
+研索 ScholarScope Web 服务
 
 基于 FastAPI 提供 REST API，供前端使用界面调用。
 
 端点：
-    GET  /                  → 项目展示首页（🌸 HTML）
-    GET  /app               → 搜索使用界面（🌸 HTML）
+    GET  /                  → 项目展示首页
+    GET  /app               → 搜索使用界面
     POST /api/search        → 执行搜索（核心）
     GET  /api/paper/{id}    → 论文详情
     GET  /api/references/{id} → 参考文献
@@ -158,7 +158,7 @@ def _get_llm_router():
 # ------------------------------------------------------------------ #
 
 app = FastAPI(
-    title="SakuraScholar",
+    title="研索 ScholarScope",
     description="科研场景下复杂学术查询的智能论文搜索与推荐系统",
     version="1.0.0",
 )
@@ -196,7 +196,7 @@ async def app_page() -> HTMLResponse:
 
 @app.get("/api/health")
 async def health() -> Dict:
-    return {"status": "ok", "service": "SakuraScholar", "version": "1.0.0"}
+    return {"status": "ok", "service": "ScholarScope", "version": "1.0.0"}
 
 
 @app.get("/api/innovations")
@@ -225,11 +225,14 @@ def search(req: SearchRequest) -> Dict[str, Any]:
     # SPAR2 引擎：始终走真实多通道检索（arXiv/OpenAlex/CrossRef/本地语义），
     # req.backends / req.use_real_api / req.ablation 为兼容旧接口保留（不生效）。
     # Web 模式 deadline 60s（评测模式用 170s），保证用户不会等太久
-    orch = Orchestrator(llm_chat=llm, deadline_seconds=60.0, max_rounds=2,
-                         max_judge=80, local_top_k=200)
+    # Web 模式：保留原 SPAR2 体系，但小服务器上只跑第一轮（含五通道 + 判分），
+    # 第二轮/RefChain 留给评测模式；deadline 70s + 单次 LLM 30s 硬超时，
+    # 保证在 Cloudflare 100s 内稳定返回
+    orch = Orchestrator(llm_chat=llm, deadline_seconds=70.0, max_rounds=1,
+                         max_judge=40, local_top_k=200)
 
     # 超时保护：外部 API 可能很慢，最多等 75 秒
-    SEARCH_TIMEOUT = 75
+    SEARCH_TIMEOUT = 95
     # 不用 with 语句，避免超时后等待后台线程结束才返回响应
     executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
     try:
@@ -418,8 +421,10 @@ async def list_llm_models() -> Dict:
 
 
 @app.post("/api/llm/register")
-async def register_llm_model(req: LLMRegisterRequest) -> Dict:
-    """注册一个新的 LLM 模型端点。"""
+async def register_llm_model(req: LLMRegisterRequest, token: str = "") -> Dict:
+    """注册一个新的 LLM 模型端点（仅管理员可操作，保护已有 key 配置）。"""
+    if not _is_admin(token):
+        raise HTTPException(status_code=403, detail="仅管理员可配置大模型")
     router = _get_llm_router()
     router.register(
         name=req.name,
@@ -434,8 +439,10 @@ async def register_llm_model(req: LLMRegisterRequest) -> Dict:
 
 
 @app.post("/api/llm/unregister/{name}")
-async def unregister_llm_model(name: str) -> Dict:
-    """移除一个 LLM 模型端点。"""
+async def unregister_llm_model(name: str, token: str = "") -> Dict:
+    """移除一个 LLM 模型端点（仅管理员）。"""
+    if not _is_admin(token):
+        raise HTTPException(status_code=403, detail="仅管理员可删除模型")
     router = _get_llm_router()
     router.unregister(name)
     _save_llm_config()
@@ -508,8 +515,10 @@ class LLMPresetRegisterRequest(BaseModel):
 
 
 @app.post("/api/llm/register_preset")
-async def register_preset(req: LLMPresetRegisterRequest) -> Dict:
-    """一键注册预设模型（自动填 base_url + 默认 model）。"""
+async def register_preset(req: LLMPresetRegisterRequest, token: str = "") -> Dict:
+    """一键注册预设模型（自动填 base_url + 默认 model；仅管理员）。"""
+    if not _is_admin(token):
+        raise HTTPException(status_code=403, detail="仅管理员可配置大模型")
     from llm.openai_compat import PRESETS
     preset = PRESETS.get(req.provider)
     if not preset:
@@ -942,8 +951,10 @@ async def update_api_settings(req: Dict, token: str = "") -> Dict:
     """保存 API 配置（需登录）。body: {openalex_key?, openalex_email?, s2_key?}"""
     from agent.api_settings import save_api_config
     from agent.collections import verify_token
-    if not (token and verify_token(token)):
+    if not verify_token(token or ""):
         raise HTTPException(status_code=401, detail="请先登录")
+    if not _is_admin(token):
+        raise HTTPException(status_code=403, detail="仅管理员可修改 API 配置")
     if not isinstance(req, dict):
         raise HTTPException(status_code=400, detail="请求格式错误")
     try:

@@ -1,5 +1,5 @@
 """
-SakuraScholar 智能论文搜索 Agent 包。
+ScholarScope 智能论文检索 Agent 包。
 
 子模块：
     spar2          - SPAR2 引擎（核心实现）

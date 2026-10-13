@@ -183,7 +183,8 @@ class SPAR2Engine:
 
     def run(self, query: str, before_date: str = "") -> Dict:
         t0 = time.time()
-        deadline_abs = t0 + self.deadline_seconds
+        # judge_docs 用 time.monotonic() 比较 deadline，必须用单调时钟
+        deadline_abs = time.monotonic() + self.deadline_seconds
         judge_mod.PARSE_FAILURES = 0
         counter = _CountingChat(self._llm)
         retrieval_calls = 0
@@ -214,8 +215,10 @@ class SPAR2Engine:
                 r1_keywords, r1_phrases = keywords, phrases
                 
                 # 5 个检索通道并行执行（最慢的决定总耗时，而非累加）
-                _RETRIEVAL_TIMEOUT = 40  # 单通道硬超时
-                with ThreadPoolExecutor(max_workers=5) as pool:
+                _RETRIEVAL_TIMEOUT = 40  # 第一轮检索整体硬超时（墙上时钟，非每通道累加）
+                _retrieval_deadline = time.time() + _RETRIEVAL_TIMEOUT
+                pool = ThreadPoolExecutor(max_workers=5)
+                try:
                     f_arxiv = pool.submit(retrievers.search_arxiv,
                                           r1_keywords, r1_phrases, end_date=before_date)
                     f_openalex = pool.submit(retrievers.search_openalex,
@@ -229,7 +232,9 @@ class SPAR2Engine:
                     
                     def _safe_result(future, default=None):
                         try:
-                            return future.result(timeout=_RETRIEVAL_TIMEOUT)
+                            # 共用同一墙上时钟：5 个通道并行，总等待不超过 _RETRIEVAL_TIMEOUT
+                            remaining = max(0.0, _retrieval_deadline - time.time())
+                            return future.result(timeout=remaining)
                         except (FutureTimeout, Exception):
                             return default or []
                     
@@ -238,6 +243,8 @@ class SPAR2Engine:
                     local_results = _safe_result(f_local)
                     crossref_results = _safe_result(f_crossref)
                     s2_results = _safe_result(f_s2)
+                finally:
+                    pool.shutdown(wait=False)  # 不等慢通道，40s 硬超时真正生效
                 retrieval_calls += 5
                 
                 # 如果所有检索都失败，至少要有一些候选项
@@ -260,6 +267,9 @@ class SPAR2Engine:
                     new_channels = [arxiv_results, openalex_results, local_results,
                                     crossref_results, s2_results]
             else:
+                # 剩余时间不足 30s 时跳过第二轮（web 模式 85s 内必须返回）
+                if self.deadline_seconds - (time.time() - t0) < 30:
+                    break
                 # --- Round 2+: 文档驱动查询 ---
                 # 即使没有高度相关文档也要继续搜索，避免过早终止
                 if self.local_mode:
@@ -298,18 +308,30 @@ class SPAR2Engine:
                 round_queries_log.extend(doc_queries)
                 doc_kws = list(doc_queries) + title_terms
                 if search_round == 1:
-                    new_channels = [
-                        retrievers.search_arxiv(doc_kws, doc_queries, end_date=before_date),
-                        retrievers.search_openalex(doc_kws, doc_queries, end_date=before_date),
-                        retrievers.search_local(" ".join(doc_queries), top_k=self.local_top_k),
-                    ]
+                    # 第二轮同样并行 + 硬超时（arXiv 查询多，同步跑可能拖死 deadline）
+                    pool = ThreadPoolExecutor(max_workers=3)
+                    try:
+                        f_arxiv = pool.submit(retrievers.search_arxiv,
+                                              doc_kws, doc_queries, end_date=before_date)
+                        f_openalex = pool.submit(retrievers.search_openalex,
+                                                 doc_kws, doc_queries, end_date=before_date)
+                        f_local = pool.submit(retrievers.search_local,
+                                              " ".join(doc_queries), self.local_top_k)
+                        new_channels = [_safe_result(f) for f in (f_arxiv, f_openalex, f_local)]
+                    finally:
+                        pool.shutdown(wait=False)
                     retrieval_calls += 3
                 else:
                     # Round 3+: 只走 arXiv + 本地
-                    new_channels = [
-                        retrievers.search_arxiv(doc_kws, doc_queries, end_date=before_date),
-                        retrievers.search_local(" ".join(doc_queries), top_k=self.local_top_k),
-                    ]
+                    pool = ThreadPoolExecutor(max_workers=2)
+                    try:
+                        f_arxiv = pool.submit(retrievers.search_arxiv,
+                                              doc_kws, doc_queries, end_date=before_date)
+                        f_local = pool.submit(retrievers.search_local,
+                                              " ".join(doc_queries), self.local_top_k)
+                        new_channels = [_safe_result(f) for f in (f_arxiv, f_local)]
+                    finally:
+                        pool.shutdown(wait=False)
                     retrieval_calls += 2
 
             # --- 合并新检索结果到全局候选池 ---
@@ -448,8 +470,12 @@ class SPAR2Engine:
                 break
             for d in seeds:
                 d["_ref_expanded"] = True
+            # 每轮 RefChain 只花掉剩余预算的一半，给判分/精排/输出留时间
+            remaining = max(0.0, deadline_abs - time.monotonic())
+            ref_deadline = time.monotonic() + max(5.0, remaining / (ref_rounds - _round) * 0.8)
             ref_docs = expand_mod.expand_citations(
-                seeds, max_seeds=6, refs_per_seed=25, end_date=before_date)
+                seeds, max_seeds=6, refs_per_seed=25, end_date=before_date,
+                deadline=ref_deadline)
             retrieval_calls += min(len(seeds), 6)
             if not ref_docs:
                 continue

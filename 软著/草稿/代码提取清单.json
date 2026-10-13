@@ -1,0 +1,414 @@
+{
+  "software_name": "智能学术文献检索与分析软件",
+  "version": "V1.0",
+  "project_root": "/Users/yangyazhou/SakuraPaper",
+  "file_count": 39,
+  "material_line_count": 8315,
+  "source_line_count": 9492,
+  "selected_source_line_count": 8276,
+  "lines_per_page": 50,
+  "total_pages": 167,
+  "target_pages": 60,
+  "available_candidate_line_count": 375896,
+  "available_candidate_pages": 7518,
+  "supplement_status": "候选源码可达到前30页/后30页要求",
+  "mode": "front30_back30",
+  "selection_file": "/Users/yangyazhou/SakuraPaper/软著/草稿/代码文件选择.json",
+  "outputs": [
+    "代码-前30页.md",
+    "代码-后30页.md"
+  ],
+  "files": [
+    {
+      "path": "src/llm/router.py",
+      "source_line_count": 257,
+      "blank_line_count": 42,
+      "selected_line_start": 1,
+      "selected_line_end": 257,
+      "selected_line_count": 215,
+      "material_line_start": 1,
+      "material_line_end": 216
+    },
+    {
+      "path": "src/agent/collections.py",
+      "source_line_count": 484,
+      "blank_line_count": 83,
+      "selected_line_start": 1,
+      "selected_line_end": 484,
+      "selected_line_count": 401,
+      "material_line_start": 217,
+      "material_line_end": 618
+    },
+    {
+      "path": "src/agent/feedback_loop.py",
+      "source_line_count": 164,
+      "blank_line_count": 29,
+      "selected_line_start": 1,
+      "selected_line_end": 164,
+      "selected_line_count": 135,
+      "material_line_start": 619,
+      "material_line_end": 754
+    },
+    {
+      "path": "src/agent/graph_synthesizer.py",
+      "source_line_count": 321,
+      "blank_line_count": 44,
+      "selected_line_start": 1,
+      "selected_line_end": 321,
+      "selected_line_count": 277,
+      "material_line_start": 755,
+      "material_line_end": 1032
+    },
+    {
+      "path": "src/agent/orchestrator.py",
+      "source_line_count": 75,
+      "blank_line_count": 12,
+      "selected_line_start": 1,
+      "selected_line_end": 75,
+      "selected_line_count": 63,
+      "material_line_start": 1033,
+      "material_line_end": 1096
+    },
+    {
+      "path": "src/agent/spar2/__init__.py",
+      "source_line_count": 8,
+      "blank_line_count": 3,
+      "selected_line_start": 1,
+      "selected_line_end": 8,
+      "selected_line_count": 5,
+      "material_line_start": 1097,
+      "material_line_end": 1102
+    },
+    {
+      "path": "src/agent/spar2/crawler_selector.py",
+      "source_line_count": 129,
+      "blank_line_count": 27,
+      "selected_line_start": 1,
+      "selected_line_end": 129,
+      "selected_line_count": 102,
+      "material_line_start": 1103,
+      "material_line_end": 1205
+    },
+    {
+      "path": "src/agent/spar2/engine.py",
+      "source_line_count": 652,
+      "blank_line_count": 50,
+      "selected_line_start": 1,
+      "selected_line_end": 652,
+      "selected_line_count": 602,
+      "material_line_start": 1206,
+      "material_line_end": 1808
+    },
+    {
+      "path": "src/agent/spar2/expand.py",
+      "source_line_count": 168,
+      "blank_line_count": 13,
+      "selected_line_start": 1,
+      "selected_line_end": 168,
+      "selected_line_count": 155,
+      "material_line_start": 1809,
+      "material_line_end": 1964
+    },
+    {
+      "path": "src/agent/spar2/judge.py",
+      "source_line_count": 147,
+      "blank_line_count": 19,
+      "selected_line_start": 1,
+      "selected_line_end": 147,
+      "selected_line_count": 128,
+      "material_line_start": 1965,
+      "material_line_end": 2093
+    },
+    {
+      "path": "src/agent/spar2/llm.py",
+      "source_line_count": 46,
+      "blank_line_count": 8,
+      "selected_line_start": 1,
+      "selected_line_end": 46,
+      "selected_line_count": 38,
+      "material_line_start": 2094,
+      "material_line_end": 2132
+    },
+    {
+      "path": "src/agent/spar2/llm_guard.py",
+      "source_line_count": 30,
+      "blank_line_count": 6,
+      "selected_line_start": 1,
+      "selected_line_end": 30,
+      "selected_line_count": 24,
+      "material_line_start": 2133,
+      "material_line_end": 2157
+    },
+    {
+      "path": "src/agent/spar2/normalize.py",
+      "source_line_count": 106,
+      "blank_line_count": 13,
+      "selected_line_start": 1,
+      "selected_line_end": 106,
+      "selected_line_count": 93,
+      "material_line_start": 2158,
+      "material_line_end": 2251
+    },
+    {
+      "path": "src/agent/spar2/query_planner.py",
+      "source_line_count": 179,
+      "blank_line_count": 28,
+      "selected_line_start": 1,
+      "selected_line_end": 179,
+      "selected_line_count": 151,
+      "material_line_start": 2252,
+      "material_line_end": 2403
+    },
+    {
+      "path": "src/agent/spar2/retrievers.py",
+      "source_line_count": 643,
+      "blank_line_count": 50,
+      "selected_line_start": 1,
+      "selected_line_end": 643,
+      "selected_line_count": 593,
+      "material_line_start": 2404,
+      "material_line_end": 2997
+    },
+    {
+      "path": "src/config.py",
+      "source_line_count": 112,
+      "blank_line_count": 20,
+      "selected_line_start": 1,
+      "selected_line_end": 112,
+      "selected_line_count": 92,
+      "material_line_start": 2998,
+      "material_line_end": 3090
+    },
+    {
+      "path": "src/data/paper_node.py",
+      "source_line_count": 156,
+      "blank_line_count": 17,
+      "selected_line_start": 1,
+      "selected_line_end": 156,
+      "selected_line_count": 139,
+      "material_line_start": 3091,
+      "material_line_end": 3230
+    },
+    {
+      "path": "src/data/schemas.py",
+      "source_line_count": 256,
+      "blank_line_count": 62,
+      "selected_line_start": 1,
+      "selected_line_end": 256,
+      "selected_line_count": 194,
+      "material_line_start": 3231,
+      "material_line_end": 3425
+    },
+    {
+      "path": "src/data/search_node.py",
+      "source_line_count": 41,
+      "blank_line_count": 7,
+      "selected_line_start": 1,
+      "selected_line_end": 41,
+      "selected_line_count": 34,
+      "material_line_start": 3426,
+      "material_line_end": 3460
+    },
+    {
+      "path": "src/evaluation/metrics.py",
+      "source_line_count": 114,
+      "blank_line_count": 19,
+      "selected_line_start": 1,
+      "selected_line_end": 114,
+      "selected_line_count": 95,
+      "material_line_start": 3461,
+      "material_line_end": 3556
+    },
+    {
+      "path": "src/evaluation/runner.py",
+      "source_line_count": 528,
+      "blank_line_count": 50,
+      "selected_line_start": 1,
+      "selected_line_end": 528,
+      "selected_line_count": 478,
+      "material_line_start": 3557,
+      "material_line_end": 4035
+    },
+    {
+      "path": "src/llm/__init__.py",
+      "source_line_count": 58,
+      "blank_line_count": 7,
+      "selected_line_start": 1,
+      "selected_line_end": 58,
+      "selected_line_count": 51,
+      "material_line_start": 4036,
+      "material_line_end": 4087
+    },
+    {
+      "path": "src/llm/base.py",
+      "source_line_count": 71,
+      "blank_line_count": 14,
+      "selected_line_start": 1,
+      "selected_line_end": 71,
+      "selected_line_count": 57,
+      "material_line_start": 4088,
+      "material_line_end": 4145
+    },
+    {
+      "path": "src/llm/mock_llm.py",
+      "source_line_count": 255,
+      "blank_line_count": 41,
+      "selected_line_start": 1,
+      "selected_line_end": 255,
+      "selected_line_count": 214,
+      "material_line_start": 4146,
+      "material_line_end": 4360
+    },
+    {
+      "path": "src/llm/openai_compat.py",
+      "source_line_count": 286,
+      "blank_line_count": 39,
+      "selected_line_start": 1,
+      "selected_line_end": 286,
+      "selected_line_count": 247,
+      "material_line_start": 4361,
+      "material_line_end": 4608
+    },
+    {
+      "path": "src/llm/qwen.py",
+      "source_line_count": 117,
+      "blank_line_count": 18,
+      "selected_line_start": 1,
+      "selected_line_end": 117,
+      "selected_line_count": 99,
+      "material_line_start": 4609,
+      "material_line_end": 4708
+    },
+    {
+      "path": "src/mcp_server.py",
+      "source_line_count": 18,
+      "blank_line_count": 5,
+      "selected_line_start": 1,
+      "selected_line_end": 18,
+      "selected_line_count": 13,
+      "material_line_start": 4709,
+      "material_line_end": 4722
+    },
+    {
+      "path": "src/retrieval/__init__.py",
+      "source_line_count": 49,
+      "blank_line_count": 8,
+      "selected_line_start": 1,
+      "selected_line_end": 49,
+      "selected_line_count": 41,
+      "material_line_start": 4723,
+      "material_line_end": 4764
+    },
+    {
+      "path": "src/retrieval/arxiv.py",
+      "source_line_count": 257,
+      "blank_line_count": 19,
+      "selected_line_start": 1,
+      "selected_line_end": 257,
+      "selected_line_count": 238,
+      "material_line_start": 4765,
+      "material_line_end": 5003
+    },
+    {
+      "path": "src/retrieval/base.py",
+      "source_line_count": 322,
+      "blank_line_count": 47,
+      "selected_line_start": 1,
+      "selected_line_end": 322,
+      "selected_line_count": 275,
+      "material_line_start": 5004,
+      "material_line_end": 5279
+    },
+    {
+      "path": "src/retrieval/crossref.py",
+      "source_line_count": 256,
+      "blank_line_count": 15,
+      "selected_line_start": 1,
+      "selected_line_end": 256,
+      "selected_line_count": 241,
+      "material_line_start": 5280,
+      "material_line_end": 5521
+    },
+    {
+      "path": "src/retrieval/local_corpus.py",
+      "source_line_count": 291,
+      "blank_line_count": 22,
+      "selected_line_start": 1,
+      "selected_line_end": 291,
+      "selected_line_count": 269,
+      "material_line_start": 5522,
+      "material_line_end": 5791
+    },
+    {
+      "path": "src/retrieval/multi_source.py",
+      "source_line_count": 302,
+      "blank_line_count": 41,
+      "selected_line_start": 1,
+      "selected_line_end": 302,
+      "selected_line_count": 261,
+      "material_line_start": 5792,
+      "material_line_end": 6053
+    },
+    {
+      "path": "src/retrieval/openalex.py",
+      "source_line_count": 297,
+      "blank_line_count": 24,
+      "selected_line_start": 1,
+      "selected_line_end": 297,
+      "selected_line_count": 273,
+      "material_line_start": 6054,
+      "material_line_end": 6327
+    },
+    {
+      "path": "src/retrieval/pubmed.py",
+      "source_line_count": 164,
+      "blank_line_count": 13,
+      "selected_line_start": 1,
+      "selected_line_end": 164,
+      "selected_line_count": 151,
+      "material_line_start": 6328,
+      "material_line_end": 6479
+    },
+    {
+      "path": "src/retrieval/semantic_scholar.py",
+      "source_line_count": 297,
+      "blank_line_count": 26,
+      "selected_line_start": 1,
+      "selected_line_end": 297,
+      "selected_line_count": 271,
+      "material_line_start": 6480,
+      "material_line_end": 6751
+    },
+    {
+      "path": "src/run_eval.py",
+      "source_line_count": 341,
+      "blank_line_count": 41,
+      "selected_line_start": 1,
+      "selected_line_end": 341,
+      "selected_line_count": 300,
+      "material_line_start": 6752,
+      "material_line_end": 7052
+    },
+    {
+      "path": "src/sakura_mcp/server.py",
+      "source_line_count": 320,
+      "blank_line_count": 52,
+      "selected_line_start": 1,
+      "selected_line_end": 320,
+      "selected_line_count": 268,
+      "material_line_start": 7053,
+      "material_line_end": 7321
+    },
+    {
+      "path": "src/web/app.py",
+      "source_line_count": 1175,
+      "blank_line_count": 182,
+      "selected_line_start": 1,
+      "selected_line_end": 1175,
+      "selected_line_count": 993,
+      "material_line_start": 7322,
+      "material_line_end": 8315
+    }
+  ],
+  "safe_software_filename": "智能学术文献检索与分析软件"
+}

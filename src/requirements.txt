@@ -1,4 +1,4 @@
-# SakuraScholar - 核心依赖
+# ScholarScope - 核心依赖
 # MVP 阶段只依赖最少的库，方便本地直接运行
 
 # 异步与 HTTP
@@ -39,3 +39,8 @@ openai>=1.30.0            # 启用 openai / deepseek / qwen_api / glm 时需要
 # transformers>=4.36.0
 # torch>=2.0.0
 # accelerate>=0.25.0
+
+# =============== 岗位化改造：MCP Server（P0） ===============
+# MCP 协议 SDK（把检索/收藏/评测暴露为标准 MCP 工具，Claude Code / Cursor 可直接调用）
+mcp>=2.1.0
+httpx-sse>=0.4.0

@@ -1,0 +1,75 @@
+version: v2
+title: SakuraScholar · 答辩演示
+size: [960, 540]
+theme:
+  colors:
+    primary: "#8C4A63"
+    accent: "#B56A8C"
+    text: "#26211F"
+    secondary: "#6B6361"
+    paper: "#F5F1E8"
+    line: "#D8D0C2"
+    ivory: "#F7F2EA"
+    plum: "#7C4259"
+  textStyles:
+    title:
+      fontSize: 30
+      fontFamily: "思源宋体"
+      color: "$text"
+      bold: true
+    subtitle:
+      fontSize: 17
+      fontFamily: "MiSans"
+      color: "$secondary"
+    body:
+      fontSize: 15
+      fontFamily: "MiSans"
+      color: "$text"
+      lineHeight: 1.55
+    small:
+      fontSize: 12
+      fontFamily: "MiSans"
+      color: "$secondary"
+    caption:
+      fontSize: 10
+      fontFamily: "MiSans"
+      color: "$secondary"
+    label:
+      fontSize: 13
+      fontFamily: "MiSans"
+      color: "$secondary"
+  tableStyles:
+    default:
+      cellStyle:
+        fontSize: 13
+        fontFamily: "MiSans"
+        color: "$text"
+        align: [left, middle]
+        border: {style: solid, width: 1, color: "$line"}
+      firstRowStyle:
+        fill: {type: solid, color: "$primary"}
+        color: "#F7F2EA"
+        bold: true
+        align: [center, middle]
+        fontSize: 13
+      bodyStyles:
+        - {fill: {type: solid, color: "#F3ECE1"}}
+        - {fill: {type: solid, color: "#FAF6EE"}}
+pages:
+  - pages/01_cover.page
+  - pages/02_agenda.page
+  - pages/03_background.page
+  - pages/04_pipeline.page
+  - pages/05_architecture.page
+  - pages/06_query_planner.page
+  - pages/07_channels.page
+  - pages/08_bge.page
+  - pages/09_judge.page
+  - pages/10_refchain.page
+  - pages/11_three_part.page
+  - pages/12_web_ui.page
+  - pages/13_eval_data.page
+  - pages/14_eval_result.page
+  - pages/15_efficiency.page
+  - pages/16_innovation.page
+  - pages/17_outlook.page

@@ -1,0 +1,13 @@
+# 核心依赖 (Python 3.10+)
+tqdm>=4.66
+numpy>=1.24
+pandas>=2.0
+pyarrow>=12.0
+requests>=2.31
+
+# 可选：高性能 embedding 索引
+# faiss-cpu>=1.7.4
+# sentence-transformers>=2.6.1
+
+# 可选：统计图表
+# matplotlib>=3.7

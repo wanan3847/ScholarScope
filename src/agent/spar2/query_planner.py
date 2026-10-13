@@ -105,14 +105,15 @@ def plan_query(query: str, llm_chat: Callable,
     """返回 {"keywords": [...], "queries": [...]}；LLM 失败/输出差时用规则兜底，
     并把规则词并入 LLM 输出（扩大召回、提高对弱模型的鲁棒性）。"""
     prompt = _PROMPT.format(q=query.strip())
-    resp1 = llm_chat(prompt, max_tokens=2000)
+    from agent.spar2.llm_guard import bounded_call
+    resp1 = bounded_call(llm_chat, prompt, max_tokens=2000)
     data1 = _parse_json_response(resp1 or "")
     llm_kw = [str(k).strip() for k in (data1.get("keywords") or []) if str(k).strip()]
     llm_q = [str(qq).strip() for qq in (data1.get("queries") or []) if str(qq).strip()]
     # 双规划合并：第二次调用取并集，降低单次规划波动（关键词/短语差异）
     resp2 = None
     if double_pass and (llm_kw or llm_q):
-        resp2 = llm_chat(prompt, max_tokens=2000)
+        resp2 = bounded_call(llm_chat, prompt, max_tokens=2000)
         data2 = _parse_json_response(resp2 or "")
         llm_kw += [str(k).strip() for k in (data2.get("keywords") or []) if str(k).strip()]
         llm_q += [str(qq).strip() for qq in (data2.get("queries") or []) if str(qq).strip()]
@@ -167,7 +168,8 @@ def generate_queries_from_docs(query: str, top_docs: List[dict],
         doc_summaries="\n\n".join(summaries),
     )
     try:
-        resp = llm_chat(prompt, max_tokens=500)  # Reduced token usage
+        from agent.spar2.llm_guard import bounded_call
+        resp = bounded_call(llm_chat, prompt, max_tokens=500)
         data = _parse_json_response(resp or "")
         queries = data.get("queries") or []
         queries = [str(qq).strip() for qq in queries if str(qq).strip()]

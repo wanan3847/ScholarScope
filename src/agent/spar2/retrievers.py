@@ -13,6 +13,9 @@ from typing import Dict, List, Optional
 
 import requests
 
+# 连接复用：OpenAlex / CrossRef 请求较多，复用 Session 避免每次 TLS 握手
+_REQ_SESSION = requests.Session()
+
 try:
     import arxiv as _arxiv
 except Exception:  # pragma: no cover
@@ -165,12 +168,15 @@ def _arxiv_results_with_timeout(client, kwargs: Dict, timeout: int = 15) -> list
     """arXiv 查询加硬超时（export.arxiv.org 偶发长时间挂起）。"""
     def _run():
         return list(client.results(_arxiv.Search(**kwargs), offset=0))
-    with ThreadPoolExecutor(max_workers=1) as pool:
+    pool = ThreadPoolExecutor(max_workers=1)
+    try:
         future = pool.submit(_run)
         try:
             return future.result(timeout=timeout)
         except FutureTimeout:
             return []
+    finally:
+        pool.shutdown(wait=False)  # 不等待可能挂起的 arXiv 连接
 
 
 # ------------------------------------------------------------------ #
@@ -285,7 +291,7 @@ def search_openalex(keywords: List[str], phrases: List[str] = None,
     def _get(params: Dict):
         for attempt in range(2):  # 减少重试次数（429 时不再等太久）
             try:
-                resp = requests.get(base, params=params, timeout=10)
+                resp = _REQ_SESSION.get(base, params=params, timeout=10)
             except Exception:
                 return None
             if resp.status_code == 429:
@@ -316,10 +322,11 @@ def search_openalex(keywords: List[str], phrases: List[str] = None,
     start = int(datetime.now().year) - 20
     end = _end_year(end_date)
     pub_filter = f"publication_year:{start}-{end}"
-    email = os.getenv("OPENALEX_EMAIL", "")
+    from agent.api_settings import get_api_setting
+    email = get_api_setting("openalex_email", "OPENALEX_EMAIL", "")
     # 只有明确启用付费key时才使用，否则用mailto免费通道
-    use_paid = os.getenv("OPENALEX_USE_PAID_KEY", "0").lower() in {"1", "true", "yes"}
-    key = os.getenv("OPENALEX_API_KEY", "") if use_paid else ""
+    use_paid = get_api_setting("openalex_use_paid_key", "OPENALEX_USE_PAID_KEY", "0").lower() in {"1", "true", "yes"}
+    key = get_api_setting("openalex_key", "OPENALEX_API_KEY") if use_paid else ""
     auth = {"api_key": key} if key else ({"mailto": email} if email else {})
 
     tasks: List[Dict] = []
@@ -332,12 +339,15 @@ def search_openalex(keywords: List[str], phrases: List[str] = None,
                       "per-page": max(per_page, 80),
                       "sort": "relevance_score:desc"})
 
-    with ThreadPoolExecutor(max_workers=4) as pool:
+    pool = ThreadPoolExecutor(max_workers=4)
+    try:
         futures = [pool.submit(_run_query, {**t, **auth}) for t in tasks]
         for fut in as_completed(futures):
             resp = fut.result()
             if resp is not None:
                 _absorb(resp)
+    finally:
+        pool.shutdown(wait=False)
     return list(out.values())
 
 
@@ -354,9 +364,9 @@ def search_crossref(keywords: List[str], phrases: List[str] = None,
     out: Dict[str, Dict] = {}
     for q in qs:
         try:
-            resp = requests.get("https://api.crossref.org/works",
-                                params={"query.bibliographic": q, "rows": rows},
-                                timeout=15)
+            resp = _REQ_SESSION.get("https://api.crossref.org/works",
+                                    params={"query.bibliographic": q, "rows": rows},
+                                    timeout=15)
             if resp.status_code != 200:
                 continue
             for it in resp.json().get("message", {}).get("items", []):

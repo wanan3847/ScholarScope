@@ -102,7 +102,7 @@ def test_homepage_and_admin_docs(monkeypatch, tmp_path):
         # 根路径返回介绍首页（不再 302 到 /app）
         r = client.get("/")
         assert r.status_code == 200
-        assert "樱花学术" in r.text
+        assert "研索" in r.text
 
         # 未登录 / 普通用户不能编辑文档
         assert client.put("/api/docs", json={"sections": [{"title": "T", "body": "B"}]}).status_code == 403

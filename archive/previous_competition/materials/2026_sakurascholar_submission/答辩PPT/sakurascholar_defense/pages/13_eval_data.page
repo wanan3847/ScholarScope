@@ -1,0 +1,81 @@
+background:
+  type: solid
+  color: "$paper"
+elements:
+  - elementId: sec-label
+    elementType: text
+    bounds: [56, 26, 300, 22]
+    content:
+      fontSize: 11
+      fontFamily: "MiSans"
+      color: "$accent"
+      letterSpacing: 3
+      align: [left, middle]
+      text: 04 · 实验与评测
+  - elementId: title
+    elementType: text
+    bounds: [56, 52, 848, 46]
+    content:
+      style: "$title"
+      align: [left, middle]
+      text: 评测：数据集与指标
+  - elementId: rule
+    elementType: line
+    bounds: [56, 104, 848, 2]
+    viewBox: [424, 1]
+    points: "0,0 424,0"
+    border: {style: solid, width: 1, color: "$line"}
+  - elementId: eval-table
+    elementType: table
+    bounds: [56, 128, 848, 252]
+    columnWidths: [0.32, 0.14, 0.24, 0.30]
+    rowHeights: [0.22, 0.19, 0.19, 0.19, 0.21]
+    style: "$default"
+    rows:
+      - - text: "测试集"
+        - text: "规模"
+        - text: "来源"
+        - text: "用途"
+      - - text: "AutoScholarQuery test"
+        - text: "1000"
+        - text: "PaSa 官方"
+        - text: "自动生成查询的论文检索"
+      - - text: "RealScholarQuery test"
+        - text: "50"
+        - text: "PaSa 官方"
+        - text: "真实用户查询（主验证集）"
+      - - text: "paper_finder_bench test"
+        - text: "267"
+        - text: "AstaBench (AllenAI)"
+        - text: "PaperFindingBench 检索"
+      - - text: "LitQA2 test"
+        - text: "199"
+        - text: "AstaBench / Future-House"
+        - text: "文献问答型检索"
+  - elementId: note
+    elementType: text
+    bounds: [56, 404, 848, 80]
+    content:
+      fontSize: 14
+      fontFamily: "MiSans"
+      color: "$text"
+      align: [left, top]
+      lineHeight: 1.6
+      text: |
+        <p><strong>评分口径：论文 ID 精确匹配</strong>——arXiv（去版本）/ DOI（小写）/ S2 corpusId 三 ID 归一化后任一命中即算中。</p>
+        <p>指标：P@K / R@K / F1@K（K = 5/10/20）+ 效率（API 调用 / Token / P50-P99）</p>
+        <p>与赛题评分构成对齐：F1 70% + 运行效率 20% + 结果结构化 10%；全部数据集已本地化，可离线复现。</p>
+  - elementId: footer
+    elementType: text
+    bounds: [56, 508, 300, 20]
+    content:
+      style: "$caption"
+      align: [left, middle]
+      text: SakuraScholar · 樱花学术
+  - elementId: pageno
+    elementType: text
+    bounds: [880, 508, 40, 20]
+    content:
+      style: "$caption"
+      align: [right, middle]
+      text: 13 / 17

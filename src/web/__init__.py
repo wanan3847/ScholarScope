@@ -1,1 +1,1 @@
-"""SakuraScholar Web 服务包。"""
+"""ScholarScope Web 服务包。"""

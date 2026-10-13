@@ -1,5 +1,5 @@
 """
-SakuraScholar 全局配置
+ScholarScope 全局配置
 
 集中管理：
   - 检索后端开关
