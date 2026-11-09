@@ -5,6 +5,7 @@
 aiohttp>=3.9.0
 httpx>=0.25.0
 requests>=2.31.0          # openai_compat.py 的同步回退
+arxiv>=2.2,<3             # 在线 arXiv 检索的正式 SDK
 
 # 数据建模
 pydantic>=2.0.0
@@ -44,3 +45,19 @@ openai>=1.30.0            # 启用 openai / deepseek / qwen_api / glm 时需要
 # MCP 协议 SDK（把检索/收藏/评测暴露为标准 MCP 工具，Claude Code / Cursor 可直接调用）
 mcp>=2.1.0
 httpx-sse>=0.4.0
+
+# Project-centered evidence workspace and deterministic document tooling.
+SQLAlchemy>=2.0,<3
+psycopg[binary]>=3.2,<4
+boto3>=1.40,<2
+pypdf>=6,<7
+pdfplumber>=0.11,<1
+python-docx>=1.2,<2
+reportlab>=4,<5
+python-multipart>=0.0.20
+pgvector>=0.4,<1
+sentence-transformers>=5,<6
+
+matplotlib>=3.10,<4
+openpyxl>=3.1,<4
+cryptography>=46,<48

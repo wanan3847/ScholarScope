@@ -5,11 +5,11 @@ OpenAI 兼容 API 预设。
 所有预设都走 OpenAI 兼容接口，可由 router._chat_openai_compat 直接调用。
 
 支持的提供商：
-    - openai:   GPT-4o / GPT-4o-mini
-    - deepseek: DeepSeek-V3 / DeepSeek-R1
-    - qwen_api: 通义千问 qwen-plus / qwen-max
-    - glm:      智谱 GLM-4 / GLM-4-Flash
-    - moonshot: Kimi K1.5
+    - openai:   GPT-4o-mini / GPT-4.1
+    - deepseek: DeepSeek Flash / V4 Pro
+    - qwen_api: 通义千问
+    - glm:      智谱 GLM
+    - moonshot: Kimi K2.6 / K3
     - ollama:   本地 Ollama（特殊处理，走原生接口）
 
 使用：
@@ -20,7 +20,7 @@ OpenAI 兼容 API 预设。
 
 from __future__ import annotations
 
-from typing import Dict
+from typing import Dict, List
 
 
 # ------------------------------------------------------------------ #
@@ -37,9 +37,9 @@ PRESETS: Dict[str, Dict[str, str]] = {
     "deepseek": {
         "name": "DeepSeek",
         "base_url": "https://api.deepseek.com/v1",
-        "model": "deepseek-chat",
+        "model": "deepseek-flash",
         "env_key": "DEEPSEEK_API_KEY",
-        "desc": "DeepSeek-V3 / R1，性价比高",
+        "desc": "DeepSeek Flash / V4 Pro，官方 OpenAI 兼容接口",
     },
     "qwen_api": {
         "name": "通义千问 API",
@@ -58,9 +58,9 @@ PRESETS: Dict[str, Dict[str, str]] = {
     "moonshot": {
         "name": "月之暗面 Kimi",
         "base_url": "https://api.moonshot.cn/v1",
-        "model": "moonshot-v1-8k",
+        "model": "kimi-k2.6",
         "env_key": "MOONSHOT_API_KEY",
-        "desc": "Kimi K1.5，长上下文",
+        "desc": "Kimi K2.6 / K3，官方云端接口",
     },
     "ollama": {
         "name": "Ollama 本地",
@@ -72,44 +72,62 @@ PRESETS: Dict[str, Dict[str, str]] = {
     "openrouter": {
         "name": "OpenRouter 聚合",
         "base_url": "https://openrouter.ai/api/v1",
-        "model": "qwen/qwen-2.5-7b-instruct",
+        "model": "openai/gpt-4.1-mini",
         "env_key": "OPENROUTER_API_KEY",
-        "desc": "一个 key 接入 200+ 模型（GPT-4o/Claude/Gemini/Qwen/DeepSeek/Llama 等）",
+        "desc": "一个 key 接入多家提供商的模型",
     },
     "siliconflow": {
         "name": "SiliconFlow 硅基流动",
         "base_url": "https://api.siliconflow.cn/v1",
-        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "model": "Qwen/Qwen3-8B",
         "env_key": "SILICONFLOW_API_KEY",
         "desc": "国内聚合，一个 key 接入 Qwen/DeepSeek/GLM/Llama 等",
     },
 }
 
 
-# OpenRouter / SiliconFlow 上常见的热门模型列表（用于前端选择）
-AGGREGATOR_MODELS: Dict[str, List[Dict[str, str]]] = {
+# Common choices checked against official catalogs on 2026-10-14.
+# Suggestions do not assert account access, pricing or local installation.
+COMMON_MODELS = {
+    "openai": [
+        {"model": "gpt-4o-mini", "name": "GPT-4o mini"},
+        {"model": "gpt-4.1-mini", "name": "GPT-4.1 mini"},
+        {"model": "gpt-4.1", "name": "GPT-4.1"},
+    ],
+    "deepseek": [
+        {"model": "deepseek-flash", "name": "DeepSeek Flash"},
+        {"model": "deepseek-v4-pro", "name": "DeepSeek V4 Pro"},
+    ],
+    "qwen_api": [
+        {"model": "qwen-plus", "name": "Qwen Plus"},
+        {"model": "qwen3.7-plus", "name": "Qwen 3.7 Plus"},
+        {"model": "qwen3.8-flash", "name": "Qwen 3.8 Flash"},
+        {"model": "qwen3.8-max", "name": "Qwen 3.8 Max"},
+    ],
+    "glm": [
+        {"model": "glm-4-flash", "name": "GLM-4 Flash"},
+        {"model": "glm-4-flash-250414", "name": "GLM-4 Flash 250414"},
+        {"model": "glm-4-plus", "name": "GLM-4 Plus"},
+    ],
+    "moonshot": [
+        {"model": "kimi-k2.6", "name": "Kimi K2.6"},
+        {"model": "kimi-k3", "name": "Kimi K3"},
+    ],
+    "ollama": [
+        {"model": "qwen3:8b", "name": "Qwen 3 8B（需本机已安装）"},
+        {"model": "qwen3.5:4b", "name": "Qwen 3.5 4B（需本机已安装）"},
+        {"model": "qwen3.5:9b", "name": "Qwen 3.5 9B（需本机已安装）"},
+    ],
     "openrouter": [
-        {"model": "qwen/qwen-2.5-7b-instruct", "name": "Qwen 2.5 7B (免费)", "free": True},
-        {"model": "qwen/qwen-2.5-72b-instruct", "name": "Qwen 2.5 72B"},
-        {"model": "deepseek/deepseek-chat", "name": "DeepSeek V3"},
-        {"model": "deepseek/deepseek-r1", "name": "DeepSeek R1"},
-        {"model": "openai/gpt-4o-mini", "name": "GPT-4o mini"},
-        {"model": "openai/gpt-4o", "name": "GPT-4o"},
-        {"model": "anthropic/claude-3.5-sonnet", "name": "Claude 3.5 Sonnet"},
-        {"model": "google/gemini-flash-1.5", "name": "Gemini Flash 1.5"},
-        {"model": "meta-llama/llama-3.3-70b-instruct", "name": "Llama 3.3 70B"},
-        {"model": "01-ai/yi-large", "name": "Yi Large"},
+        {"model": "openai/gpt-4.1-mini", "name": "GPT-4.1 mini"},
+        {"model": "deepseek/deepseek-v4-pro", "name": "DeepSeek V4 Pro"},
     ],
     "siliconflow": [
-        {"model": "Qwen/Qwen2.5-7B-Instruct", "name": "Qwen 2.5 7B (免费)", "free": True},
-        {"model": "Qwen/Qwen2.5-72B-Instruct", "name": "Qwen 2.5 72B"},
-        {"model": "deepseek-ai/DeepSeek-V3", "name": "DeepSeek V3"},
-        {"model": "deepseek-ai/DeepSeek-R1", "name": "DeepSeek R1"},
-        {"model": "THUDM/glm-4-9b-chat", "name": "GLM-4 9B (免费)", "free": True},
-        {"model": "meta-llama/Meta-Llama-3.1-8B-Instruct", "name": "Llama 3.1 8B (免费)", "free": True},
-        {"model": "meta-llama/Meta-Llama-3.1-70B-Instruct", "name": "Llama 3.1 70B"},
+        {"model": "Qwen/Qwen3-8B", "name": "Qwen 3 8B"},
     ],
 }
+# Retain the existing aggregator endpoint contract.
+AGGREGATOR_MODELS = {k: COMMON_MODELS[k] for k in ("openrouter", "siliconflow")}
 
 
 def list_presets() -> list:
@@ -127,6 +145,7 @@ def list_presets() -> list:
             "env_key": env_key,
             "desc": p.get("desc", ""),
             "available": has_key,
+            "models": [dict(m) for m in COMMON_MODELS.get(key, [])],
         })
     return out
 
@@ -167,12 +186,14 @@ class OpenAICompatLLM(BaseLLM):
         self.model = model
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
-        self.timeout = timeout
+        self.timeout = max(1, min(float(timeout), 30))
         self._call_count = 0
         self._token_used = 0
 
     def _is_ollama(self) -> bool:
-        return "localhost:11434" in self.base_url or "127.0.0.1:11434" in self.base_url
+        from urllib.parse import urlsplit
+        address=urlsplit(self.base_url)
+        return address.hostname in {"localhost","127.0.0.1","host.docker.internal"} and address.port==11434
 
     def _headers(self) -> dict:
         return {
@@ -186,9 +207,9 @@ class OpenAICompatLLM(BaseLLM):
             if self._is_ollama():
                 return self._chat_ollama_native(messages, **kw)
             return self._chat_openai_compat(messages, **kw)
-        except Exception as e:
+        except Exception:
             import logging
-            logging.getLogger(__name__).error("[OpenAICompat] %s 调用失败: %s", self.model, e)
+            logging.getLogger(__name__).warning("OpenAI-compatible model temporarily unavailable")
             return ""
 
     def _chat_ollama_native(self, messages: List[dict], **kw) -> str:
@@ -199,15 +220,16 @@ class OpenAICompatLLM(BaseLLM):
             "messages": messages,
             "stream": False,
             "think": False,
+            "keep_alive": kw.get("keep_alive", "90s"),
             "options": {
                 "temperature": kw.get("temperature", 0.0),
                 "num_predict": kw.get("max_tokens", 1024),
+                "num_ctx": min(32768,max(2048,int(kw.get("num_ctx",8192)))),
             },
         }
-        with httpx.Client(timeout=self.timeout, proxy=None, trust_env=False) as client:
-            resp = client.post(url, json=payload, headers=self._headers())
-            resp.raise_for_status()
-        data = resp.json()
+        if kw.get("structured_json"):payload["format"]=kw.get("json_schema") or "json"
+        from llm.ollama_transport import chat_response
+        data = chat_response(url,payload,self._headers(),min(70,max(.1,float(kw.get("timeout_seconds",self.timeout)))))
         msg = data.get("message", {})
         content = msg.get("content", "") or msg.get("reasoning", "") or ""
         self._token_used += (
@@ -225,7 +247,7 @@ class OpenAICompatLLM(BaseLLM):
             "stream": False,
         }
         url = f"{self.base_url}/chat/completions"
-        with httpx.Client(timeout=self.timeout, proxy=None, trust_env=False) as client:
+        with httpx.Client(timeout=min(70,max(.1,float(kw.get("timeout_seconds",self.timeout)))), proxy=None, trust_env=False) as client:
             resp = client.post(url, json=payload, headers=self._headers())
             resp.raise_for_status()
         data = resp.json()
@@ -283,4 +305,4 @@ def create_llm(provider: str = "openai", **kwargs) -> BaseLLM:
     )
 
 
-__all__ = ["PRESETS", "AGGREGATOR_MODELS", "list_presets", "get_preset", "OpenAICompatLLM", "create_llm"]
+__all__ = ["PRESETS", "COMMON_MODELS", "AGGREGATOR_MODELS", "list_presets", "get_preset", "OpenAICompatLLM", "create_llm"]

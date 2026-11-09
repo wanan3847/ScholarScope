@@ -1,0 +1,18 @@
+{
+  "id": "literature-review",
+  "name": "证据综述",
+  "version": "1.0.0",
+  "license": "MIT",
+  "origin": "ScholarScope original instructions",
+  "tools": [
+    "matrix",
+    "review",
+    "manuscript"
+  ],
+  "dependencies": [
+    "matrix",
+    "review",
+    "manuscript"
+  ],
+  "output": "project-scoped persistent records with source provenance"
+}

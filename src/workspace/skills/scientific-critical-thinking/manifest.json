@@ -1,0 +1,16 @@
+{
+  "id": "scientific-critical-thinking",
+  "name": "批判性证据检查",
+  "version": "1.0.0",
+  "license": "MIT",
+  "origin": "ScholarScope original instructions",
+  "tools": [
+    "verify",
+    "review"
+  ],
+  "dependencies": [
+    "verify",
+    "review"
+  ],
+  "output": "project-scoped persistent records with source provenance"
+}

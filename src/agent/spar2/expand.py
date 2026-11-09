@@ -42,6 +42,9 @@ def expand_citations(seed_docs: List[dict], max_seeds: int = 8,
             return default
         return max(0.1, deadline - time.monotonic())
 
+    def _request_timeout(default: float = 8.0) -> float:
+        return min(default, _left(default))
+
     out: List[dict] = []
     end = int(end_date[:4]) if end_date else 9999
 
@@ -69,7 +72,7 @@ def expand_citations(seed_docs: List[dict], max_seeds: int = 8,
             resp = requests.get(
                 f"https://api.openalex.org/works/{requests.utils.quote(oid)}",
                 params={"select": "referenced_works", **_openalex_headers()},
-                timeout=30,
+                timeout=_request_timeout(),
             )
             if resp.status_code == 200:
                 ref_oa_ids.extend((resp.json().get("referenced_works") or [])[:refs_per_seed])
@@ -81,7 +84,7 @@ def expand_citations(seed_docs: List[dict], max_seeds: int = 8,
                 params={"filter": f"cites:{oid.split('/')[-1]}", "per-page": refs_per_seed,
                         "select": "id,title,ids,abstract_inverted_index,publication_year,cited_by_count",
                         **_openalex_headers()},
-                timeout=30,
+                timeout=_request_timeout(),
             )
             if resp.status_code == 200:
                 for w in resp.json().get("results", []):
@@ -96,7 +99,7 @@ def expand_citations(seed_docs: List[dict], max_seeds: int = 8,
                 f"https://api.openalex.org/works/{requests.utils.quote(rid)}",
                 params={"select": "id,title,ids,abstract_inverted_index,publication_year,cited_by_count",
                         **_openalex_headers()},
-                timeout=20,
+                timeout=_request_timeout(),
             )
             if resp.status_code == 200:
                 return resp.json()
@@ -120,7 +123,7 @@ def expand_citations(seed_docs: List[dict], max_seeds: int = 8,
     finally:
         pool.shutdown(wait=False)  # 不等慢引用请求，让 RefChain 受 deadline 约束
 
-    # 2) CrossRef 参考文献 + 被引（DOI 种子，主要服务 litqa2/paper_finder 的 DOI gold）
+    # 2) Crossref 参考文献 + 被引（DOI 种子）
     for seed in seed_docs[:max_seeds]:
         if _expired():
             break
@@ -131,7 +134,7 @@ def expand_citations(seed_docs: List[dict], max_seeds: int = 8,
         try:
             resp = requests.get(
                 f"https://api.crossref.org/works/{requests.utils.quote(doi)}/references",
-                timeout=30,
+                timeout=_request_timeout(),
             )
             if resp.status_code == 200:
                 for ref in resp.json().get("message", {}).get("reference", [])[:refs_per_seed]:
@@ -160,7 +163,7 @@ def expand_citations(seed_docs: List[dict], max_seeds: int = 8,
                     "rows": refs_per_seed,
                     "select": "DOI,title,abstract,published-print,issued,is-referenced-by-count",
                 },
-                timeout=30,
+                timeout=_request_timeout(),
             )
             if resp.status_code == 200:
                 for item in resp.json().get("message", {}).get("items", [])[:refs_per_seed]:

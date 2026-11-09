@@ -16,6 +16,7 @@ build/
 
 # Environment
 .env
+.env.*
 .venv/
 venv/
 
@@ -28,6 +29,11 @@ src/data/feedback.jsonl
 src/data/llm_config.json
 src/data/s2_corpus_id_cache.json
 src/data/api_config.json
+src/data/workspace/
+src/data/.collections.lock
+src/data/integrations.json
+src/data/integrations.key
+src/data/integrations-*.lock
 
 # Eval results (keep templates, discard runs)
 results/*.json
@@ -54,6 +60,3 @@ models/*/model*.safetensors
 
 # Node
 node_modules/
-
-# 参赛提交材料（含视频 / ZIP 等大文件）
-参赛材料_*/

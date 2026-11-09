@@ -1,46 +1,30 @@
 # AGENTS.md — 研索 ScholarScope
 
-项目说明：研索（ScholarScope）是面向复杂学术查询的智能论文检索与推荐系统。
+研索是面向研究者的文献检索、阅读和资料整理工作台。根 README 是项目唯一入口文档，改动代码时同步更新。
 
-根 README 是项目唯一入口文档；改代码时保持文档同步。
+## 工作重点
 
-## 常用命令（均在 `src/` 下）
+- 优先解决真实研究问题：主题、方法、研究对象和明确约束与论文是否直接匹配。
+- 在线检索入口为 `src/agent/orchestrator.py` 中的 `Orchestrator`，Web 与 MCP 共用 SPAR2 Agent。最终推荐按研究用途整理，不对外展示数值评分。
+- 推荐理由必须基于检索到的标题或摘要，证据引用须能在原文片段中核对。引用量和期刊声望不决定推荐顺序；检索失败不生成占位论文。
+- 保持收藏、已阅、文件夹、账号隔离、文献文件导入导出等功能可用。
+- 设计参考 `/Users/yangyazhou/awesome-design-md`，使用克制、清晰、适合阅读的布局。
 
-- 启动 Web：`python3 -m uvicorn web.app:app --host 127.0.0.1 --port 8765`（页面 `/app`）
-- 评测官方测试集：`python3 run_eval.py --n 5000 --benchmarks real_scholar auto_scholar paper_finder litqa2 --real --llm deepseek --output /abs/path.json`
-- 单元测试：`/Users/yangyazhou/miniconda3/bin/pytest tests/ -q`（32 个，必须全绿）
-- 真机 UI 测试：`node src/tests/ui_smoke.js`（Playwright + 无头 Chromium，需先起服务）
+## 命令
 
-## 关键事实（2026-08-23 状态）
+在 `src/` 下启动：
+`python3 -m uvicorn web.app:app --host 127.0.0.1 --port 8765`，页面 `/app`。
 
-- **Web 界面**：收藏夹/已阅/文件夹/认证 API 可用（含默认收藏文件夹、按用户隔离的批量导入/导出、可编辑帮助文档、内置 admin 账号）。品牌为研索 ScholarScope，说明语为“面向复杂学术查询的智能论文检索与推荐系统”。
-- **评测数据已本地化**：PaSa 官方集在 `data/PaSa/`（AutoScholarQuery 1000 + RealScholarQuery 50，
-  与 `src/data/benchmarks/` 副本一致）；AstaBench paper_finder 267 条、LitQA2 199 条在
-  `src/data/benchmarks/`；LitQA2 官方 parquet 在 `data/litqa2/`。
-- **benchmark 指标口径**：论文 ID 精确匹配，arXiv（去版本）/ DOI（小写）/ S2 corpusId 三 ID 归一化任一命中即算中。该口径用于系统检索实验。
-- **SPAR2 引擎 5 通道检索**：arXiv / OpenAlex / CrossRef / Semantic Scholar / 本地 PaSa 语义语料；
-  免费额度（OpenAlex/S2）UTC 零点重置，评测请在北京时间 08:00 后启动（全通道分数才可比）。
-- **外部 API 可用性决定 F1**：OpenAlex/S2 匿名额度耗尽时自动静默降级（候选池变小，
-  但三件套的 2 跳引文 + 双规划可部分补偿）；arXiv API 偶发超时（已加重试 + 熔断）。
-- **LLM 配置持久化**在 `src/data/llm_config.json`，`register_preset` 会自动兜底读 `.env` key。
-- **收藏/已阅等 ID 路由**一律用 `{paper_id:path}`（DOI 带斜杠，普通路径参数会 404）。
-- **SPAR2 常驻机制**：并行 5 通道检索（40s/通道硬超时）+ 迭代检索（最多 3 轮 BFS）、
-  文档驱动查询 + 标题词补充、OpenAlex 摘要补全、RefChain 双向引文（API 模式 2 跳）、
-  BGE 语义预筛 + 保底（0.70/0.20/0.10，阈值 0.40）、top-30 相对精排（仅 API 模式）、
-  deadline 逐批截断 + 并行判分；本地模型（ollama）自动跳过精排/双规划（实测反效果）。
-- **本地模型工作流**：先本地 ollama（`SAKURA_LLM_PROVIDER=ollama --llm ollama`，免费）
-  迭代验证，效果可接受后再用 DeepSeek（`--llm deepseek`）确认；评测进程用
-  `scripts/run_eval_daemon.py` 守护启动防误杀。
-- **`run_eval.py` 输出路径**：绝对路径或 `src/` 相对路径（`results/` 在仓库根，传相对路径会 404
-  目录不存在——用绝对路径最稳）。
-- **旧比赛材料**：集中保存在 `archive/previous_competition/`。旧赛题评分比例、评审标准和参赛要求仅作为历史材料；开展新比赛工作时，先读取新比赛官方规则，不得将旧标准当作当前评分依据，也不要在新材料中引用旧标准。
-- **benchmark 实验记录**：`docs/评测记录.md` 记录系统检索实验数据，与竞赛评分标准分开使用；引用指标时注明测试集、模型、样本量和日期。
+在 `src/` 下运行回归：
+`python3 -m pytest tests/ -q`。
+
+修改模板后必须提取内联 JavaScript 并用 `node --check` 校验。UI 检查使用 `src/tests/` 中的 Playwright 脚本，先启动服务。
 
 ## 约定
 
-- 文档里的时间用绝对日期，不留"今天/最近"。
-- 检索后端失败必须静默降级，不能拖垮整条流水线（统一 `_safe_call` / 熔断器模式）。
-- **前端不依赖浏览器 API 做关键逻辑；改动模板后用 `node --check` 校验内联 JS。**
-- **项目结构**：ad-hoc 测试脚本在 `src/tests/ad_hoc/`，构建脚本在 `scripts/`，
-  优化报告在 `docs/`。`.gitignore` 已创建，运行时数据（collections/read_papers/users 等）
-  不会被提交。
+- 外部检索源与模型失败必须静默降级；每个阶段有时间预算，单源故障不能阻塞整个搜索。
+- 前端关键功能不依赖外部 CDN、浏览器特有接口或实验性 API。
+- DOI 包含斜杠，论文 ID 路由一律使用 `{paper_id:path}`。
+- 账号、收藏、已阅、API 配置属于运行数据，不提交；不要在日志或回答中输出密钥。
+- 文档日期使用绝对日期。
+- 构建脚本放 `scripts/`，临时检验脚本放 `src/tests/ad_hoc/`，产品文档放 `docs/`，对外申报与比赛材料放 `比赛材料/`（索引见 `比赛材料/00-索引.md`）。

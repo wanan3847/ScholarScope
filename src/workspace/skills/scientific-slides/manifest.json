@@ -1,0 +1,16 @@
+{
+  "id": "scientific-slides",
+  "name": "科研演示",
+  "version": "1.0.0",
+  "license": "MIT",
+  "origin": "ScholarScope original instructions",
+  "tools": [
+    "presentation",
+    "export"
+  ],
+  "dependencies": [
+    "presentation",
+    "export"
+  ],
+  "output": "project-scoped persistent records with source provenance"
+}

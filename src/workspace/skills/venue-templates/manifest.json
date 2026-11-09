@@ -1,0 +1,14 @@
+{
+  "id": "venue-templates",
+  "name": "写作模板检查",
+  "version": "1.0.0",
+  "license": "MIT",
+  "origin": "ScholarScope original instructions",
+  "tools": [
+    "venue"
+  ],
+  "dependencies": [
+    "venue"
+  ],
+  "output": "project-scoped persistent records with source provenance"
+}

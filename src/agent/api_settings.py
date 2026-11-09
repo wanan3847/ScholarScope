@@ -8,10 +8,11 @@ from __future__ import annotations
 
 import json
 import os
+import tempfile
 from pathlib import Path
 from typing import Dict, Optional
 
-_CONFIG_FILE = Path(__file__).resolve().parent.parent / "data" / "api_config.json"
+_CONFIG_FILE = Path(os.getenv("SCHOLARSCOPE_DATA_DIR", Path(__file__).resolve().parent.parent / "data")) / "api_config.json"
 
 
 def load_api_config() -> Dict[str, str]:
@@ -27,7 +28,11 @@ def load_api_config() -> Dict[str, str]:
 
 def save_api_config(openalex_key: Optional[str] = None,
                     openalex_email: Optional[str] = None,
-                    s2_key: Optional[str] = None) -> Dict[str, str]:
+                    s2_key: Optional[str] = None,
+                    crossref_token: Optional[str] = None,
+                    scopus_key: Optional[str] = None,
+                    scopus_institution_token: Optional[str] = None,
+                    unpaywall_email: Optional[str] = None) -> Dict[str, str]:
     """保存 API 配置。
 
     字段语义：None=保持不变；空字符串=清除；非空=覆盖。
@@ -36,7 +41,9 @@ def save_api_config(openalex_key: Optional[str] = None,
     cfg = load_api_config()
     for key, val in (("openalex_key", openalex_key),
                      ("openalex_email", openalex_email),
-                     ("s2_key", s2_key)):
+                     ("s2_key", s2_key), ("crossref_token", crossref_token),
+                     ("scopus_key", scopus_key), ("scopus_institution_token", scopus_institution_token),
+                     ("unpaywall_email", unpaywall_email)):
         if val is None:
             continue
         val = str(val).strip()
@@ -46,9 +53,9 @@ def save_api_config(openalex_key: Optional[str] = None,
             cfg.pop(key, None)
     try:
         _CONFIG_FILE.parent.mkdir(parents=True, exist_ok=True)
-        _CONFIG_FILE.write_text(
-            json.dumps(cfg, ensure_ascii=False, indent=2), encoding="utf-8"
-        )
+        fd, path = tempfile.mkstemp(dir=_CONFIG_FILE.parent)
+        with os.fdopen(fd, "w") as file: json.dump(cfg, file, ensure_ascii=False, indent=2)
+        os.replace(path, _CONFIG_FILE)
     except OSError as e:  # pragma: no cover
         raise RuntimeError(f"保存 API 配置失败: {e}") from e
     return cfg

@@ -68,7 +68,33 @@ def extract_keywords_fallback(query: str) -> Dict:
         if joined not in keywords:
             keywords.append(joined[:60])
     phrases = _fallback_phrases(query, tokens)
+    glossary = {"测井":"well logs","孔隙度":"porosity","渗透率":"permeability","深度学习":"deep learning",
+        "图神经网络":"graph neural networks","神经网络":"neural networks","遥感":"remote sensing",
+        "时间序列":"time series","预测":"prediction","蛋白质":"protein","分子":"molecular",
+        "医学影像":"medical imaging","气候":"climate","地震":"seismic","储层":"reservoir"}
+    translated = [v for k,v in glossary.items() if k in query]
+    if translated:
+        keywords = list(dict.fromkeys(translated + keywords))[:12]
+        phrases = list(dict.fromkeys([" ".join(translated)] + phrases))
+    if re.search(r"测井|well[- ]?logs?",query,re.I) and re.search(r"深度学习|deep[- ]learning",query,re.I):
+        targets = [v for k,v in (("孔隙度|porosity","porosity"),("渗透率|permeability","permeability")) if re.search(k,query,re.I)]
+        focused = [f"well logs deep learning {t} prediction" for t in targets]
+        focused += [f"well logging convolutional neural network {t}" for t in targets]
+        phrases = list(dict.fromkeys(focused + phrases))[:8]
     return {"keywords": keywords, "queries": phrases}
+
+
+def focused_research_queries(query: str) -> List[str]:
+    """Recall variants for the same task; original intent gates every result."""
+    base=extract_keywords_fallback(query)["queries"]
+    if re.search(r"测井|well[- ]?(?:logs?|logging)|borehole logs?",query,re.I) and re.search(r"深度学习|deep[- ]learning",query,re.I):
+        targets=[v for pattern,v in ((r"孔隙度|porosity","porosity"),(r"渗透率|permeability","permeability")) if re.search(pattern,query,re.I)]
+        # Split alternative targets rather than require both words in every
+        # provider query. Cover architectures whose titles omit 'deep learning'.
+        variants=[f"well logs {method} {target} prediction" for method in
+            ("deep learning","convolutional neural network","LSTM","transformer") for target in targets]
+        base=variants+base
+    return list(dict.fromkeys(base))[:12]
 
 
 def _bigrams_from_queries(queries: List[str], max_n: int = 8) -> List[str]:
@@ -101,19 +127,19 @@ def _parse_json_response(text: str) -> Dict:
 
 
 def plan_query(query: str, llm_chat: Callable,
-               double_pass: bool = True) -> Dict:
+               double_pass: bool = True, timeout: float | None = None) -> Dict:
     """返回 {"keywords": [...], "queries": [...]}；LLM 失败/输出差时用规则兜底，
     并把规则词并入 LLM 输出（扩大召回、提高对弱模型的鲁棒性）。"""
     prompt = _PROMPT.format(q=query.strip())
     from agent.spar2.llm_guard import bounded_call
-    resp1 = bounded_call(llm_chat, prompt, max_tokens=2000)
+    resp1 = bounded_call(llm_chat, prompt, max_tokens=700, timeout=timeout, timeout_seconds=timeout or 30)
     data1 = _parse_json_response(resp1 or "")
     llm_kw = [str(k).strip() for k in (data1.get("keywords") or []) if str(k).strip()]
     llm_q = [str(qq).strip() for qq in (data1.get("queries") or []) if str(qq).strip()]
     # 双规划合并：第二次调用取并集，降低单次规划波动（关键词/短语差异）
     resp2 = None
     if double_pass and (llm_kw or llm_q):
-        resp2 = bounded_call(llm_chat, prompt, max_tokens=2000)
+        resp2 = bounded_call(llm_chat, prompt, max_tokens=700, timeout=timeout, timeout_seconds=timeout or 30)
         data2 = _parse_json_response(resp2 or "")
         llm_kw += [str(k).strip() for k in (data2.get("keywords") or []) if str(k).strip()]
         llm_q += [str(qq).strip() for qq in (data2.get("queries") or []) if str(qq).strip()]
@@ -153,7 +179,7 @@ Avoid repeating original query.'''
 
 
 def generate_queries_from_docs(query: str, top_docs: List[dict],
-                               llm_chat: Callable) -> List[str]:
+                               llm_chat: Callable, timeout: float | None = None) -> List[str]:
     """根据已找到的高分论文生成新的搜索查询（迭代搜索第二轮用）。
     失败返回空列表（不影响流程）。"""
     if not top_docs:
@@ -169,7 +195,7 @@ def generate_queries_from_docs(query: str, top_docs: List[dict],
     )
     try:
         from agent.spar2.llm_guard import bounded_call
-        resp = bounded_call(llm_chat, prompt, max_tokens=500)
+        resp = bounded_call(llm_chat, prompt, max_tokens=500, timeout=timeout, timeout_seconds=timeout or 30)
         data = _parse_json_response(resp or "")
         queries = data.get("queries") or []
         queries = [str(qq).strip() for qq in queries if str(qq).strip()]

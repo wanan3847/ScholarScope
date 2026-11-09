@@ -1,0 +1,17 @@
+.git
+.venv
+.cache
+**/node_modules
+**/__pycache__
+src/data
+src/.cache
+src/.pytest_cache
+models
+references
+archive
+results
+.env*
+*.zip
+*.docx
+*.pptx
+*.pdf

@@ -1,0 +1,14 @@
+{
+  "id": "peer-review",
+  "name": "来源与稿件审查",
+  "version": "1.0.0",
+  "license": "MIT",
+  "origin": "ScholarScope original instructions",
+  "tools": [
+    "review"
+  ],
+  "dependencies": [
+    "review"
+  ],
+  "output": "project-scoped persistent records with source provenance"
+}

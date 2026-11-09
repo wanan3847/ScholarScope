@@ -1,0 +1,16 @@
+{
+  "id": "paper-lookup",
+  "name": "真实文献检索",
+  "version": "1.1.0",
+  "license": "MIT",
+  "origin": "ScholarScope original instructions",
+  "tools": [
+    "search",
+    "research",
+    "acquire"
+  ],
+  "dependencies": [
+    "search"
+  ],
+  "output": "project-scoped persistent records with source provenance"
+}

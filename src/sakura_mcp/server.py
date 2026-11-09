@@ -7,7 +7,7 @@
     python mcp_server.py --transport sse --port 8766
 
 工具清单：
-    - search_papers     多通道检索（arXiv/OpenAlex/CrossRef/S2/本地语义 + LLM 判分）
+    - search_papers     SPAR2 多轮检索、引文扩展与实用文献选择
     - get_paper         论文详情
     - get_references    参考文献（RefChain 引用方向）
     - get_citations     引用该文的论文（RefChain 被引方向）
@@ -21,6 +21,7 @@ from __future__ import annotations
 import asyncio
 import concurrent.futures
 import json
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -50,11 +51,11 @@ mcp = MCPServer("ScholarScope", instructions=(
     "跑官方测试集评测用 run_eval。"
 ))
 
-# 与 Web 搜索一致的引擎配置：Web deadline 70s、首轮检索 + 判分
-SEARCH_DEADLINE = 70.0
-SEARCH_MAX_ROUNDS = 1
-SEARCH_MAX_JUDGE = 40
-SEARCH_LOCAL_TOP_K = 200
+# 与 Web 搜索一致的 SPAR2 Agent 配置
+SEARCH_DEADLINE = 50.0
+SEARCH_MAX_ROUNDS = 2
+SEARCH_MAX_JUDGE = 24
+SEARCH_LOCAL_TOP_K = 300
 SEARCH_TIMEOUT = 95
 
 
@@ -62,6 +63,15 @@ def _get_llm(model: str = ""):
     """获取 LLM 实例；空则走默认路由（无可用端点时自动降级 MockLLM）。"""
     try:
         router = get_default_router()
+        # Use the same persisted provider choices as the Web app.
+        config_path = Path(os.getenv("SCHOLARSCOPE_DATA_DIR", ROOT / "data")) / "llm_config.json"
+        if config_path.exists():
+            for item in json.loads(config_path.read_text(encoding="utf-8")):
+                router.register(
+                    name=item["name"], model=item.get("model", ""),
+                    base_url=item.get("base_url", ""), api_key=item.get("api_key", ""),
+                    enabled=bool(item.get("base_url")), priority=item.get("priority", 0),
+                )
         return router.get(model or None)
     except Exception:
         return None
@@ -82,16 +92,16 @@ def _paper_to_markdown(p: Dict) -> str:
     title = p.get("title", "").strip() or "(无标题)"
     year = p.get("year") or ""
     venue = p.get("venue") or ""
-    score = p.get("final_score", p.get("score", 0.0))
     pid = p.get("arxiv_id") or p.get("doi") or p.get("s2_corpus_id") or p.get("id", "")
-    return f"- **{title}**（{year}）| {venue} | score={score:.3f} | id={pid}"
+    reason = p.get("recommendation_reason", "")
+    return f"- **{title}**（{year}）| {venue} | id={pid}\n  {reason}"
 
 
 def _papers_summary(result: Dict) -> str:
     papers = result.get("papers", [])[:20]
     if not papers:
         return "未检索到相关论文。"
-    lines = [f"返回 {len(papers)} 篇候选论文（按相关性排序）：", ""]
+    lines = [f"返回 {len(papers)} 篇推荐文献（按研究用途选择）：", ""]
     for i, p in enumerate(papers, 1):
         lines.append(f"{i}. {_paper_to_markdown(p)}")
     lines.append("")
@@ -111,8 +121,8 @@ def _papers_summary(result: Dict) -> str:
 @mcp.tool()
 def search_papers(query: str, top_k: int = 10, before_date: str = "",
                   llm_model: str = "") -> str:
-    """多通道检索论文：查询理解 → arXiv/OpenAlex/CrossRef/S2/本地语义 5 通道召回
-    → BGE 语义预筛 → LLM 批量判分 → 排序输出。
+    """使用站内 SPAR2 Agent 检索论文：查询规划 → 五源召回 → 文档驱动迭代
+    → 引文扩展 → 按研究用途选择论文，并附标题/摘要中的核对依据。
 
     Args:
         query: 学术查询（可复杂，如 "diffusion models for RL planning"）
@@ -122,18 +132,17 @@ def search_papers(query: str, top_k: int = 10, before_date: str = "",
     """
     orch = Orchestrator(
         llm_chat=_get_llm(llm_model),
-        deadline_seconds=SEARCH_DEADLINE,
-        max_rounds=SEARCH_MAX_ROUNDS,
+        max_output=50,
         max_judge=SEARCH_MAX_JUDGE,
         local_top_k=SEARCH_LOCAL_TOP_K,
+        deadline_seconds=SEARCH_DEADLINE,
+        max_rounds=SEARCH_MAX_ROUNDS,
+        practical_limit=max(1, min(top_k, 50)),
     )
     result = _run_with_timeout(
         lambda: orch.sync_run(query, before_date), SEARCH_TIMEOUT
     )
     result["papers"] = result.get("papers", [])[: max(1, top_k)]
-    for p in result["papers"]:
-        if p.get("final_score") is None:
-            p["final_score"] = p.get("score", 0.0)
     summary = _papers_summary(result)
     detail = json.dumps(
         {"query": query, "papers": result["papers"],

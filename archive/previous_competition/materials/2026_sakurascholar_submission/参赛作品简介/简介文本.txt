@@ -1,1 +1,0 @@
-作品名称：樱花学术（SakuraScholar）——科研场景下复杂学术查询的智能论文搜索与推荐系统。作品构建多Agent的SPAR2引擎：将复杂查询分解为关键词与语义短语，并行接入arXiv、OpenAlex、CrossRef、Semantic Scholar与本地语料五通道检索，经BGE语义预筛、LLM三维判分、RefChain双向引文扩展与迭代检索，输出JSON、对比表、文献关系图三件套。在PaSa官方测试集上，F1@10从0.0171提升至0.1055，本地Qwen全量50条F1@10=0.0893；支持Mock/DeepSeek/千问/GLM多模型与通道熔断降级，兼具创新性与落地性。

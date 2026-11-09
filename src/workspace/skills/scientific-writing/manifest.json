@@ -1,0 +1,16 @@
+{
+  "id": "scientific-writing",
+  "name": "科研写作",
+  "version": "1.0.0",
+  "license": "MIT",
+  "origin": "ScholarScope original instructions",
+  "tools": [
+    "manuscript",
+    "venue"
+  ],
+  "dependencies": [
+    "manuscript",
+    "venue"
+  ],
+  "output": "project-scoped persistent records with source provenance"
+}

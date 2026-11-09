@@ -1,6 +1,6 @@
-"""SPAR2：基于成熟 SPAR 架构改造的竞赛提分引擎。
+"""SPAR2：多源论文检索组件与传统批量筛选流程。
 
-与旧 Orchestrator 完全独立；通过 run_eval.py --engine spar2 接入评测。
+在线工作台与 MCP 由 Orchestrator 调用 SPAR2Engine 完成查询规划、多轮检索和引文扩展。
 """
 
 from agent.spar2.engine import SPAR2Engine

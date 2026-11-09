@@ -1,0 +1,16 @@
+{
+  "id": "citation-management",
+  "name": "证据与引用管理",
+  "version": "1.0.0",
+  "license": "MIT",
+  "origin": "ScholarScope original instructions",
+  "tools": [
+    "verify",
+    "export"
+  ],
+  "dependencies": [
+    "verify",
+    "export"
+  ],
+  "output": "project-scoped persistent records with source provenance"
+}

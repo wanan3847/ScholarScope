@@ -11,6 +11,7 @@ def _use_tmp_data(monkeypatch, tmp_path):
     monkeypatch.setattr(C, "_READ_PAPERS_FILE", tmp_path / "read_papers.json")
     monkeypatch.setattr(C, "_USERS_FILE", tmp_path / "users.json")
     monkeypatch.setattr(C, "_PAPER_CACHE_FILE", tmp_path / "paper_cache.json")
+    monkeypatch.setenv("SAKURA_ADMIN_PASSWORD", "controlled-admin-password")
 
 
 def test_default_folder_flow(monkeypatch, tmp_path):
@@ -53,21 +54,26 @@ def test_move_missing_paper_errors(monkeypatch, tmp_path):
 
 
 def test_import_user_isolation(monkeypatch, tmp_path):
-    """导入接口带 user_id 时写入对应用户，不能落进匿名账号。"""
+    """导入身份取自会话；客户端 user_id 不能访问其他账号。"""
     _use_tmp_data(monkeypatch, tmp_path)
     from fastapi.testclient import TestClient
     import web.app
 
     C.register_user("alice", "pass1234")
+    C.register_user("bob", "pass1234")
+    token = C.login_user("alice", "pass1234")["token"]
+    headers = {"Authorization": "Bearer " + token}
     client = TestClient(web.app.app)
-    r = client.post("/api/favorites/import", json={
+    r = client.post("/api/favorites/import", headers=headers, json={
         "items": [{"id": "10.1000/xyz", "title": "P", "doi": "10.1000/xyz"}],
         "source": "bibtex",
-        "user_id": "alice",
+        "user_id": "bob",
     })
     assert r.status_code == 200
     assert r.json()["status"] == "ok"
-    assert client.get("/api/favorites?user_id=alice").json()["total"] == 1
+    assert client.get("/api/favorites?user_id=bob", headers=headers).json()["total"] == 1
+    assert C.list_favorites("bob")["total"] == 0
+    assert client.get("/api/favorites?user_id=alice").json()["total"] == 0
     assert client.get("/api/favorites?user_id=web-anonymous").json()["total"] == 0
 
 
@@ -114,7 +120,7 @@ def test_homepage_and_admin_docs(monkeypatch, tmp_path):
 
         # 启动时已预置 admin 账号（默认 admin/admin123），可直接登录编辑并持久化
         token = client.post("/api/auth/login",
-                            json={"username": "admin", "password": "admin123"}).json()["token"]
+                            json={"username": "admin", "password": "controlled-admin-password"}).json()["token"]
         r = client.put(f"/api/docs?token={token}",
                        json={"sections": [{"title": "配置", "body": "- A\n- B"}]})
         assert r.status_code == 200
@@ -167,7 +173,7 @@ def test_api_settings_flow(monkeypatch, tmp_path):
         assert client.put("/api/settings/api",
                           json={"openalex_key": "sk-x"}).status_code == 401
         token = client.post("/api/auth/login",
-                            json={"username": "admin", "password": "admin123"}).json()["token"]
+                            json={"username": "admin", "password": "controlled-admin-password"}).json()["token"]
         # 保存
         r = client.put(f"/api/settings/api?token={token}", json={
             "openalex_key": "sk-secret123", "openalex_email": "a@b.c", "s2_key": "s2-secret9"})

@@ -1,296 +1,179 @@
 # 研索 ScholarScope
 
-> 面向复杂学术查询的智能论文检索与推荐系统
+面向研究人员、博士生和科研工程师的 Literature Intelligence Workspace。
 
-研索（ScholarScope）是一个面向科研工作者的多 Agent 论文检索与推荐系统，针对复杂学术查询提供端到端处理：从查询理解、多源检索、迭代式搜索、RefChain 引文扩展，到结构化输出（JSON + Markdown 表格 + 关系图）与反馈闭环。
+研索是一个文献检索与阅读工作台：描述研究问题，查找最相关的论文，阅读摘要和推荐理由，将文献按课题收藏整理。支持已有文献文件导入及引用导出。
 
-> **SPAR2 检索引擎**：系统评测使用基于 SPAR 架构改造的
-> `SPAR2Engine`（`src/agent/spar2/`，`run_eval.py --engine spar2`）。
-> 查询规划（关键词+语义短语）→ 5 通道检索（arXiv API / OpenAlex / CrossRef /
-> Semantic Scholar / 本地 PaSa 语义语料）
-> → BGE 语义预排 → LLM 批量判分 → RefChain 引用扩展 → 排序输出。
-> 上一届比赛背景下形成的设计记录见 [旧比赛材料归档](archive/previous_competition/README.md)。
-
-## 核心特性
-
-- **SPAR2 流水线**：QueryPlanner 查询理解（关键词+语义短语）→ 5 通道检索（arXiv / OpenAlex / CrossRef / Semantic Scholar / 本地 PaSa 语义语料）→ BGE 语义预排 → LLM 批量判分 → RefChain 双向引文扩展（引用+被引）→ 排序输出
-- **SPAR2 常驻创新机制**：迭代检索（BFS 多轮）/ 文档驱动查询生成 / RefChain 双向引文扩展 / BGE 语义预筛+保底 / 多通道检索 / 评测截止日期过滤
-- **真实学术 API + 离线语料**：Semantic Scholar、OpenAlex（均无需 API key）以及 PaSa
-  官方公开论文标题库的本地倒排/向量召回；S2 429 或断网时仍可复现检索结果。
-- **多 LLM 支持**：MockLLM（离线）/ OpenAI / DeepSeek / 通义千问 / 智谱 GLM / 本地 Qwen
-- **5 个评测 Benchmark**：AutoScholarQuery / RealScholarQuery / paper_finder_bench / LitQA2 / SPARBench（自建）
-- **三件套输出**：JSON + Markdown 对比表 + HTML 关系图（自包含 SVG，离线可开），
-  关系边由论文间相似度生成（`src/agent/graph_synthesizer.py`）
-- **反馈闭环**：点击/复制/引用/跳过/隐藏/星级事件收集与奖励统计（`src/agent/feedback_loop.py`）
-- **完全离线可跑通**：MVP 阶段不依赖任何 API key
-
-## 快速开始
+## 启动
 
 ```bash
-# 1. 安装依赖
 cd src
 pip install -r requirements.txt
-# 以下命令都在 src/ 目录下执行；新开终端请先 cd src
-
-# 2. 启动 Web 服务（主入口，浏览器打开 http://localhost:8765/app）
 python3 -m uvicorn web.app:app --host 127.0.0.1 --port 8765
-
-# 3. 离线 Demo（全 Mock，零依赖）
-python examples/run_demo.py
-
-# 4. 真实 API 搜索（无需 key，S2 + OpenAlex）
-python examples/real_search_demo.py
-
-# 5. 官方测试集评测（推荐：SPAR2 引擎）
-python run_eval.py --n 10 --benchmarks real_scholar --engine spar2 --real --llm deepseek \
-  --output /绝对路径/结果.json
 ```
 
-## 使用真实 LLM
+- 线上：<https://scholarscope.041126.xyz/>（Cloudflare Tunnel → `127.0.0.1:8766`，服务端目录 `/opt/sites/scholarscope`，systemd 单元 `scholar-scope`）
+- 首页：<http://127.0.0.1:8765/>（内容按窗口宽度铺满，页边距与工作台一致）
+- 检索工作台：<http://127.0.0.1:8765/app>
+- 科研项目：<http://127.0.0.1:8765/app#projects>
 
-复制 `.env.example` 为 `.env`，填入对应 API key：
+完整平台改造的 [开发任务书](docs/implementation/2026-10-14-research-workspace-taskbook.md) 基础模块已交付，正在补齐智能分析与真实检索效果，验收结果和外部接口边界见 [执行记录](docs/implementation/research-workspace-verification.md)，模块与许可见 [架构记录](docs/implementation/research-platform-architecture.md)。科研项目支持持久资料、成员权限、PDF 按页阅读、证据库、自定义比较矩阵、跨论文原文检索问答、双人筛选、综述编辑、科研图表和演示报告。研究任务实际调用这些工具，保留计划、核验确认、进度和产物；Zotero 同步、开放全文获取、文献动态与参考关系接入真实接口，容器模式支持 PostgreSQL/pgvector 与私有 S3。
+
+项目数据默认保存在忽略提交的 `src/data/workspace/`，支持用 `SCHOLARSCOPE_DATABASE_URL` 选择 PostgreSQL，用 `SCHOLARSCOPE_S3_BUCKET` / `SCHOLARSCOPE_S3_ENDPOINT` 选择对象存储。项目接口通过 Bearer 会话识别账号；未登录用户使用共享匿名项目空间。证据保存来源哈希与位置，不能提交不在原文中的片段；修改证据会将依赖的研究产物标记为待复核。
+
+项目问答使用本地 `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` 做语义与关键词联合检索，默认读取已缓存模型，不在请求中自动下载。没有可用模型时保留关键词检索；可设置 `SCHOLARSCOPE_ALLOW_MODEL_DOWNLOAD=1` 允许下载，或 `SCHOLARSCOPE_DISABLE_EMBEDDINGS=1` 禁用语义模型。配置可用模型后，回答综合跨论文方法与结果，矩阵按字段提取中文概括；每条概括须有实际原文引用并经过第二次语义核对。模型超时、无效引用或核对失败时回退到原文整理，界面标示实际生成模式和章节覆盖，资料不足时明确说明。模型选择已知原文片段 ID，后端附上原始片段，避免模型改写引文；明确的内部研究标记只解析为所引论文的原始标题，未知或错引标记被拒绝，语义核对仍须通过。问答可导出包含回答、原文引文和出处的 Markdown。矩阵提取保留原文候选，支持批量、列级重跑、人工修改与确认；人工修改的单元格不会被批量重跑覆盖。
+
+综述草稿按项目证据组织章节，使用本地 Tiptap 编辑；引文、参考文献、来源变化检查、版本恢复和成员评论均持久保存。支持 Word、PDF、Markdown 导出。研究演示可生成 12 页组会、开题、答辩或论文讲解草稿，在线修改页面、要点、顺序、布局、备注和项目品牌，导出原生文本框可编辑的 PPTX、Markdown 或离线网页幻灯片。模型按章节检索相关原文并分批生成，字段标签不完整时仍可使用对应文本；去除重复片段、平衡不同论文，并为各章节及缺漏重试分配时间预算。比较型演示要点可引用两篇研究，全部出处保留在预览、导出备注和来源变化检查中。没有通过核对的模型结果时使用明确标识的原文整理；覆盖记录区分独立综合、摘要/结论复用、项目范围说明与未完成章节。草稿仍需要研究者完善论证。PPTX 服务端导出需要 Node.js 及 `npm ci --prefix frontend` 的依赖。
+
+项目概览可编辑课题、查看近期资料/任务与待复核产物。知识库支持标签、资料集合、项目收藏/已阅、文件导入与 BibTeX/RIS/JSON/CSV 导出；矩阵可导出含原文出处的 Excel。写作模板支持研究者配置章节、引用格式、摘要/关键词限制、字号、纸张和页边距，并保存规范来源；通用模板不声称符合某一期刊。科研图表区分报告值、研究者数据和派生数据，核对数值、轴和单位，导出 SVG/PNG 并在 PPT 中复用为原生 Office 图表。
+
+“研究任务”可启用按缺口补检索：保留原始主题、方法和年份约束，在共用 210 秒预算内最多执行八轮真实检索，达到目标数量即停止，并尝试取得可用公开全文。查询按目标参数、同义词和模型名称展开；原始研究问题用于每轮资格核对与最终推荐，符合条件的候选优先进入有限的模型判断预算。各轮保留新增、重复、拒绝数量及停止原因。年份条件发送到 arXiv、OpenAlex、Crossref，并在合并后再次核对；不为凑数量放宽条件。筛选建议保留原文依据，不替代成员的人工决定。任务保存实际工具计划，单步执行在受限子进程中，最多同时执行两个任务；支持取消、失败重试与中断恢复，已完成步骤和产物保留。证据核验阶段等待项目编辑者确认；确认后来源变化会重新核验。生成 Word/PPTX 文件与私有 ZIP 来源清单可在任务面板下载。项目内原创科研技能有版本、许可证与工具契约；自定义工作流只能选择白名单操作，十项技能均接入实际工具；Zotero 导入步骤使用当前账号的专用连接，写入远端库由同步面板的独立导出操作触发。
+
+项目“文献同步”支持 Zotero 个人/群组库与集合、条目/标签/PDF 附件导入、元数据导出、增量版本和双向冲突选择。连接及进度按账号加密保存，项目成员只共享已导入资料，密钥不进入项目产物包。导出须先启用该账号的写入选项；远端版本变化时不覆盖。个人库实测需要有效凭据，目前验收覆盖官方公共 API 与接口契约。
+
+使用自己的 Zotero 账号：
+
+1. 打开工作台“登录账号”，登录或注册研索账号；进入“科研项目”，打开自己拥有或可编辑的项目，选择“文献同步”。
+2. 点击“获取库 ID 和密钥”，在 [Zotero 官网](https://www.zotero.org/settings/keys) 登录自己的 Zotero 账号，创建用于研索的专用 API Key，允许读取对应文献库；导入附件时还需文件读取权限。
+3. 在项目表单选择“个人库”，填写密钥页面的数字用户 ID 和 API Key；集合键可留空。点击“保存连接配置”，再点击“检查连接”验证读取权限，然后“增量导入到项目”。保存配置本身不表示远端认证成功；连接检查只读，不会导入或写入 Zotero。密钥只填网页表单。
+4. 测试向 Zotero 导出时，密钥需有写入权限，并在表单启用“允许此账号将项目元数据导出到该 Zotero 库”，再点击导出。账号及私有连接保持隔离。用户 ID 与用户名不同，详见 [Zotero 官方文档](https://www.zotero.org/support/dev/web_api/v3/basics)。
+
+知识库可按 DOI 取得真实元数据、查询开放 PDF 链接、下载解析公开 HTTPS 文件并核对来源。下载限制 25 MB、验证公开 DNS 地址和每次跳转、固定连接地址、保留 TLS 证书验证；不向跳转源转发账号密钥。阅读器批注随原文位置持久保存。扫描页使用本机 Poppler/Tesseract OCR，保留识别置信度和 PDF 位置；缺少依赖时仍可阅读原图。Docker 默认使用英文/简体中文 OCR，已通过实际中文扫描页解析验收；本机可用 `brew install poppler tesseract`，其他语言通过 `SCHOLARSCOPE_OCR_LANG` 指定已安装语言包。图表和公式可调用视觉模型对实际区域辅助解读，结果标为待人工核对，不自动写成已确认数据。
+
+“研究动态”保存问题及年份范围，支持手动或按日/周检查；任务和已见记录跨重启保留，新发现相对于项目及检索已见资料，不冒称是刚发表的论文。检查可选择自动加入项目，暂停自动检查后可手动继续。参考关系来自 OpenAlex 实际记录，来源失败保留明确空状态。
+
+存储已用独立的 PostgreSQL 17、pgvector 与 S3 服务实测，包含真实 PDF、跨语言向量检索、重新连接与备份恢复。本地管理命令从仓库根执行，数据库和对象存储连接通过上文环境变量配置：
 
 ```bash
-cp .env.example .env
-# 编辑 .env，例如：
-#   SAKURA_LLM_PROVIDER=deepseek
-#   DEEPSEEK_API_KEY=sk-xxxx
+python3 scripts/workspace_admin.py migrate
+python3 scripts/workspace_admin.py backup /absolute/path/research-backup.zip
+python3 scripts/workspace_admin.py restore /absolute/path/research-backup.zip
 ```
 
-支持 provider：
+备份含账号、运行配置、加密集成记录及解密文件与研究文件，权限为 0600。恢复要求空数据库与空运行目录，并验证文件哈希；旧资料和已有备份不会被覆盖。
 
-| provider | 模型 | 说明 |
-| --- | --- | --- |
-| `mock` | mock-llm-v1 | 离线关键词匹配（默认，零依赖） |
-| `openai` | gpt-4o-mini | OpenAI 官方 API |
-| `deepseek` | deepseek-chat | DeepSeek API（价格友好） |
-| `qwen_api` | qwen-plus | 通义千问 DashScope 兼容 API |
-| `glm` | glm-4-flash | 智谱 GLM（免费额度） |
-| `qwen` | Qwen2.5-7B-Instruct | 本地 Qwen 模型（需 GPU） |
+Docker 启动：从仓库根运行 `docker compose up -d --build`。默认 SQLite/本地文件；生成 `.env.storage` 后可使用 `compose.storage.yaml` 启动 PostgreSQL/pgvector 与认证 S3。镜像为非 root、只读根文件系统，语义模型是可选构建配置。完整命令、模型准备与备份恢复见 [容器部署](docs/implementation/container-deployment.md)。两种模式均已用实际 API、PDF、任务和恢复验证。
 
-## MCP Server（Claude Code / Cursor 直接调用）
+账号接口按会话隔离收藏、已阅、文件夹和导入，不接受客户端用户名作为身份。新密码使用 PBKDF2，旧密码哈希在成功登录后迁移；会话限时七天，令牌以哈希保存。新环境仅在显式设置 `SAKURA_ADMIN_PASSWORD` 时创建管理员（可用 `SAKURA_ADMIN_USER` 指定账号）；不再自动创建固定密码管理员。已有账号及其资料继续保留。
 
-岗位化改造 P0：把检索/收藏/评测能力暴露为标准 MCP 工具，任意 MCP 客户端可直接调用：
+可以在页面模型设置中注册 DeepSeek、Ollama 或 OpenAI 兼容模型，在检索设置中配置学术数据源密钥。模型配置持久化在 `src/data/llm_config.json`，数据源配置通过 `/api/settings/api` 管理。未配置可用模型时，搜索按文本匹配降级。已检查本机 `qwen3.5:4b` 并注册 Ollama 研究模型，默认本地上下文限制为 8,192 token，研究上下文可用 `SCHOLARSCOPE_RESEARCH_CONTEXT` 调整；同一服务进程的本地推理串行，排队时间计入请求预算，空闲约 90 秒后释放模型内存；该本机配置是运行数据，不提交。容器中连接宿主机 Ollama 时使用 `http://host.docker.internal:11434/v1`。模型输出仍需研究者核对，当前尚未用独立评测证明达到市场同类产品的分析效果。
+
+模型设置中的“本次检索使用的模型”用于检索请求；项目问答、综述、演示和研究任务自动使用可用端点中优先级最高的模型。用真实云端 API 验收项目功能时，用管理员账号配置端点，将云端优先级设为高于现有 Ollama，保存后先点击“测试”，再生成项目内容；API Key 只填设置表单。
+
+模型设置的“预设提供商”直接复用现有注册、持久化、测试和路由服务，提供常用模型下拉框并支持自定义模型 ID；优先级可填写，新增表单默认为 30，已配置列表显示各端点优先级。更新同一官方提供商时 API Key 留空会保留已保存密钥，不覆盖为无凭据端点。2026-10-14 按官方目录核对常用选择，包括 [OpenAI](https://developers.openai.com/api/docs/models/gpt-4.1-mini)、[DeepSeek](https://api-docs.deepseek.com/)、[通义千问](https://help.aliyun.com/zh/model-studio/models)、[GLM](https://docs.bigmodel.cn/cn/guide/models/text/glm-4)、[Kimi](https://platform.kimi.com/docs/models) 和聚合提供商；列表不承诺账号权限或免费额度。新注册 DeepSeek 默认使用 `deepseek-flash`，Kimi 默认 `kimi-k2.6` 并适配固定温度参数；已保存的模型配置不会自动改写。Ollama 选项需要本机已安装模型，不触发下载。
+
+Zotero 导出按[官方响应格式](https://www.zotero.org/support/dev/web_api/v3/write_requests)处理已保存、未变更与逐条失败结果；中断恢复先核对固定条目键，认证或网络失败时不会继续写入。单条字段错误保留重试状态并继续其他文献；共享报告只记录错误码和已识别字段，不保存远端可能回显凭据的原始错误。真实私有库连接需要在可联网服务中点击“检查连接”验证；接口契约通过不等于实际账号同步成功。
+
+## 检索与阅读
+
+用户验收按需求追踪、实际接口旅程、真实文件解析、浏览器操作和外部服务质量分层执行，计划及逐项边界见 [用户验收报告](docs/testing/user-acceptance.md)。在仓库根运行 `.venv/bin/python src/tests/run_acceptance.py`，会隔离账号/数据库、运行回归和构建、按环境条件启动自己的服务并执行五套 Playwright 用例，生成带 PASS/FAIL/BLOCKED 的报告；退出码 2 表示仍有阻塞，不能算全部通过。当前浏览器运行受端口限制，真实研究模型测试沿用用户后续 API 验收安排。
+
+检索阶段异常现在返回脱敏的服务不可用提示，不把提供商原始异常放入响应或日志；失败不生成占位论文。该路径通过故障注入复现、修复并回归检查。
+
+Web 与 MCP 的在线检索统一使用 `src/agent/orchestrator.py` 中的 `Orchestrator` 和 SPAR2 Agent：
+
+1. 把研究问题转为标准学术术语和聚焦的检索短语，保留方法、任务、研究对象与明确年份约束。
+2. 并行检索 arXiv、OpenAlex、Crossref、Semantic Scholar、Europe PMC 和本地文献索引；配置授权密钥后启用 Scopus，Crossref Plus 为可选配额，合并 DOI / arXiv 别名，去除重复标题。
+3. 由 Agent 沿已检索文献的参考文献扩展候选，再根据标题和摘要按研究用途选择文献；推荐理由附带可核对的原文证据。最终推荐顺序不采用数值评分、引用量或 venue 声望。
+4. 模型、语义模型或某个数据源不可用时使用剩余可用结果；无真实候选时返回空结果。摘要缺失时提示证据有限。
+
+明确的深度学习、图神经网络、测井资料及目标参数约束先由标题/摘要核对，再进入用途选择；模型不可用时同样保留这些约束。2026-10-14 的真实测井验收以 30 篇为目标，首次仅得到 2 篇；后续补检索在约 210 秒、3 轮中保存 10 个真实候选，仍未达到目标。其中中子孔隙度曲线预测、测井/试井/地震融合和学位论文需按研究用途区分，推荐与项目资料显示适用范围提示。同标题且作者相符的预印本/出版版本保留关联版本与原始证据，不重复计数。真实模型网页流程已通过矩阵、问答、综述和 12 页报告的调用及 Word/PPTX 导出检查；目前综述和演示的 AI 综合仍会只覆盖部分章节。数量、全文或论证不足均保留实际状态，不补造论文；摘要不能替代全文研究评估。
+
+推荐理由用于帮助选择阅读顺序，不替代原文阅读。年份筛选应用于所有来源，日期缺失的文献在指定年份时不列入结果。SPAR2 检索预算为 50 秒，最终用途选择最多 32 秒，接口保护上限 95 秒。Agent 最终选择失败时保留 SPAR2 多源和引文召回的候选，并标明降级模式。
+
+点击列表文献进入阅读面板，查看完整摘要、推荐理由与可核对的证据片段；支持收藏、标记已阅、打开原文和引用导出。阅读器可以展开或打开独立窗口，并提供摘要摘录、阅读笔记、进度和标签。
+
+高级筛选按返回文献的数据库来源、方法词、引用次数和代码链接过滤；缺失元数据不会被当作满足条件。方法对比表展示检索文本识别的方法、已有数据集信息和代码链接。知识上下文提供返回数据中的文献关系图、方法概念对应图和当前结果的发表时间分布；文本相似关系与引文分开，数据缺失时显示空状态。年份筛选仍在搜索 API 中执行。
+
+## 文献库与文件
+
+- 按课题建立文件夹，设置默认收藏文件夹，移动和移除文献。
+- 导入 BibTeX、RIS、CSV、JSON 文件；导出全部收藏或单个文件夹。
+- 本地账号支持注册、登录、修改密码；收藏、已阅、文件夹按用户隔离。
+- 未登录用户使用服务器上的共享匿名文献库。
+- 检索历史保存在浏览器，含缓存的结果，重新打开时可恢复。
+- 保存的检索记录问题和年份条件；阅读笔记、摘录、进度和标签按账号保存在当前浏览器，独立阅读窗口同步笔记修改。这些新增本机资料不随文献文件导出，也不跨设备同步。
+- `Cmd/Ctrl K` 快捷检索；文献列表使用上下方向键浏览，Enter 打开阅读，Escape 返回窄屏列表。
+- 内置管理员可编辑帮助文档，内容存储在 `src/data/docs_content.json`。
+
+## 设计
+
+首页与工作台延续 `docs/design/Open-Design-Landing.zip` 的 Atelier Zero 风格：暖纸色 `#efe7d2`、浅骨色表面、墨色正文、珊瑚色主操作、衬线强调与点状分隔。首页保留拼贴封面和章节布局，所有产品入口进入真实工作台；场景预览标明阅读示意，不作为检索结果。`/app` 为三栏科研工作台，保留文献列表、方法对比、阅读与知识上下文、文献库、历史及设置。支持深浅色、展开阅读、独立阅读窗口和窄屏列表/阅读切换。
+
+首页源码在 `frontend/landing.html`，共享字体、封面和首页样式/交互在 `frontend/public/brand/`，工作台源码在 `frontend/src/`。字体与关键资源本地提供，不依赖外部 CDN。视觉规范见 [前端设计语言](docs/design/DESIGN.md)，功能和保存范围见 [科研工作台设计](docs/design/research-workspace.md)（2026-10-13）。
+前端构建（仓库根目录）：
+
+```bash
+npm ci --prefix frontend
+node scripts/build_frontend.mjs
+```
+
+构建会生成 `src/web/static/ui/` 与 `src/web/static/brand/`，将首页安装到 `/`、工作台安装到 `/app`。首页检索路径可携带问题进入 `/app?q=...`，文献库与导入分别进入 `/app#favorites`、`/app#import`。开发可运行 `npm run dev --prefix frontend`，由 Vite 代理请求到已启动的 FastAPI 服务。
+
+## MCP
 
 ```bash
 cd src
-python mcp_server.py --transport stdio      # Claude Code / Cursor 里配置为本地 MCP server
-python mcp_server.py --transport sse --port 8766   # SSE 模式
+python mcp_server.py --transport stdio
+# 或
+python mcp_server.py --transport sse --port 8766
 ```
 
-仓库根已提供 `.mcp.json`，Claude Code 会自动加载 `scholarscope` 服务（如 python 环境不同，改 `command` 为你的解释器路径）。
-
-| 工具 | 能力 |
-| --- | --- |
-| `search_papers` | 多通道检索（arXiv/OpenAlex/CrossRef/S2/本地语义 + LLM 判分） |
-| `get_paper` / `get_references` / `get_citations` | 论文详情 + RefChain 双向引文扩展 |
-| `save_favorite` / `list_favorites` | 收藏/个人库（按用户隔离） |
-| `run_eval` | 跑官方 benchmark 评测（F1/Recall） |
-
-依赖：`pip install -r requirements.txt`（新增 `mcp`）。
+仓库根 `.mcp.json` 已提供本地服务配置。`search_papers` 使用与 Web 相同的在线检索流程；论文详情、引用和被引查询、收藏操作可通过对应工具调用。
 
 ## 项目结构
 
-```
-SakuraPaper/
-├── src/                          # 主源码
-│   ├── config.py                 # 全局配置
-│   ├── mcp_server.py             # MCP Server 入口（stdio/SSE）
-│   ├── sakura_mcp/               # MCP 工具定义（检索/详情/收藏/评测）
-│   ├── agent/                    # SPAR2 引擎 + 反馈闭环 + 结构化输出
-│   │   ├── orchestrator.py       # 顶层编排器
-│   │   ├── spar2/                # SPAR2 引擎（engine/query_planner/judge/
-│   │   │                         #   retrievers/expand/normalize）
-│   │   ├── graph_synthesizer.py  # 三件套输出
-│   │   ├── feedback_loop.py      # 反馈闭环
-│   │   ├── collections.py        # 收藏夹 / 已阅 / 文件夹 / 用户认证
-│   ├── retrieval/                # 检索后端
-│   │   ├── base.py               # RawPaper / BaseBackend
-│   │   ├── semantic_scholar.py   # Semantic Scholar（真实 API）
-│   │   ├── openalex.py           # OpenAlex（真实 API）
-│   │   ├── arxiv.py              # arXiv
-│   │   ├── pubmed.py             # PubMed
-│   │   ├── multi_source.py       # FOS 路由 + 多源合并
-│   ├── llm/                      # LLM 客户端
-│   │   ├── base.py               # BaseLLM 抽象
-│   │   ├── mock_llm.py           # MockLLM（离线）
-│   │   ├── openai_compat.py      # OpenAI 兼容（OpenAI/DeepSeek/Qwen API/GLM）
-│   │   ├── qwen.py               # 本地 Qwen
-│   ├── evaluation/               # 评测
-│   │   ├── metrics.py            # P@K / R@K / F1@K
-│   │   ├── runner.py             # 评测 Runner（5 benchmark）
-│   ├── data/                     # 数据结构 + 评测集
-│   │   ├── paper_node.py         # PaperNode
-│   │   ├── schemas.py            # Pydantic 模型
-│   │   ├── benchmarks/           # 真实评测数据
-│   │   │   ├── AutoScholarQuery/test.jsonl
-│   │   │   ├── RealScholarQuery/test.jsonl
-│   │   │   ├── paper_finder_bench/test_2025_05.json
-│   │   │   ├── litqa2/test.jsonl
-│   │   │   └── SPARBench/test.jsonl  # 自建（100 条）
-│   ├── training/                 # 训练 / 微调
-│   │   └── sscp.py               # ⑩ SSCP 自监督对比预训练
-│   ├── utils/
-│   │   └── tracer.py             # LangSmith 风格 trace
-│   ├── web/                      # FastAPI Web 服务
-│   │   ├── app.py                # 搜索 / 收藏 / 已阅 / 文件夹 / 认证 / LLM 配置等 REST API
-│   │   └── templates/            # Web 前端界面
-│   ├── tests/                    # 单元测试（当前 32 个，全绿）
-│   │   └── ad_hoc/               # 手动验证脚本（pytest 自动跳过）
-│   ├── prompts/                  # LLM prompt 模板
-│   └── examples/                 # 演示脚本
-├── docs/                         # 设计文档
-│   ├── 评测记录.md
-│   └── 岗位化改造方案.md
-├── archive/previous_competition/ # 上一届比赛材料与旧评分依据
-├── scripts/                      # 构建 / 评测辅助脚本
-├── results/                      # 评测输出（运行时数据，不入库）
-├── data_prep/                    # 早期数据准备脚本（比赛材料）
-├── data/                         # 原始数据集
-│   ├── PaSa/                     # PaSa 真实数据
-│   └── asta-bench/               # AstaBench 数据
-├── references/                   # 参考项目源码
-└── .env.example                  # 环境变量示例
-```
+| 路径 | 内容 |
+| --- | --- |
+| `src/agent/orchestrator.py` | Web 与 MCP 共用的 Agent 入口和用途选择 |
+| `src/agent/spar2/engine.py` | 多轮检索、语义预筛、判别和引文扩展 |
+| `src/agent/spar2/retrievers.py` | 多源检索与本地语义匹配 |
+| `src/agent/collections.py` | 文献库、文件夹、已阅和账号 |
+| `frontend/` | 全新 React 界面源码与组件 |
+| `src/web/` | FastAPI 页面、API 和前端构建资源 |
+| `src/sakura_mcp/` | MCP 工具 |
+| `src/data/` | 运行配置与本地文献数据 |
+| `src/tests/` | 自动回归与界面检查 |
+| `scripts/` | 本地索引构建等辅助脚本 |
+| `data/` | 本地评测数据集 |
 
-## 常用命令（均在 src/ 下）
+本地文献索引使用现有论文语料，只将标题、摘要与书目资料用于搜索。
 
-```bash
-# 启动 Web 服务（页面 / 与 /app）
-python3 -m uvicorn web.app:app --host 127.0.0.1 --port 8765
-
-# 官方测试集评测（--n 传大数即全量；绝对路径最稳）
-python3 run_eval.py --n 5000 --benchmarks real_scholar auto_scholar paper_finder litqa2 \
-  --real --llm deepseek --output /绝对路径/结果.json
-
-# 单元测试（32 个，必须全绿）
-/Users/yangyazhou/miniconda3/bin/pytest tests/ -q
-
-# 真机 UI 冒烟（Playwright，需先起服务）
-node src/tests/ui_smoke.js
-
-# 预填充 S2 corpusId 缓存（评测前可跑，仓库根目录执行）
-python3 scripts/prefill_s2_cache.py
-```
-
-## Web API
-
-启动服务后访问：
-
-- `GET  /`、`GET /app` — 项目展示首页 / 搜索使用界面（温暖学术风格）
-- `POST /api/search` — 执行搜索（支持 `format=three_part` 三件套输出）
-- `GET  /api/paper/{id}` / `/api/references/{id}` / `/api/citations/{id}` — 论文详情 / 参考文献 / 被引
-- `POST /api/feedback`、`GET /api/feedback/report` — 反馈事件与统计
-- `GET  /api/benchmarks`、`POST /api/eval` — 评测列表与触发
-- `GET  /api/stats`、`GET /api/innovations`、`GET /api/health` — 系统统计 / 创新机制 / 健康检查
-- 收藏相关：`GET/POST/DELETE /api/favorites[/{paper_id}]`、`GET /api/favorites/check/{id}`
-- 已阅相关：`GET/POST/DELETE /api/read_papers[/{paper_id}]`、`GET /api/read_papers/check/{id}`
-- 文件夹：`GET/POST /api/folders`、`GET/PUT /api/folders/default`（默认收藏文件夹）、
-  `PUT/DELETE /api/folders/{folder_id}`、`POST /api/folders/{folder_id}/papers/{paper_id}`
-- 用户认证：`POST /api/auth/register` / `login` / `logout`
-- 账号管理：`POST /api/auth/change-password`（改密码后旧密码失效、其他会话下线）
-- 批量导入：`POST /api/favorites/import`（BibTeX / RIS / CSV / JSON，按 user_id 隔离）
-- LLM 配置：`GET /api/llm/models`、`POST /api/llm/register` / `unregister` / `test`、
-  `GET /api/llm/presets`、`POST /api/llm/register_preset`、`GET /api/llm/aggregator_models/{provider}`
-- API 配置：`GET/PUT /api/settings/api`（OpenAlex / S2 key，界面填写、存储脱敏）
-
-Web 界面功能：品牌首页（介绍页，顶栏布局与搜索页一致，图标可直达 /app 对应面板）
-与搜索页、收藏夹（文件夹管理 + BibTeX/RIS/CSV/JSON 导入导出）、
-已阅标记、搜索历史、检索后端/创新模块开关、大模型配置弹窗（预设/已注册/自定义/当前使用）、
-本地账号体系（登录/注册/改密码/登出，右上角头像进入账号面板）、
-右上角「帮助」文档弹窗（用户使用手册：快速上手/收藏夹/导入导出/账号/设置/常见问题，
-管理员可编辑）、设置里可直接填写 OpenAlex / S2 API key（不用改 .env）、
-界面默认放大 15%（字大一点不难受）。
-收藏夹：移动/移除按存储的真实论文 ID（arXiv / DOI）操作，DOI 收藏也可正常跨文件夹移动；
-可设置「默认收藏文件夹」，新收藏自动进入该文件夹；在某个文件夹里导出时只导出该文件夹、
-导出文件名跟随文件夹名（如 `tabpfn.bib`）。
-
-注意：Web 搜索始终走真实 SPAR2 多通道检索（arXiv/OpenAlex/CrossRef/S2/本地语义），
-前端已移除无效的“真实 API / 结构化输出”开关（SPAR2 固定全通道检索）；
-Web 模式 deadline 60s、接口硬超时 75s（外部 API 额度耗尽或网络慢时可能返回 504，
-可稍后重试）。评测模式不受此限制（`run_eval.py` 使用 170s deadline）。
-帮助文档内容存放在 `src/data/docs_content.json`，管理员可在文档弹窗里直接编辑。
-内置管理员账号：`admin` / `admin123`（启动时自动创建，可用 `.env` 的
-`SAKURA_ADMIN_USER` / `SAKURA_ADMIN_PASSWORD` 覆盖；文档弹窗里也写了提示）。
-
-## 系统评测
-
-### 1. 基准测试集
-
-系统检索实验使用以下公开 benchmark（数据已下载到本地，无需联网下载）：
-
-| 来源 | 测试集 | 本地位置 | 规模 |
-| --- | --- | --- | --- |
-| [bytedance/pasa](https://github.com/bytedance/pasa) | AutoScholarQuery test | `data/PaSa/AutoScholarQuery/test.jsonl`（= `src/data/benchmarks/AutoScholarQuery/test.jsonl`） | 1000 |
-| bytedance/pasa | RealScholarQuery test | `data/PaSa/RealScholarQuery/test.jsonl`（= `src/data/benchmarks/RealScholarQuery/test.jsonl`） | 50 |
-| [allenai/asta-bench](https://github.com/allenai/asta-bench) | paper_finder_bench | `src/data/benchmarks/paper_finder_bench/test_2025_05.json` | 267 |
-| allenai/asta-bench | LitQA2 | `data/litqa2/LitQA2/*.parquet`（= `src/data/benchmarks/litqa2/test.jsonl`） | 199 |
-
-注册表 Key：`auto_scholar` / `real_scholar` / `paper_finder` / `litqa2` / `sparbench`（自建抽样）。
-
-### 2. 怎么跑
-
-先配置真实 LLM（`cp .env.example .env`，填 `DEEPSEEK_API_KEY`，`SAKURA_LLM_PROVIDER=deepseek`），
-然后在 `src/` 下执行：
-
-```bash
-# 快速验证（每个测试集前 10 条，真实检索 + DeepSeek）
-python run_eval.py --n 10 --benchmarks real_scholar auto_scholar paper_finder litqa2 \
-  --real --llm deepseek --output /absolute/path/quick.json
-
-# 全量评测（--n 传一个大于样本数的值即跑全量；real_scholar 全量 50 条
-# DeepSeek 约 1.5-2 小时、本地 qwen3 约 3 小时；建议守护方式启动）
-python run_eval.py --n 5000 --benchmarks real_scholar auto_scholar paper_finder litqa2 \
-  --real --llm deepseek --output /absolute/path/full.json
-
-# 只看某一个
-python run_eval.py --n 5000 --benchmarks real_scholar --real --llm deepseek --output /absolute/path/real_scholar.json
-```
-
-输出 JSON 含 `macro_metrics`（F1@5/10/20、Recall、Precision）、`efficiency`
-（API 调用 / Token / P50-P99 延时）与逐条 `detailed`。
-
-### 3. 指标口径与已知限制
-
-- **F1 按论文 ID 精确匹配**：arXiv ID（去版本）/ DOI（小写）/ S2 corpusId 三 ID 归一化后
-  任一命中即算中；paper_finder 的 gold 是 S2 corpusId，本地评分时通过 S2 batch 接口
-  原位映射预测 ID —— **S2 限流（429）时该项会显示 0 分，等 S2 恢复后重跑即可**。
-- **语义型 gold 依赖 S2/OpenAlex**：如 "diffusion models + RL" → `Planning with Diffusion`
-  （标题/摘要不含查询词），关键词检索找不到，需语义通道。无 S2 key 时真实模式会额外生成
-  一条去问题措辞的“标题风格”查询，与 AND 查询并行送入 OpenAlex/CrossRef；S2 恢复后
-  自动全量生效。该降级不读取评测 gold，适用于隐藏集。
-- **效率指标**：SPAR2 真实模式 DeepSeek P50 ≈ 176-181s、API 调用 24-54 次/条；
-  本地 qwen3 P50 ≈ 205s、33 次/条（每查询硬超时 170s，`SPAR2_DEADLINE` 可调）。
-- **当前最佳（2026-08-22）**：RealScholarQuery DeepSeek 20 条三件套 F1@10=**0.1055**、
-  本地 qwen3 全量 50 条 F1@10=0.0893，详见 [docs/评测记录.md](docs/评测记录.md)。
-- **参考基线**：AutoScholarQuery PaSa-7B Recall@20 = 0.708；RealScholarQuery PaSa-7B Recall@20 = 0.733。
-
-历次评测结果、优化空间与重跑方法见 [docs/评测记录.md](docs/评测记录.md)。
-
-## 测试
+## 开发检查
 
 ```bash
 cd src
-pytest tests/ -v
+python3 -m pytest tests/ -q
 ```
 
-## 文档
+模板改动后提取内联 JavaScript 并执行 `node --check`；界面检查需先启动本地服务。运行时文献库、用户、密钥与缓存不提交。论文 ID API 使用 `{paper_id:path}`，支持带斜杠的 DOI。
 
-- [评测记录](docs/评测记录.md)
-- [项目改造方案](docs/岗位化改造方案.md)
-- [旧比赛材料归档](archive/previous_competition/README.md)
+从仓库根运行界面检查（首次安装浏览器）：
 
-## 致谢
+```bash
+npm install --prefix .cache/ui-check playwright@1.64.0
+.cache/ui-check/node_modules/.bin/playwright install chromium
+node src/tests/ui_smoke.js
+node src/tests/ui_research.js
+node src/tests/ui_landing.js
+node src/tests/ui_platform.js
+python3 scripts/check_inline_js.py
+```
 
-本项目借鉴了以下优秀工作：
-- [PaSa](https://github.com/bytedance/pasa) — LLM Agent for Comprehensive Academic Paper Search
-- [SPAR](https://github.com/bytedance/SPAR) — Sub-graph PaSaR
-- [ScholarCopilot / AI2ScholarQA](https://github.com/allenai/ai2-scholar-qa)
-- [PaperQA2](https://github.com/future-chem/paper-qa)
-- [AstaBench](https://github.com/elicit/asta-bench)
+界面检查使用受控检索、账号与文献库响应，不改动真实运行数据；覆盖首页筛选与场景切换、真实入口跳转、原有资料管理流程与筛选、关系图、笔记、标签、键盘导航和多窗口阅读，并检查 360 至 1920px 的首页与工作台响应式布局。截图输出到 `.cache/ui-check/screenshots/`。
 
-评测数据来自 PaSa 与 AstaBench 官方发布。
-RealScholarQuery 全量基线（2026-08-09）：F1@10=0.0171、Recall@20=0.0292；
-2026-08-11 关键词 AND + PaSa 截止日期修复的小样本（5 条）F1@10=0.0285、
-Recall@20=0.0268。该结果仍低于 PaSa-7B 参考线，不能宣称达标；完整验收以
-`run_eval.py --n 50` 的真实网络结果为准。paper_finder 当前受 S2 429 影响。
+平台检查另启隔离 API 与临时数据库，上传真实测试 PDF，核对矩阵、原文问答、写作、可编辑幻灯片、原生图表和带人工核验的实际任务流程，并重新打开 DOCX、PPTX 与 ZIP。测试资料明确为受控 fixture，不作为产品默认文献。
+
+2026-10-14 基础工程验收曾通过 94 项 Python 回归、三套既有 UI 与平台 31 类检查、两种存储模式的容器与恢复。最新正式复验通过 **148 项 Python 回归**（含 24 条用户流程用例），生产构建、内联 JavaScript 校验及实际比较型 PPTX 的双来源导出检查通过。本轮隔离服务因执行环境网络限制未能启动，最新浏览器检查尚未通过；检索数量与模型生成效果留待真实 API 验收，不能沿用之前结果宣称新逻辑已达到市场同等效果。完整证据见执行记录。
+
+## 参赛材料
+
+对外申报与比赛材料集中在 `比赛材料/`：`常州大学智能体大赛/`（赛事文件、提交材料、计划书源文件与图表）、`江苏省青年发明家大赛/`（申报材料、模板、图表源文件）、`英迈云/`。软件著作权材料与截图保留在根目录 `软著/`。索引见 `比赛材料/00-索引.md`。
+
+2026-11-03 的常州大学智能体创新大赛（赛道二 工具调度与自主任务智能体）提交材料由三个脚本生成：`bash scripts/build_cczu_agent_plan.sh`（计划书 PDF）、`python3 scripts/polish_cczu_plan_docx.py`（计划书 Word）、`python3 scripts/fill_cczu_signup.py`（报名表）。正文中的实测数字来自当日 `pytest tests/ -q`（148 passed，48.90 秒）与实机启动检查。
+
+2026-10-14 的[正式申报材料](比赛材料/江苏省青年发明家大赛/申报材料/江苏省青年发明家创新大赛_人工智能+专项赛_参赛项目申报材料_研索ScholarScope.docx)按团队当前版本修订正文，保留需求、六项创新点、应用价值、后续计划与佐证目录。正文经中文字体渲染和逐页检查为 4 页，沿用已有工作流图，补充技术架构图、工程验证表与第三方来源说明；测试数字来自正式验收记录，未完成项如实列出。封面、已填写申报表、填写说明、承诺书、原有图片及正文以外的格式均保持原样，已做 XML 字节与渲染像素比对。早先的[独立正文建议稿](比赛材料/江苏省青年发明家大赛/申报材料/研索ScholarScope_申报书正文图表修订建议_2026-10-14.docx)保留作参考，以正式申报材料为准。
+
+图表源文件位于 `比赛材料/江苏省青年发明家大赛/图表源文件/`；生成脚本为 `scripts/revise_competition_visuals.py`，使用文档技能的 Codex primary runtime。脚本只生成另存的建议稿；如建议稿已被人工修改，哈希检查会拒绝覆盖。
+
+正文局部修订脚本 `scripts/correct_competition_body.py` 仅从任务备份生成 `.cache/competition-body-correction-20261014/candidate.docx`，不会写入正式申报材料；保留正文以外的 XML 字节和未修改的文档包部件，并输出保留范围校验记录。正式文件在候选稿逐页验收、原文件未被并发修改后更新。

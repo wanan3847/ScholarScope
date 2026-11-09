@@ -65,7 +65,7 @@ class LLMRouter:
             api_key=api_key, enabled=enabled, priority=priority,
         )
         self._instances.pop(name, None)
-        logger.info("[Router] 注册 %s → %s @ %s", name, model, base_url)
+        logger.info("Model endpoint registered")
 
     def unregister(self, name: str) -> None:
         self._endpoints.pop(name, None)
@@ -109,7 +109,7 @@ class _RoutedLLM(BaseLLM):
 
     def __init__(self, ep: ModelEndpoint, timeout: int = 180):
         self.ep = ep
-        self.timeout = timeout
+        self.timeout = max(1, min(float(timeout), 30))
         self._call_count = 0
         self._token_used = 0
 
@@ -123,7 +123,9 @@ class _RoutedLLM(BaseLLM):
 
     def _is_ollama(self) -> bool:
         """是否为 Ollama 本地端点。"""
-        return "localhost:11434" in self.ep.base_url or "127.0.0.1:11434" in self.ep.base_url
+        from urllib.parse import urlsplit
+        address=urlsplit(self.ep.base_url)
+        return address.hostname in {"localhost","127.0.0.1","host.docker.internal"} and address.port==11434
 
     def _chat(self, messages: List[Dict], **kw) -> str:
         self._call_count += 1
@@ -133,8 +135,8 @@ class _RoutedLLM(BaseLLM):
             else:
                 content = self._chat_openai_compat(messages, **kw)
             return content
-        except Exception as e:
-            logger.error("[Router] %s 调用失败: %s", self.ep.name, e)
+        except Exception as error:
+            logger.warning("Model endpoint temporarily unavailable (%s)",type(error).__name__)
             return ""
 
     def _chat_ollama_native(self, messages: List[Dict], **kw) -> str:
@@ -150,15 +152,16 @@ class _RoutedLLM(BaseLLM):
             "messages": messages,
             "stream": False,
             "think": False,  # 关闭 qwen3 思考模式
+            "keep_alive": kw.get("keep_alive", "90s"),
             "options": {
                 "temperature": kw.get("temperature", 0.0),
                 "num_predict": kw.get("max_tokens", 1024),
+                "num_ctx": min(32768,max(2048,int(kw.get("num_ctx",8192)))),
             },
         }
-        with httpx.Client(timeout=self.timeout, proxy=None, trust_env=False) as client:
-            resp = client.post(url, json=payload, headers=self._headers())
-            resp.raise_for_status()
-        data = resp.json()
+        if kw.get("structured_json"):payload["format"]=kw.get("json_schema") or "json"
+        from llm.ollama_transport import chat_response
+        data = chat_response(url,payload,self._headers(),min(70,max(.1,float(kw.get("timeout_seconds",self.timeout)))))
         msg = data.get("message", {})
         content = msg.get("content", "") or ""
         # 兜底：thinking 模式未关时从 reasoning 字段取
@@ -180,8 +183,16 @@ class _RoutedLLM(BaseLLM):
             "max_tokens": kw.get("max_tokens", 1024),
             "stream": False,
         }
+        # Official Kimi K2.6/K3 reject our general-purpose temperature=0.
+        # Keep the existing endpoint/configuration path and its time budget.
+        if self.ep.model in ("kimi-k2.6", "kimi-k3"):
+            payload.pop("temperature", None)
+            if self.ep.model == "kimi-k2.6":
+                payload["thinking"] = {"type": "disabled"}
+            else:
+                payload["reasoning_effort"] = "low"
         url = f"{self.ep.base_url}/chat/completions"
-        with httpx.Client(timeout=self.timeout, proxy=None, trust_env=False) as client:
+        with httpx.Client(timeout=min(70,max(.1,float(kw.get("timeout_seconds",self.timeout)))), proxy=None, trust_env=False) as client:
             resp = client.post(url, json=payload, headers=self._headers())
             resp.raise_for_status()
         data = resp.json()
@@ -201,6 +212,14 @@ class _RoutedLLM(BaseLLM):
         return self._chat(
             [{"role": m.role, "content": m.content} for m in messages], **kwargs
         )
+
+    def chat_vision(self, prompt, image_base64, **kwargs):
+        if self._is_ollama():
+            messages=[{"role":"user","content":prompt,"images":[image_base64]}]
+        else:
+            messages=[{"role":"user","content":[{"type":"text","text":prompt},
+                {"type":"image_url","image_url":{"url":"data:image/png;base64,"+image_base64}}]}]
+        return self._chat(messages,**kwargs)
 
     def score_true_probability(self, prompt: str, **kwargs) -> float:
         text = self.complete(

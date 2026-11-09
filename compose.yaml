@@ -1,0 +1,23 @@
+name: scholarscope
+services:
+  app:
+    build:
+      context: .
+      args:
+        INCLUDE_EMBEDDINGS: ${INCLUDE_EMBEDDINGS:-0}
+    init: true
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${SCHOLARSCOPE_PORT:-8765}:8765"
+    environment:
+      SCHOLARSCOPE_DISABLE_EMBEDDINGS: ${SCHOLARSCOPE_DISABLE_EMBEDDINGS:-1}
+      SCHOLARSCOPE_ALLOW_MODEL_DOWNLOAD: ${SCHOLARSCOPE_ALLOW_MODEL_DOWNLOAD:-0}
+    volumes:
+      - research-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp:size=512m,mode=1777
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+volumes:
+  research-data:

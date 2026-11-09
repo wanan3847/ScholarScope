@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 import requests
+from html.parser import HTMLParser
 
 # 连接复用：OpenAlex / CrossRef 请求较多，复用 Session 避免每次 TLS 握手
 _REQ_SESSION = requests.Session()
@@ -103,41 +104,49 @@ def extract_title_terms(docs: List[dict], top_n: int = 6) -> List[str]:
 # arXiv
 # ------------------------------------------------------------------ #
 def search_arxiv(keywords: List[str], phrases: List[str] = None,
-                 end_date: str = "", max_results: int = 120) -> List[Dict]:
+                 end_date: str = "", max_results: int = 120,start_year=0) -> List[Dict]:
     """arXiv API 检索：每个精确 AND 组合/短语独立请求，避免被通用词挤掉。"""
     if not _arxiv or (not keywords and not phrases):
         return []
     phrases = phrases or []
-    queries: List[str] = _arxiv_keyword_queries(keywords)
-    budgets: List[int] = [60] * len(queries)
+    queries: List[str] = []
+    budgets: List[int] = []
     # 语义短语独立请求
     for p in phrases[:4]:
-        q = f'(all:"{p}")'
+        words=re.findall(r'[\w-]+',p)
+        q = " AND ".join(f'all:"{word}"' for word in words[:9])
         if q not in queries:
             queries.append(q)
             budgets.append(40)
+    for q in _arxiv_keyword_queries(keywords):
+        if q not in queries:queries.append(q);budgets.append(60)
     if not queries:
         return []
     out: Dict[str, Dict] = {}
-    client = _arxiv.Client(delay_seconds=0.3)
-    for attempt in range(3):
+    client = _arxiv.Client(delay_seconds=3,num_retries=1)
+    deadline=time.monotonic()+28
+    for attempt in range(1):
         got = 0
         try:
             for q, budget in zip(queries, budgets):
+                remaining=deadline-time.monotonic()
+                if remaining<1:break
                 kwargs = {"query": q, "max_results": min(budget, max_results),
                           "sort_by": _arxiv.SortCriterion.Relevance,
                           "sort_order": _arxiv.SortOrder.Descending}
-                if end_date:
+                if end_date or start_year:
                     try:
-                        kwargs["end_date"] = datetime.strptime(end_date, "%Y%m%d").date()
+                        upper=datetime.strptime(end_date if len(end_date)==8 else end_date+"1231" if end_date else datetime.now().strftime("%Y%m%d"),"%Y%m%d").strftime("%Y%m%d")
+                        kwargs["query"]+=f" AND submittedDate:[{start_year or 1991}01010000 TO {upper}2359]"
                     except Exception:
                         pass
-                results = _arxiv_results_with_timeout(client, kwargs, timeout=15)
+                results = _arxiv_results_with_timeout(client, kwargs, timeout=min(12,remaining))
                 for r in results:
                     aid = r.entry_id.split("/")[-1].split("v")[0]
                     year = r.published.strftime("%Y") if r.published else ""
                     if end_date and year and int(year) > int(_end_year(end_date)):
                         continue
+                    if start_year and (not year or int(year)<start_year):continue
                     # 提取作者列表
                     authors = []
                     try:
@@ -266,6 +275,8 @@ def _parse_openalex_work(w: Dict) -> Optional[Dict]:
         "openalex_id": w.get("id") or "",
         "ids": [],
         "sources": ["openalex"],
+        "pdf_url": (w.get("best_oa_location") or {}).get("pdf_url") or (w.get("primary_location") or {}).get("pdf_url") or "",
+        "is_oa": bool((w.get("open_access") or {}).get("is_oa")),
     }
     if arxiv:
         doc["ids"].append(arxiv)
@@ -277,7 +288,8 @@ def _parse_openalex_work(w: Dict) -> Optional[Dict]:
 
 
 def search_openalex(keywords: List[str], phrases: List[str] = None,
-                    end_date: str = "", per_page: int = 40) -> List[Dict]:
+                    end_date: str = "", per_page: int = 40,
+                    start_year: int | None = None) -> List[Dict]:
     """OpenAlex 检索：
     - title_and_abstract.search（词面精确，相关度排序）对每个关键词一次；
     - 再用 2 组组合关键词做全文 search（语义召回）；
@@ -319,7 +331,7 @@ def search_openalex(keywords: List[str], phrases: List[str] = None,
         resp = _get(params)
         return resp
 
-    start = int(datetime.now().year) - 20
+    start = start_year if start_year is not None else int(datetime.now().year) - 20
     end = _end_year(end_date)
     pub_filter = f"publication_year:{start}-{end}"
     from agent.api_settings import get_api_setting
@@ -342,12 +354,15 @@ def search_openalex(keywords: List[str], phrases: List[str] = None,
     pool = ThreadPoolExecutor(max_workers=4)
     try:
         futures = [pool.submit(_run_query, {**t, **auth}) for t in tasks]
-        for fut in as_completed(futures):
-            resp = fut.result()
-            if resp is not None:
-                _absorb(resp)
+        try:
+            for fut in as_completed(futures,timeout=28):
+                resp = fut.result()
+                if resp is not None:
+                    _absorb(resp)
+        except FutureTimeout:
+            pass
     finally:
-        pool.shutdown(wait=False)
+        pool.shutdown(wait=False,cancel_futures=True)
     return list(out.values())
 
 
@@ -355,18 +370,31 @@ def search_openalex(keywords: List[str], phrases: List[str] = None,
 # CrossRef
 # ------------------------------------------------------------------ #
 def search_crossref(keywords: List[str], phrases: List[str] = None,
-                    rows: int = 50) -> List[Dict]:
-    """CrossRef 书目检索：返回 DOI/标题（服务 litqa2/paper_finder 的 DOI gold）。"""
+                    rows: int = 50,start_year=0,end_date="") -> List[Dict]:
+    """Crossref 书目检索：返回 DOI、标题和出版资料。"""
     if not keywords and not phrases:
         return []
     phrases = phrases or []
     qs = phrases[:3] or [" ".join(keywords[:4])]
     out: Dict[str, Dict] = {}
+    from agent.api_settings import get_api_setting
+    token = get_api_setting("crossref_token", "CROSSREF_API_TOKEN")
+    headers = {"Crossref-Plus-API-Token": "Bearer " + token} if token else {}
+    deadline=time.monotonic()+28
     for q in qs:
+        remaining=deadline-time.monotonic()
+        if remaining<1:break
         try:
+            params={"query.bibliographic":q,"rows":rows}
+            filters=[]
+            if start_year:filters.append(f"from-pub-date:{int(start_year)}-01-01")
+            if end_date:
+                upper=end_date if len(end_date)==8 else end_date[:4]+"1231"
+                filters.append(f"until-pub-date:{upper[:4]}-{upper[4:6]}-{upper[6:8]}")
+            if filters:params["filter"]=",".join(filters)
             resp = _REQ_SESSION.get("https://api.crossref.org/works",
-                                    params={"query.bibliographic": q, "rows": rows},
-                                    timeout=15)
+                                    params=params,
+                                    timeout=min(12,remaining), headers=headers)
             if resp.status_code != 200:
                 continue
             for it in resp.json().get("message", {}).get("items", []):
@@ -403,7 +431,7 @@ def search_crossref(keywords: List[str], phrases: List[str] = None,
                     "arxiv_id": "",
                     "doi": doi,
                     "title": title.strip(),
-                    "abstract": "",
+                    "abstract": _plain_abstract(it.get("abstract", "")),
                     "year": year,
                     "authors": authors,
                     "venue": cr_venue,
@@ -417,15 +445,83 @@ def search_crossref(keywords: List[str], phrases: List[str] = None,
     return list(out.values())
 
 
+def _plain_abstract(value):
+    class Text(HTMLParser):
+        def __init__(self): super().__init__(); self.parts = []
+        def handle_data(self, data): self.parts.append(data)
+        def handle_endtag(self, tag):
+            if tag in ("p", "jats:p", "div"): self.parts.append(" ")
+    parser = Text()
+    try: parser.feed(str(value or "")); return " ".join("".join(parser.parts).split())
+    except Exception: return ""
+
+
+def search_europe_pmc(keywords: List[str], phrases: List[str] = None, end_date="", rows=50):
+    """Europe PMC core metadata, abstracts and reported open-access links."""
+    queries = (phrases or [])[:2] or [" ".join(keywords[:5])]
+    output, deadline = {}, time.monotonic() + 18
+    for query in queries:
+        if not query or time.monotonic() >= deadline: break
+        try:
+            upper = _end_year(end_date)
+            response = _REQ_SESSION.get("https://www.ebi.ac.uk/europepmc/webservices/rest/search",
+                params={"query": query + " AND FIRST_PDATE:[1900-01-01 TO " + upper + "-12-31]", "format": "json", "resultType": "core", "pageSize": min(rows, 100)},
+                timeout=min(8, max(.1, deadline - time.monotonic())))
+            if response.status_code != 200: continue
+            for p in response.json().get("resultList", {}).get("result", []):
+                title = str(p.get("title", "")).strip()
+                if not title: continue
+                doi = str(p.get("doi", "")).lower()
+                pmcid = p.get("pmcid", "")
+                key = doi or str(p.get("source", "")) + ":" + str(p.get("id", ""))
+                links = p.get("fullTextUrlList", {}).get("fullTextUrl", [])
+                pdf = next((l.get("url") for l in links if l.get("documentStyle") == "pdf" and l.get("availability") in ("Open access", "Free")), "")
+                output[key] = {"doi": doi, "pmcid": pmcid, "paper_id": key, "arxiv_id": "", "title": title,
+                    "abstract": _plain_abstract(p.get("abstractText", "")), "year": str(p.get("pubYear", "")),
+                    "authors": [a.get("fullName", "") for a in p.get("authorList", {}).get("author", []) if a.get("fullName")],
+                    "venue": p.get("journalInfo", {}).get("journal", {}).get("title", ""),
+                    "url": "https://doi.org/" + doi if doi else "https://europepmc.org/article/" + str(p.get("source", "MED")) + "/" + str(p.get("id", "")),
+                    "pdf_url": pdf, "is_oa": p.get("isOpenAccess") == "Y", "ids": [key], "sources": ["europe_pmc"]}
+        except Exception: continue
+    return list(output.values())
+
+
+def search_scopus(keywords: List[str], phrases: List[str] = None, rows=50):
+    """Licensed Scopus metadata; disabled unless the administrator supplies a key."""
+    from agent.api_settings import get_api_setting
+    key = get_api_setting("scopus_key", "SCOPUS_API_KEY")
+    if not key: return []
+    query = (phrases or [" ".join(keywords[:5])])[0]
+    if not query: return []
+    headers = {"X-ELS-APIKey": key, "Accept": "application/json"}
+    institution = get_api_setting("scopus_institution_token", "SCOPUS_INSTITUTION_TOKEN")
+    if institution: headers["X-ELS-Insttoken"] = institution
+    try:
+        response = _REQ_SESSION.get("https://api.elsevier.com/content/search/scopus",
+            params={"query": 'TITLE-ABS-KEY("' + str(query).replace('"', '')[:1000] + '")', "count": min(rows, 100)}, headers=headers, timeout=8)
+        if response.status_code != 200: return []
+        papers = []
+        for p in response.json().get("search-results", {}).get("entry", []):
+            title = str(p.get("dc:title", "")).strip()
+            if not title: continue
+            doi = str(p.get("prism:doi", "")).lower()
+            papers.append({"title": title, "doi": doi, "paper_id": p.get("eid") or p.get("dc:identifier"), "arxiv_id": "",
+                "abstract": _plain_abstract(p.get("dc:description", "")), "authors": [p["dc:creator"]] if p.get("dc:creator") else [],
+                "year": str(p.get("prism:coverDate", ""))[:4], "venue": p.get("prism:publicationName", ""),
+                "url": "https://doi.org/" + doi if doi else p.get("prism:url", ""), "sources": ["scopus"]})
+        return papers
+    except Exception: return []
+
+
 # ------------------------------------------------------------------ #
-# Semantic Scholar（语义检索：词面不重叠的语义型 gold 最依赖此通道）
+# Semantic Scholar（论文检索与书目元数据）
 # ------------------------------------------------------------------ #
 def search_semantic_scholar(keywords: List[str], phrases: List[str] = None,
                             limit: int = 100, timeout: int = 15) -> List[Dict]:
     """S2 /graph/v1/paper/search 语义检索。
 
     匿名可用（429 时静默降级）；带 S2_API_KEY 时走独立配额。
-    返回 doc 带 corpusId，直接服务 paper_finder 的 corpusId gold。
+    返回文献包含 corpusId，供跨来源归一化使用。
     """
     if not keywords and not phrases:
         return []
@@ -450,7 +546,7 @@ def search_semantic_scholar(keywords: List[str], phrases: List[str] = None,
                     params={
                         "query": q,
                         "limit": limit,
-                        "fields": "title,abstract,externalIds,corpusId,citationCount,publicationDate,authors,url,venue",
+                        "fields": "title,abstract,externalIds,corpusId,citationCount,publicationDate,authors,url,venue,openAccessPdf,isOpenAccess",
                     },
                     headers=headers, timeout=timeout,
                 )
@@ -502,6 +598,8 @@ def search_semantic_scholar(keywords: List[str], phrases: List[str] = None,
                     "cited_by": int(p.get("citationCount") or 0),
                     "ids": ids,
                     "sources": ["semantic_scholar"],
+                    "pdf_url": (p.get("openAccessPdf") or {}).get("url") or "",
+                    "is_oa": bool(p.get("isOpenAccess")),
                 }
                 key_id = arxiv or doi or ("s2:" + str(cid))
                 if key_id and key_id not in out:

@@ -1,4 +1,0 @@
-{
-  "status": "compile-error",
-  "diagnosticsText": "✘ [ERROR] Expected \">\" but found \",\"\n\n    spar2-engine-optimization-report.canvas.tsx:36:54:\n      36 │         headers={['文件', '优化内容', '影响']},\n         │                                       ^\n         ╵                                       >"
-}

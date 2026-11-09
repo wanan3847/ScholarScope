@@ -78,7 +78,8 @@ def _parse_scores(text: str, n: int) -> List[float] | None:
 
 def judge_docs(query: str, docs: List[dict], llm_chat: Callable,
                batch_size: int = 12, deadline: float | None = None,
-               max_workers: int = 4) -> List[float]:
+               max_workers: int = 4,
+               call_timeout: float | None = None) -> List[float]:
     """批量判分；LLM 失败或超 deadline 时降级为词法分。
 
     deadline：绝对时间戳（time.monotonic() 刻度），用于慢速本地模型
@@ -100,7 +101,7 @@ def judge_docs(query: str, docs: List[dict], llm_chat: Callable,
         query_short = query.strip()[:400]
         prompt = _PROMPT.format(q=query.strip(), q_short=query_short, papers="\n\n".join(lines))
         from agent.spar2.llm_guard import bounded_call
-        resp = bounded_call(llm_chat, prompt, max_tokens=1200)
+        resp = bounded_call(llm_chat, prompt, max_tokens=max(60,len(batch)*12), timeout=call_timeout, timeout_seconds=call_timeout or 30)
         if resp is None:
             # LLM 超时：直接词法兜底，不重试（避免慢调用拖爆 deadline）
             return [lexical_score(query, d) for d in batch]
@@ -118,7 +119,7 @@ def judge_docs(query: str, docs: List[dict], llm_chat: Callable,
         # 解析失败：重试一次
         global PARSE_FAILURES
         PARSE_FAILURES += 1
-        resp2 = bounded_call(llm_chat, prompt, max_tokens=1200)
+        resp2 = bounded_call(llm_chat, prompt, max_tokens=max(60,len(batch)*12), timeout=call_timeout, timeout_seconds=call_timeout or 30)
         if resp2 is None:
             return [lexical_score(query, d) for d in batch]
         parsed2 = _parse_scores(resp2, len(batch))

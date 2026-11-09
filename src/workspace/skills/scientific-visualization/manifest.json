@@ -1,0 +1,16 @@
+{
+  "id": "scientific-visualization",
+  "name": "科研数据图表",
+  "version": "1.0.0",
+  "license": "MIT",
+  "origin": "ScholarScope original instructions",
+  "tools": [
+    "chart",
+    "export"
+  ],
+  "dependencies": [
+    "chart",
+    "export"
+  ],
+  "output": "project-scoped persistent records with source provenance"
+}

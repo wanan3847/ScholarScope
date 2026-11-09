@@ -19,13 +19,17 @@ import os
 import secrets
 import time
 import uuid
+import re
+import functools
+import threading
+import fcntl
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
 # 数据目录
-_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+_DATA_DIR = Path(os.getenv("SCHOLARSCOPE_DATA_DIR", Path(__file__).resolve().parent.parent / "data"))
 _COLLECTIONS_FILE = _DATA_DIR / "collections.json"
 _READ_PAPERS_FILE = _DATA_DIR / "read_papers.json"
 _USERS_FILE = _DATA_DIR / "users.json"
@@ -54,10 +58,13 @@ def _write_json(path: Path, data: Any) -> None:
     """安全写入 JSON 文件。"""
     path.parent.mkdir(parents=True, exist_ok=True)
     try:
-        path.write_text(
+        temporary = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
+        temporary.write_text(
             json.dumps(data, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
+        temporary.chmod(0o600)
+        os.replace(temporary, path)
     except OSError as e:
         logger.error("写入 %s 失败: %s", path, e)
 
@@ -327,7 +334,7 @@ def is_read(user_id: Optional[str], paper_id: str) -> bool:
 
 
 # ------------------------------------------------------------------ #
-# 用户认证（简单 hash，非生产级）
+# 本地账号与限时会话；部署多实例时使用共享持久目录。
 # ------------------------------------------------------------------ #
 
 def _load_users() -> Dict:
@@ -345,18 +352,33 @@ def _hash_password(password: str, salt: str = "") -> tuple:
     """密码 hash。返回 (hash, salt)。"""
     if not salt:
         salt = secrets.token_hex(16)
-    h = hashlib.sha256(f"{salt}{password}".encode()).hexdigest()
+    h = "pbkdf2-sha256$600000$" + hashlib.pbkdf2_hmac("sha256", password.encode(), salt.encode(), 600000).hex()
     return h, salt
+
+
+def _password_matches(password, user):
+    stored_hash = user.get("password_hash", "")
+    salt = user.get("salt", "")
+    candidate = _hash_password(password, salt)[0] if stored_hash.startswith("pbkdf2-sha256$") else hashlib.sha256(f"{salt}{password}".encode()).hexdigest()
+    return secrets.compare_digest(candidate, stored_hash)
+
+
+def _token_key(token):
+    return "sha256:" + hashlib.sha256(token.encode()).hexdigest()
+
+
+SESSION_SECONDS = 7 * 24 * 3600
 
 
 def register_user(username: str, password: str) -> Dict:
     """注册新用户。"""
     if not username or not password:
         return {"status": "error", "detail": "用户名和密码不能为空"}
-    if len(username) < 2:
-        return {"status": "error", "detail": "用户名至少 2 个字符"}
-    if len(password) < 4:
-        return {"status": "error", "detail": "密码至少 4 个字符"}
+    reserved = {"web-anonymous", os.getenv("SAKURA_ADMIN_USER", "admin"), *os.getenv("SAKURA_ADMIN_USERS", "").split(",")}
+    if not 2 <= len(username) <= 100 or re.search(r"[\s\x00-\x1f\x7f]", username) or username in reserved:
+        return {"status": "error", "detail": "用户名需为 2–100 个非空白字符，且不能使用保留账号"}
+    if not 8 <= len(password) <= 1024:
+        return {"status": "error", "detail": "密码需为 8–1024 个字符"}
 
     data = _load_users()
     users = data.get("users", [])
@@ -365,11 +387,13 @@ def register_user(username: str, password: str) -> Dict:
             return {"status": "error", "detail": "用户名已存在"}
 
     pw_hash, salt = _hash_password(password)
+    token = secrets.token_hex(32)
     users.append({
         "username": username,
         "salt": salt,
         "password_hash": pw_hash,
         "created_at": time.time(),
+        "tokens": {_token_key(token): time.time()},
     })
     data["users"] = users
     _save_users(data)
@@ -383,12 +407,13 @@ def register_user(username: str, password: str) -> Dict:
     read_data[username] = {}
     _write_json(_READ_PAPERS_FILE, read_data)
 
-    token = secrets.token_hex(32)
     return {"status": "ok", "username": username, "token": token}
 
 
-def ensure_admin_user(username: str = "admin", password: str = "admin123") -> bool:
+def ensure_admin_user(username: str = "admin", password: str = "") -> bool:
     """确保内置管理员账号存在（幂等）。返回是否新建。"""
+    if len(password) < 8:
+        return False
     data = _load_users()
     users = data.get("users", [])
     if any(u.get("username") == username for u in users):
@@ -418,12 +443,18 @@ def login_user(username: str, password: str) -> Dict:
     data = _load_users()
     for u in data.get("users", []):
         if u["username"] == username:
-            pw_hash, _ = _hash_password(password, u.get("salt", ""))
-            if pw_hash == u.get("password_hash"):
+            if _password_matches(password, u):
+                if not u.get("password_hash", "").startswith("pbkdf2-sha256$"):
+                    u["password_hash"], u["salt"] = _hash_password(password)
                 token = secrets.token_hex(32)
                 # 简单 token 存储（追加到用户数据）
                 tokens = u.setdefault("tokens", {})
-                tokens[token] = time.time()
+                cutoff = time.time() - SESSION_SECONDS
+                tokens = {k: v for k, v in tokens.items() if isinstance(v, (int, float)) and v >= cutoff}
+                for old in sorted(tokens, key=tokens.get)[:-7]:
+                    del tokens[old]
+                tokens[_token_key(token)] = time.time()
+                u["tokens"] = tokens
                 _save_users(data)
                 return {"status": "ok", "username": username, "token": token}
             return {"status": "error", "detail": "密码错误"}
@@ -437,13 +468,12 @@ def change_password(token: str, old_password: str, new_password: str) -> Dict:
         return {"status": "error", "detail": "登录状态已失效，请重新登录"}
     if not old_password or not new_password:
         return {"status": "error", "detail": "请填写当前密码和新密码"}
-    if len(new_password) < 4:
-        return {"status": "error", "detail": "新密码至少 4 位"}
+    if not 8 <= len(new_password) <= 1024:
+        return {"status": "error", "detail": "新密码需为 8–1024 个字符"}
     data = _load_users()
     for u in data.get("users", []):
         if u["username"] == username:
-            old_hash, _ = _hash_password(old_password, u.get("salt", ""))
-            if old_hash != u.get("password_hash"):
+            if not _password_matches(old_password, u):
                 return {"status": "error", "detail": "当前密码不正确"}
             new_hash, new_salt = _hash_password(new_password)
             u["salt"] = new_salt
@@ -451,7 +481,7 @@ def change_password(token: str, old_password: str, new_password: str) -> Dict:
             u.setdefault("tokens", {})
             # 改密码后使其他会话失效，保留当前会话
             for t in list(u["tokens"].keys()):
-                if t != token:
+                if t not in (token, _token_key(token)):
                     del u["tokens"][t]
             _save_users(data)
             return {"status": "ok", "username": username}
@@ -465,8 +495,9 @@ def logout_user(token: str) -> Dict:
     data = _load_users()
     for u in data.get("users", []):
         tokens = u.get("tokens", {})
-        if token in tokens:
-            del tokens[token]
+        key = _token_key(token) if _token_key(token) in tokens else token
+        if key in tokens:
+            del tokens[key]
             _save_users(data)
             return {"status": "ok"}
     return {"status": "ok"}
@@ -479,6 +510,38 @@ def verify_token(token: str) -> Optional[str]:
     data = _load_users()
     for u in data.get("users", []):
         tokens = u.get("tokens", {})
-        if token in tokens:
+        created = tokens.get(_token_key(token), tokens.get(token))
+        if isinstance(created, (int, float)) and time.time() - SESSION_SECONDS <= created <= time.time() + 60:
             return u["username"]
     return None
+
+
+# A whole read/modify/write operation holds both a process and a thread lock.
+# Nested helpers reuse the outer lock so cached metadata cannot lose another write.
+_DATA_LOCK = threading.RLock()
+_LOCK_STATE = threading.local()
+
+
+def _serialized(fn):
+    @functools.wraps(fn)
+    def locked(*args, **kwargs):
+        with _DATA_LOCK:
+            if getattr(_LOCK_STATE, "active", False):
+                return fn(*args, **kwargs)
+            lock_path = _USERS_FILE.parent / ".collections.lock"
+            lock_path.parent.mkdir(parents=True, exist_ok=True)
+            with lock_path.open("a") as file:
+                fcntl.flock(file, fcntl.LOCK_EX)
+                _LOCK_STATE.active = True
+                try:
+                    return fn(*args, **kwargs)
+                finally:
+                    _LOCK_STATE.active = False
+                    fcntl.flock(file, fcntl.LOCK_UN)
+    return locked
+
+
+for _name in ("get_cached_paper", "_cache_paper_meta", "add_favorite", "remove_favorite", "is_favorited", "list_favorites",
+              "list_folders", "create_folder", "delete_folder", "rename_folder", "get_default_folder", "set_default_folder", "move_paper_to_folder",
+              "list_read_papers", "add_read_paper", "remove_read_paper", "is_read", "register_user", "ensure_admin_user", "login_user", "change_password", "logout_user", "verify_token"):
+    globals()[_name] = _serialized(globals()[_name])
